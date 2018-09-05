@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".create">
+
+    <EditText
+        android:id="@+id/clip_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="title" />
+
+    <EditText
+        android:id="@+id/clip_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.6"
+        android:hint="content"
+
+        />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+
+            android:id="@+id/_public"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="select_type"
+            android:text="Public" />
+
+        <RadioButton
+            android:id="@+id/_private"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="select_type"
+            android:text="Private" />
+
+    </RadioGroup>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#0000ff"
+        android:onClick="create_clip"
+        android:text="Create"
+        android:textAllCaps="false" />
+
+</LinearLayout>
