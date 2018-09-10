@@ -114,14 +114,20 @@ public class fragment_profile extends fragment_wrapper {
 
         if (getArguments() != null) {
             user_id = getArguments().getString("user_id");
-            user_name = getArguments().getString("user_name");
-            user_email = getArguments().getString("user_email");
-            user_type = getArguments().getString("user_type");
+            user_name = getArguments().getString( "name");
+            user_email = getArguments().getString("email");
+            user_type = getArguments().getString( "type");
+
+            Log.i("fragment_profile", "nonempty bundle");
 
             if(getArguments().containsKey("type")){
                 rx = getArguments().getString("type");
 
             }
+        }
+        else{
+
+            Log.i("fragment_profile", "empty bundle");
         }
 
         V = inflater.inflate(R.layout.fragment_profile, container, false);

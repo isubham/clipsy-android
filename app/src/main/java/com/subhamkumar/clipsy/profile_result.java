@@ -26,7 +26,7 @@ public class profile_result extends AppCompatActivity {
         fragment_complete_profile fragment_profile = new fragment_complete_profile();
         if(getIntent().getExtras() != null) {
             Bundle user_detail = getIntent().getExtras();
-            user_detail.putString("_fx", "read_clips");
+            user_detail.putString("fx", "read_clips");
             fragment_profile.setArguments(user_detail);
         }
         fragmentTransaction.add(profile_result.getId(), fragment_profile);

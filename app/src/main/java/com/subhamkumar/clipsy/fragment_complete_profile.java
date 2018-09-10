@@ -66,7 +66,7 @@ public class fragment_complete_profile extends fragment_wrapper {
             Bundle user_detail = getActivity().getIntent().getExtras();
             fragment_profile.setArguments(user_detail);
 
-            user_detail.putString("_fx", "read_clips");
+            user_detail.putString("fx", "read_clips");
             fragment_clips.setArguments(user_detail);
         }
 

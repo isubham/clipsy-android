@@ -126,10 +126,12 @@ public class fragment_search extends fragment_wrapper {
                                Intent to_profile_result = new Intent(getActivity(), profile_result.class);
                                to_profile_result.putExtra("user_id",
                                        ((TextView)view.findViewById(R.id.rl_profile_id)).getText().toString().trim());
-                                to_profile_result.putExtra("user_name",
+                                to_profile_result.putExtra("name",
                                        ((TextView)view.findViewById(R.id.rl_profile_name)).getText().toString().trim());
-                                to_profile_result.putExtra("user_email",
+                                to_profile_result.putExtra("email",
                                        ((TextView)view.findViewById(R.id.rl_profile_email)).getText().toString().trim());
+                               to_profile_result.putExtra("type",
+                                       ((TextView)view.findViewById(R.id.rl_profile_id)).getText().toString().trim());
 
                                 startActivity(to_profile_result);
 

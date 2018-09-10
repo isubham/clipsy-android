@@ -67,9 +67,9 @@ public class panel extends AppCompatActivity {
         Bundle user_details = new Bundle();
 
         user_details.putString("user_id", user_id);
-        user_details.putString("user_name", user_name);
-        user_details.putString("user_email", user_email);
-        user_details.putString("user_type", user_type);
+        user_details.putString("name", user_name);
+        user_details.putString("email", user_email);
+        user_details.putString("type", user_type);
 
 
 
@@ -80,7 +80,7 @@ public class panel extends AppCompatActivity {
         fragment_complete_profile.setArguments(user_details);
 
         fragment_clips fragment_clips = new fragment_clips();
-        user_details.putString("_fx", "read_clips");
+        user_details.putString("fx", "read_clips");
         fragment_clips.setArguments(user_details);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
