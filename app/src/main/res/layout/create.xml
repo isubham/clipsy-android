@@ -10,15 +10,17 @@
         android:id="@+id/clip_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:hint="title" />
 
     <EditText
         android:id="@+id/clip_content"
+        android:lines="20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.6"
-        android:hint="content"
-
+        android:hint="your content"
+        android:gravity="start"
         />
 
     <RadioGroup
@@ -50,5 +52,20 @@
         android:onClick="create_clip"
         android:text="Create"
         android:textAllCaps="false" />
+
+
+    <!--
+    <com.github.irshulx.Editor
+        android:layout_width="match_parent"
+        android:id="@+id/editor"
+        app:render_type="Editor"
+        app:placeholder="Start writing here..."
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="100dp"
+        />
+        -->
 
 </LinearLayout>

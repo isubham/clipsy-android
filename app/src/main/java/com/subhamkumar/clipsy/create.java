@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.subhamkumar.clipsy.models.CONSTANTS;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,14 +19,14 @@ import java.util.Map;
 
 public class create extends wrapper {
 
-    String user_id, clip_type;
+    String user_id,clip_type;
 
     @Override
     public Map makeParams() {
         Map params = new HashMap<String, String>();
 
         params.put("visibility", clip_type);
-        params.put("user", clip_type);
+        params.put("user", user_id);
         params.put("clip_title", text(R.id.clip_title));
         params.put("clip_content", text(R.id.clip_content));
 
@@ -45,12 +46,9 @@ public class create extends wrapper {
         try {
             JSONObject jsonObject = new JSONObject(response);
 
-            if (jsonObject.getString("status") == "1") {
-                // TODO : 1 go to signin after saying account created
+            if (jsonObject.has("status")) {
                 Toast.makeText(this, "Clip Created", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(create.this, home.class));
             } else {
-                // TODO : 2 account didnot created give message show message
                 Toast.makeText(this, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
             }
 
@@ -60,23 +58,26 @@ public class create extends wrapper {
     }
 
 
+    public void select_type(View V) {
+        clip_type = V.getId() == R.id._private ? CONSTANTS.PRIVATE : CONSTANTS.PUBLIC;
+    }
+
+    public void create_clip(View V){
+        make_request();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create);
 
         // getting user id
-        user_id = getIntent().getExtras().getString("user_id");
+        if(getIntent().getExtras() != null){
+            user_id = getIntent().getExtras().getString("user_id");
+        }
+        clip_type = CONSTANTS.PUBLIC;
 
-    }
-
-    public void select_type(View V) {
-        clip_type = (V.getId()) == R.id._private ? "1" : "2";
-    }
-
-
-    public void create_clip(View V) {
-        make_request();
-    }
 
 }
+
+}
+

@@ -1,7 +1,7 @@
 package com.subhamkumar.clipsy;
 
 import android.app.Activity;
-import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -9,22 +9,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Map;
 
-public abstract class wrapper extends Activity {
+public abstract class fragment_wrapper extends Fragment {
 
     public String text(EditText et) {
         return et.getText().toString().trim();
     }
 
-    public String text(int et) {
-        return ((EditText) findViewById(et)).getText().toString().trim();
-    }
 
     public abstract Map makeParams();
 

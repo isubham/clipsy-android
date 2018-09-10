@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.subhamkumar.clipsy.models.CONSTANTS;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +46,7 @@ public class signup extends wrapper {
     @Override
     public Map makeParams() {
         Map param = new HashMap<String, String>();
-        param.put("fx", "signup");
+        param.put("fx", CONSTANTS.OPERATION_SIGN_UP);
         param.put("email", Text(R.id.signup_email));
         param.put("password", Text(R.id.signup_password));
         param.put("name", Text(R.id.signup_name));

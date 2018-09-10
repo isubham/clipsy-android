@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Clip;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewholder> {
@@ -55,9 +54,9 @@ public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewhol
     public void onBindViewHolder(@NonNull Clip_viewholder clip_viewholder, int i) {
 
         clip_viewholder.id.setText(                 clips.get(i).id);
-        clip_viewholder.author_name.setText(        clips.get(i).author_name);
-        clip_viewholder.author_id.setText(          clips.get(i).author_id);
-        clip_viewholder.clip_title.setText(         clips.get(i).clip_time);
+        clip_viewholder.author_name.setText(        clips.get(i).u_name);
+        clip_viewholder.author_id.setText(          clips.get(i).u_id);
+        clip_viewholder.clip_title.setText(         clips.get(i).clip_title);
         clip_viewholder.clip_content.setText(       clips.get(i).clip_content);
         clip_viewholder.clip_time.setText(          clips.get(i).clip_time);
 

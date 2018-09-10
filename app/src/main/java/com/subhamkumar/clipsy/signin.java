@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.subhamkumar.clipsy.models.CONSTANTS;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +29,7 @@ public class signin extends wrapper {
     @Override
     public Map makeParams() {
         Map param = new HashMap<String, String>();
-        param.put("fx", "signin");
+        param.put("fx", CONSTANTS.OPERATION_SIGN_IN);
         param.put("email", ((EditText) findViewById(R.id.signin_email)).getText().toString().trim());
         param.put("password", ((EditText) findViewById(R.id.signin_pass)).getText().toString().trim());
         return param;
@@ -36,6 +37,9 @@ public class signin extends wrapper {
 
     @Override
     public void handle_response(String response) {
+        /*
+        {"1":{"name":"subham","email":"subham@gmail.com","type":"1"}}
+         */
         try {
             JSONObject jsonObject = new JSONObject(response);
 
@@ -51,9 +55,14 @@ public class signin extends wrapper {
 
                 String email = jsonObject.getJSONObject(user_id).getString("email");
                 String type = jsonObject.getJSONObject(user_id).getString("type");
+                String name = jsonObject.getJSONObject(user_id).getString("name");
 
-                startActivity(new Intent(signin.this, home.class)
-                        .putExtra("email", email).putExtra("type", type).putExtra("user_id", user_id));
+
+                startActivity(new Intent(signin.this, panel.class)
+                        .putExtra("email", email)
+                        .putExtra("type", type)
+                        .putExtra("name", name)
+                        .putExtra("user_id", user_id));
 
             }
 
@@ -71,11 +80,14 @@ public class signin extends wrapper {
         startActivity(new Intent(signin.this, signup.class));
     }
 
+    public void gotonewhome() {
+        startActivity(new Intent(signin.this, panel.class));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signin);
-
 
     }
 }
