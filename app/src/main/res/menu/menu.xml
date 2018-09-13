@@ -7,5 +7,6 @@
         android:title="Write"
         android:visible="true"
         myapp:showAsAction="always"
+        android:icon="@drawable/outline_create_black"
         />
 </menu>

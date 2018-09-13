@@ -1,6 +1,7 @@
 package com.subhamkumar.clipsy;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,12 +9,27 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class panel extends AppCompatActivity {
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        to_create();
+        return super.onOptionsItemSelected(item);
+    }
 
     //    Creating adapter for the viewpager
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -73,7 +89,7 @@ public class panel extends AppCompatActivity {
 
         fragment_clips fragment_clips = new fragment_clips();
         // TODO : add new method for fetching post of following
-        user_details.putString("fx", "read_clips");
+        user_details.putString("fx", "following_clips");
         fragment_clips.setArguments(user_details);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -86,6 +102,11 @@ public class panel extends AppCompatActivity {
 
     Bundle user_details;
 
+    public void to_create() {
+        startActivity(new Intent(panel.this, create.class).putExtra("user_id", user_id));
+    }
+
+    String user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,12 +114,11 @@ public class panel extends AppCompatActivity {
 
         if(getIntent().getExtras() != null) {
             user_details = getIntent().getExtras();
+            user_id = user_details.getString("user_id");
         }
 
         initializeVaribles();
-
         settingVariables();
-
         setupViewPager(viewPager);
     }
 }

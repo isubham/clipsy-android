@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class create extends wrapper {
 
-    String user_id,clip_type;
+    String user_id, clip_type;
 
     @Override
     public Map makeParams() {
@@ -62,22 +62,23 @@ public class create extends wrapper {
         clip_type = V.getId() == R.id._private ? CONSTANTS.PRIVATE : CONSTANTS.PUBLIC;
     }
 
-    public void create_clip(View V){
+    public void create_clip(View V) {
         make_request();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create);
 
         // getting user id
-        if(getIntent().getExtras() != null){
-            user_id = getIntent().getExtras().getString(CONSTANTS.FIELD_USER_ID);
+        if (getIntent().getExtras() != null) {
+            user_id = getIntent().getExtras().getString("user_id");
         }
         clip_type = CONSTANTS.PUBLIC;
 
 
-}
+    }
 
 }
 

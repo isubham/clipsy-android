@@ -34,7 +34,8 @@ import java.util.Map;
 public class fragment_clips extends fragment_wrapper {
 
     // user_id => clips list
-    public fragment_clips() {}
+    public fragment_clips() {
+    }
 
     @Override
     public void setArguments(@Nullable Bundle args) {
@@ -46,20 +47,28 @@ public class fragment_clips extends fragment_wrapper {
     public Map makeParams() {
         Map<String, String> read_clips = new HashMap<String, String>();
         read_clips.put(CONSTANTS.FX, _fx); // "read_clips");
-        read_clips.put(CONSTANTS.USER, user_id);
+
+        if (_fx.equals("following_clips")) {
+            read_clips.put("user_x", user_id);
+            Log.i(CONSTANTS.FRAGMENT_CLIPS, read_clips.toString());
+            return read_clips;
+        }
+
         Log.i(CONSTANTS.FRAGMENT_CLIPS, read_clips.toString());
+        read_clips.put(CONSTANTS.USER, user_id);
         return read_clips;
     }
 
     @Override
     public void handle_response(String response) {
-
+        clipList.clear();
+        Log.i("clips_data", response);
         try {
             JSONObject jsonObject = new JSONObject(response);
 
             JSONArray clip_ids = jsonObject.names();
 
-            for(int i = 0; i < clip_ids.length(); i++) {
+            for (int i = 0; i < clip_ids.length(); i++) {
                 String clip_id = clip_ids.get(i).toString();
                 JSONObject clip = jsonObject.getJSONObject(clip_id);
                 clipList.add(new Clip(clip_id,
@@ -69,12 +78,11 @@ public class fragment_clips extends fragment_wrapper {
                         clip.getString("clip_content"),
                         clip.getString("timestamp"),
                         clip.getString("visibility")
-                        ));
+                ));
 
                 clip_adapter.notifyDataSetChanged();
             }
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             Log.e("json ex", e.getMessage());
         }
 
@@ -91,9 +99,6 @@ public class fragment_clips extends fragment_wrapper {
     List<Clip> clipList;
     FloatingActionButton create_clip_floating_button;
 
-    private void init_data() {
-        make_request();
-    }
 
     private void init(View V) {
         rv_clip = (RecyclerView) V.findViewById(R.id.clip_fragment_recycleview);
@@ -104,17 +109,8 @@ public class fragment_clips extends fragment_wrapper {
         rv_clip.setAdapter(clip_adapter);
         rv_clip.setLayoutManager(linearLayoutManager);
 
-        create_clip_floating_button = (FloatingActionButton)V.findViewById(R.id.create_clip_floating_button );
+        make_request();
 
-        init_data();
-        create_clip_floating_button .setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(new Intent(getActivity(),create.class).putExtra("user_id", user_id));
-                    }
-                }
-        );
     }
 
     String user_id;
@@ -126,13 +122,11 @@ public class fragment_clips extends fragment_wrapper {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         user_id = getArguments().getString("user_id");
-        if(getArguments().containsKey("c_user_id")) {
+        if (getArguments().containsKey("c_user_id")) {
             user_id = getArguments().getString("c_user_id");
         }
         _fx = getArguments().getString("fx");
-
         V = inflater.inflate(R.layout.fragment_clips, container, false);
-
         context = container.getContext();
         init(V);
         return V;

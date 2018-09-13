@@ -23,9 +23,9 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.subhamkumar.clipsy.models.CONSTANTS;
 import com.subhamkumar.clipsy.adapter.Clip_adapter;
 import com.subhamkumar.clipsy.adapter.Profile_adapter;
-import com.subhamkumar.clipsy.models.CONSTANTS;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
