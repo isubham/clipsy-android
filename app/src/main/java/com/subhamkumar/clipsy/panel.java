@@ -64,14 +64,6 @@ public class panel extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Bundle user_details = new Bundle();
-
-        user_details.putString("user_id", user_id);
-        user_details.putString("name", user_name);
-        user_details.putString("email", user_email);
-        user_details.putString("type", user_type);
-
-
 
         fragment_search fragment_search = new fragment_search();
         fragment_search.setArguments(user_details);
@@ -80,6 +72,7 @@ public class panel extends AppCompatActivity {
         fragment_complete_profile.setArguments(user_details);
 
         fragment_clips fragment_clips = new fragment_clips();
+        // TODO : add new method for fetching post of following
         user_details.putString("fx", "read_clips");
         fragment_clips.setArguments(user_details);
 
@@ -91,7 +84,7 @@ public class panel extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
     }
 
-    String user_id, user_type, user_name, user_email;
+    Bundle user_details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,14 +92,8 @@ public class panel extends AppCompatActivity {
         setContentView(R.layout.panel);
 
         if(getIntent().getExtras() != null) {
-
-            user_id = getIntent().getExtras().getString("user_id");
-            user_email = getIntent().getExtras().getString("email");
-            user_name = getIntent().getExtras().getString("name");
-            user_type = getIntent().getExtras().getString("type");
-
+            user_details = getIntent().getExtras();
         }
-
 
         initializeVaribles();
 

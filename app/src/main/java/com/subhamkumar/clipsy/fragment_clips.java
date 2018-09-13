@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.subhamkumar.clipsy.adapter.Clip_adapter;
+import com.subhamkumar.clipsy.models.CONSTANTS;
 import com.subhamkumar.clipsy.models.Clip;
 
 import org.json.JSONArray;
@@ -44,9 +45,9 @@ public class fragment_clips extends fragment_wrapper {
     @Override
     public Map makeParams() {
         Map<String, String> read_clips = new HashMap<String, String>();
-        read_clips.put("fx", _fx); // "read_clips");
-        read_clips.put("user", user_id);
-        Log.i("fragment_clips", read_clips.toString());
+        read_clips.put(CONSTANTS.FX, _fx); // "read_clips");
+        read_clips.put(CONSTANTS.USER, user_id);
+        Log.i(CONSTANTS.FRAGMENT_CLIPS, read_clips.toString());
         return read_clips;
     }
 
@@ -125,6 +126,9 @@ public class fragment_clips extends fragment_wrapper {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         user_id = getArguments().getString("user_id");
+        if(getArguments().containsKey("c_user_id")) {
+            user_id = getArguments().getString("c_user_id");
+        }
         _fx = getArguments().getString("fx");
 
         V = inflater.inflate(R.layout.fragment_clips, container, false);

@@ -12,12 +12,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/profile_complete_linearLayout"
-        android:layout_weight="0.4"
         ></LinearLayout>
 
 
     <LinearLayout
-        android:layout_weight="0.7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

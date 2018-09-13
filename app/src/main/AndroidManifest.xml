@@ -22,11 +22,11 @@
         <activity android:name=".create" />
         <activity
             android:name=".panel"
-            android:theme="@style/Theme.AppCompat.Light"
-            ></activity>
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity
-            android:theme="@style/Theme.AppCompat.Light"
-            android:name=".profile_result"></activity>
+            android:name=".profile_result"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity android:name=".profiles_list"></activity>
     </application>
 
 </manifest>

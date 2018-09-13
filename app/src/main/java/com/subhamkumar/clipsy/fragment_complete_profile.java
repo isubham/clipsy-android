@@ -47,8 +47,6 @@ public class fragment_complete_profile extends fragment_wrapper {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
         V = inflater.inflate(R.layout.fragment_complete_profile, container, false);
 
         // inflat fragment_clips and fragment_profile

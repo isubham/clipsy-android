@@ -25,6 +25,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.subhamkumar.clipsy.adapter.Clip_adapter;
 import com.subhamkumar.clipsy.adapter.Profile_adapter;
+import com.subhamkumar.clipsy.models.CONSTANTS;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
@@ -40,6 +41,7 @@ import java.util.Map;
 
 
 public class fragment_search extends fragment_wrapper {
+
     @Override
     public Map makeParams() {
         Map<String, String> params = new HashMap<String, String>();
@@ -69,7 +71,6 @@ public class fragment_search extends fragment_wrapper {
 
                 Profile_adapter.notifyDataSetChanged();
             }
-
 
         }catch (JSONException e) {
 
@@ -124,15 +125,18 @@ public class fragment_search extends fragment_wrapper {
                            public void onItemClick(View view, int position) {
 
                                Intent to_profile_result = new Intent(getActivity(), profile_result.class);
-                               to_profile_result.putExtra("user_id",
-                                       ((TextView)view.findViewById(R.id.rl_profile_id)).getText().toString().trim());
-                                to_profile_result.putExtra("name",
-                                       ((TextView)view.findViewById(R.id.rl_profile_name)).getText().toString().trim());
-                                to_profile_result.putExtra("email",
-                                       ((TextView)view.findViewById(R.id.rl_profile_email)).getText().toString().trim());
-                               to_profile_result.putExtra("type",
+
+                               to_profile_result.putExtra("c_user_id",
                                        ((TextView)view.findViewById(R.id.rl_profile_id)).getText().toString().trim());
 
+                               to_profile_result.putExtra("name",
+                                       ((TextView)view.findViewById(R.id.rl_profile_name)).getText().toString().trim());
+
+                               to_profile_result.putExtra("email",
+                                       ((TextView)view.findViewById(R.id.rl_profile_email)).getText().toString().trim());
+
+                               to_profile_result.putExtra("user_id",
+                                      user_id);
                                 startActivity(to_profile_result);
 
                            }
@@ -156,7 +160,7 @@ public class fragment_search extends fragment_wrapper {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        user_id = getArguments().getString("user_id");
+        user_id = getArguments().getString(CONSTANTS.USER_ID);
 
         View V = inflater.inflate(R.layout.fragment_search, container, false);
         init(V);

@@ -25,12 +25,12 @@ public class create extends wrapper {
     public Map makeParams() {
         Map params = new HashMap<String, String>();
 
-        params.put("visibility", clip_type);
-        params.put("user", user_id);
-        params.put("clip_title", text(R.id.clip_title));
-        params.put("clip_content", text(R.id.clip_content));
+        params.put(CONSTANTS.VISIBILITY, clip_type);
+        params.put(CONSTANTS.USER, user_id);
+        params.put(CONSTANTS.CLIP_TITLE, text(R.id.clip_title));
+        params.put(CONSTANTS.CLIP_CONTENT, text(R.id.clip_content));
 
-        params.put("fx", "create_clip");
+        params.put(CONSTANTS.FX, CONSTANTS.CREATE_CLIP);
 
 
         return params;
@@ -46,14 +46,14 @@ public class create extends wrapper {
         try {
             JSONObject jsonObject = new JSONObject(response);
 
-            if (jsonObject.has("status")) {
-                Toast.makeText(this, "Clip Created", Toast.LENGTH_SHORT).show();
+            if (jsonObject.has(CONSTANTS.STATUS)) {
+                Toast.makeText(this, CONSTANTS.CLIP_CREATED, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, jsonObject.getString(CONSTANTS.STATUS), Toast.LENGTH_SHORT).show();
             }
 
         } catch (JSONException e) {
-            Log.e("json ex", e.getMessage());
+            Log.e(CONSTANTS.JSON_EX, e.getMessage());
         }
     }
 
@@ -72,7 +72,7 @@ public class create extends wrapper {
 
         // getting user id
         if(getIntent().getExtras() != null){
-            user_id = getIntent().getExtras().getString("user_id");
+            user_id = getIntent().getExtras().getString(CONSTANTS.FIELD_USER_ID);
         }
         clip_type = CONSTANTS.PUBLIC;
 

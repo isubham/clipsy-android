@@ -2,6 +2,17 @@ package com.subhamkumar.clipsy.models;
 
 public  class CONSTANTS {
 
+    public static final String USER_ID = "user_id";
+    public static final String STATUS = "status";
+    public static final String CLIP_CREATED = "Clip Created";
+    public static final String JSON_EX = "json ex";
+    public static final String CREATE_CLIP = "create_clip";
+    public static final String FX = "fx";
+    public static final String CLIP_CONTENT = "clip_content";
+    public static final String CLIP_TITLE = "clip_title";
+    public static final String USER = "user";
+    public static final String VISIBILITY = "visibility";
+    public static final String FRAGMENT_CLIPS = "fragment_clips";
     public static String OPERATION_SIGN_UP = "sign_up";
     public static String OPERATION_SIGN_IN = "sign_in";
     public static String OPERATION_UPDATE_USER = "update_user";

@@ -58,6 +58,10 @@ public class signin extends wrapper {
                 String name = jsonObject.getJSONObject(user_id).getString("name");
 
 
+    /*
+    @dependency
+    name, user_id, type, c_user_id
+     */
                 startActivity(new Intent(signin.this, panel.class)
                         .putExtra("email", email)
                         .putExtra("type", type)
@@ -78,10 +82,6 @@ public class signin extends wrapper {
 
     public void gotosignup(View V) {
         startActivity(new Intent(signin.this, signup.class));
-    }
-
-    public void gotonewhome() {
-        startActivity(new Intent(signin.this, panel.class));
     }
 
     @Override
