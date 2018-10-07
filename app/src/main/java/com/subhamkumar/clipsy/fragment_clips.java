@@ -74,7 +74,6 @@ public class fragment_clips extends fragment_wrapper {
                 clipList.add(new Clip(clip_id,
                         clip.getString("u_name"),
                         clip.getString("u_id"),
-                        clip.getString("clip_title"),
                         clip.getString("clip_content"),
                         clip.getString("timestamp"),
                         clip.getString("visibility")
@@ -121,7 +120,9 @@ public class fragment_clips extends fragment_wrapper {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        user_id = getArguments().getString("user_id");
+        if(getArguments().containsKey("user_id")) {
+            user_id = getArguments().getString("user_id");
+        }
         if (getArguments().containsKey("c_user_id")) {
             user_id = getArguments().getString("c_user_id");
         }

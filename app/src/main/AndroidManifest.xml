@@ -10,8 +10,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".signin">
+        android:theme="@style/Theme.AppCompat.Light">
+        <activity
+            android:name=".signin"
+            android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,14 +21,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".signup" />
-        <activity android:name=".create" />
         <activity
             android:name=".panel"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".profile_result"
             android:theme="@style/Theme.AppCompat.Light" />
-        <activity android:name=".profiles_list"></activity>
+        <activity android:name=".profiles_list" />
+        <activity android:name=".editor" />
+        <activity android:name=".email_verification" />
+        <activity android:name=".send_verify_token" />
+        <activity android:name=".change_password" />
+
+        <receiver android:name=".utils.CustomTabs$CopyBroadcastReceiver" />
+
+        <activity android:name=".choose_avatar"></activity>
     </application>
 
 </manifest>

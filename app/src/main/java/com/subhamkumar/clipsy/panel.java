@@ -27,8 +27,20 @@ public class panel extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        to_create();
+        switch (item.getItemId()) {
+            case R.id.write_clip:
+                to_create();
+                break;
+            case R.id.sign_out:
+                to_sign_out();
+                break;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void to_sign_out() {
+        startActivity(new Intent(panel.this, signin.class).putExtra("sign_out", "1"));
+        this.finish();
     }
 
     //    Creating adapter for the viewpager
@@ -76,6 +88,7 @@ public class panel extends AppCompatActivity {
         setupViewPager(viewPager);
 
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setElevation(6);
 
     }
 
@@ -89,7 +102,9 @@ public class panel extends AppCompatActivity {
 
         fragment_clips fragment_clips = new fragment_clips();
         // TODO : add new method for fetching post of following
-        user_details.putString("fx", "following_clips");
+        if(user_details != null) {
+            user_details.putString("fx", "following_clips");
+        }
         fragment_clips.setArguments(user_details);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -103,7 +118,7 @@ public class panel extends AppCompatActivity {
     Bundle user_details;
 
     public void to_create() {
-        startActivity(new Intent(panel.this, create.class).putExtra("user_id", user_id));
+        startActivity(new Intent(panel.this, editor.class).putExtra("user_id", user_id));
     }
 
     String user_id;
@@ -111,6 +126,7 @@ public class panel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.panel);
+        getSupportActionBar().setElevation(0);
 
         if(getIntent().getExtras() != null) {
             user_details = getIntent().getExtras();

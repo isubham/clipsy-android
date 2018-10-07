@@ -4,81 +4,89 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:paddingBottom="16dp"
+    android:paddingTop="16dp"
     tools:context=".fragment_profile">
 
-        <TextView
-            android:id="@+id/fragment_profile_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Profile name"
-            android:textSize="16dp"
-            android:textStyle="bold" />
+    <ImageButton
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/boy003"
+        android:id="@+id/choose_avatar_icon"
+        />
+
+    <TextView
+        android:id="@+id/fragment_profile_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Profile name"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/fragment_profile_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Profile email"
+        android:textColor="@color/blue_600" />
+
+    <Button
+        android:id="@+id/rx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/indigo_500"
+        android:minHeight="14dp"
+        android:text="Follow"
+        android:textAllCaps="false"
+        android:textColor="@color/indigo_50" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="8dp">
 
         <TextView
-            android:id="@+id/fragment_profile_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Profile email"
-            android:textColor="@color/blue_600" />
-
-        <Button
-            android:id="@+id/rx"
+            android:id="@+id/fragment_profile_clips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/indigo_500"
+            android:layout_weight="0.1"
+            android:backgroundTint="@color/grey_50"
+            android:gravity="center"
             android:minHeight="14dp"
-            android:text="Follow"
+            android:text="Clips"
             android:textAllCaps="false"
-            android:textColor="@color/indigo_50" />
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/fragment_profile_followers"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:orientation="horizontal">
+            android:layout_weight="0.1"
+            android:backgroundTint="@color/grey_300"
+            android:gravity="center"
+            android:minHeight="14dp"
+            android:text="Followers"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
 
-            <TextView
-                android:id="@+id/fragment_profile_clips"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:backgroundTint="@color/grey_50"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:text="Clips"
-                android:minHeight="14dp"
-                android:textAllCaps="false"
-                android:textColor="@color/black" />
-
-            <Button
-                android:id="@+id/fragment_profile_followers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="14dp"
-                android:layout_weight="0.1"
-                android:backgroundTint="@color/grey_300"
-                android:gravity="center"
-                android:text="Followers"
-                android:textAllCaps="false"
-                android:textColor="@color/black" />
-
-            <Button
-                android:id="@+id/fragment_profile_following"
-                android:layout_width="wrap_content"
-                android:minHeight="14dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:backgroundTint="@color/grey_300"
-                android:gravity="center"
-                android:text="Following"
-                android:textAllCaps="false"
-                android:textColor="@color/black" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/fragment_profile_following"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:backgroundTint="@color/grey_300"
+            android:gravity="center"
+            android:minHeight="14dp"
+            android:text="Following"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
 
     </LinearLayout>
+
+</LinearLayout>
 

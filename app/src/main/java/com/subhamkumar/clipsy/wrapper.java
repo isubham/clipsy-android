@@ -2,6 +2,7 @@ package com.subhamkumar.clipsy;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -16,7 +17,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-public abstract class wrapper extends Activity {
+public abstract class wrapper extends AppCompatActivity {
 
     public String text(EditText et) {
         return et.getText().toString().trim();
@@ -42,7 +43,7 @@ public abstract class wrapper extends Activity {
 
     public void make_request() {
 
-        String url = "http://pitavya.com/clipsy/api/";
+        String url = "http://api.pitavya.com/clipsy/";
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,

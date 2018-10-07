@@ -1,10 +1,14 @@
 package com.subhamkumar.clipsy;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -58,15 +62,18 @@ public class signin extends wrapper {
                 String name = jsonObject.getJSONObject(user_id).getString("name");
 
 
-    /*
-    @dependency
-    name, user_id, type, c_user_id
-     */
+                /*
+                @dependency
+                name, user_id, type, c_user_id
+                 */
                 startActivity(new Intent(signin.this, panel.class)
                         .putExtra("email", email)
                         .putExtra("type", type)
                         .putExtra("name", name)
                         .putExtra("user_id", user_id));
+
+                save_login_details(email, type, name, user_id);
+                this.finish();
 
             }
 
@@ -84,10 +91,76 @@ public class signin extends wrapper {
         startActivity(new Intent(signin.this, signup.class));
     }
 
+     public void start_forget_password(View V) {
+        startActivity(new Intent(signin.this, send_verify_token.class).putExtra("email",
+                ((EditText) findViewById(R.id.signin_email)).getText().toString().trim()));
+     }
+
+     String email;
+
+    Bundle bundle;
+
+    SharedPreferences localStore;
+    static String myFile = "theAwesomeDataInMain", myKey = "52521";
+
+    public void save_login_details(String email, String type, String name, String user_id) {
+        localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
+        localStore.edit()
+                .putString("email", email)
+                .putString("type", type)
+                .putString("name", name)
+                .putString("user_id", user_id)
+                .commit();
+
+    }
+
+    public void check_login_details() {
+        localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
+        if (localStore.contains("email")){
+            Log.i("check_login", "contains email");
+                 startActivity(new Intent(signin.this, panel.class)
+                         .putExtra("email", localStore.getString("email",""))
+                        .putExtra("type", localStore.getString("type",""))
+                        .putExtra("name", localStore.getString("name",""))
+                        .putExtra("user_id", localStore.getString("user_id","")));
+                 this.finish();
+        }
+        else{
+            Log.i("check_login", "donot contains email");
+        }
+    }
+
+    public void delete_login_details() {
+        localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
+        localStore.edit().clear().commit();
+    }
+
+    String sign_out;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.signin);
 
+        bundle = getIntent().getExtras();
+
+        email = "";
+        if (bundle!= null) {
+            email = getIntent().getExtras().getString("email");
+            ((EditText) findViewById(R.id.signin_email)).setText(email);
+            if(bundle.containsKey("sign_out"))
+                delete_login_details();
+            else{
+                check_login_details();
+            }
+        }
+
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
 }

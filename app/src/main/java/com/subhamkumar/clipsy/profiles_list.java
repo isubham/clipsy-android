@@ -84,6 +84,7 @@ public class profiles_list extends wrapper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_list);
 
+
         bundle = getIntent().getExtras();
         user_x = bundle.getString("user_x");
         fx = bundle.getString("fx");

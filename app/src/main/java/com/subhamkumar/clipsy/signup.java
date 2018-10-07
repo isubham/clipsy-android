@@ -75,7 +75,10 @@ public class signup extends wrapper {
             if (jsonObject.getString("status").equals("1") ) {
                 // TODO : 1 go to signin after saying account created
                 Toast.makeText(signup.this, "Account Created", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(signup.this, signin.class).putExtra("email", text(R.id.signup_email)));
+                startActivity(new Intent(signup.this, email_verification.class)
+                        .putExtra("callback", "1")
+                        .putExtra("email", text(R.id.signup_email)));
+                this.finish();
             } else {
                 // TODO : 2 account didnot created give message show message
                 Toast.makeText(signup.this, jsonObject.getString("status"), Toast.LENGTH_SHORT).show();

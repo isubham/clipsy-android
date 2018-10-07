@@ -2,33 +2,42 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:padding="4dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:padding="4dp"
+        android:orientation="horizontal">
 
         <!-- row 1 => user pic | name | ago-->
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="8dp"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_weight="0.2"
+            android:padding="4dp"
             android:orientation="horizontal">
 
             <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="TODO"
+                android:src="@drawable/boy003" />
+        </LinearLayout>
 
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/user" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:layout_marginStart="2dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/rl_profile_name"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginLeft="8dp"
+                android:layout_height="16sp"
                 android:layout_weight="0.8"
                 android:text="hell world"
                 android:textStyle="bold" />
@@ -37,21 +46,20 @@
             <TextView
                 android:id="@+id/rl_profile_id"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="16sp"
                 android:text="author id"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
-        </LinearLayout>
+            <!-- row 2 => title -->
+            <TextView
+                android:id="@+id/rl_profile_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="title"
+                android:textSize="12dp" />
 
-        <!-- row 2 => title -->
-        <TextView
-            android:id="@+id/rl_profile_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="36dp"
-            android:text="title"
-            android:textSize="20dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

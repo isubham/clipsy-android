@@ -37,7 +37,7 @@ public abstract class fragment_wrapper extends Fragment {
 
     public void make_request() {
 
-        String url = "http://pitavya.com/clipsy/api/";
+        String url = "http://api.pitavya.com/clipsy/";
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,

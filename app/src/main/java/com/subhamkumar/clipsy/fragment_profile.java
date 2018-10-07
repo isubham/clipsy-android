@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -15,8 +16,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,7 +102,7 @@ public class fragment_profile extends fragment_wrapper {
 
     private void update_rx() {
 
-        String url = "http://pitavya.com/clipsy/api/";
+        String url = "http://api.pitavya.com/clipsy/";
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
@@ -158,6 +157,7 @@ public class fragment_profile extends fragment_wrapper {
 
     // follow, follow back, unfollow
 
+    ImageButton _choose_avatar_icon;
     public void init(View V) {
 
         _name = V.findViewById(R.id.fragment_profile_name);
@@ -165,6 +165,8 @@ public class fragment_profile extends fragment_wrapper {
 
         _email = V.findViewById(R.id.fragment_profile_email);
         _email.setText(user_email);
+
+        _choose_avatar_icon = V.findViewById(R.id.choose_avatar_icon);
 
         fragment_profile_followers = V.findViewById(R.id.fragment_profile_followers);
         fragment_profile_following = V.findViewById(R.id.fragment_profile_following);
@@ -187,6 +189,15 @@ public class fragment_profile extends fragment_wrapper {
                 startActivity(to_profiles_list);
             }
         });
+
+
+        _choose_avatar_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), choose_avatar.class));
+            }
+        });
+
         _rx = V.findViewById(R.id.rx);
 
         if (user_x.equals(user_y)) {
@@ -231,5 +242,6 @@ public class fragment_profile extends fragment_wrapper {
         init(V);
         return V;
     }
+
 
 }

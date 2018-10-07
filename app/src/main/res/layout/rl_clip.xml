@@ -2,11 +2,13 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="4dp"
+
+    >
 
     <LinearLayout
+
         android:layout_width="match_parent"
-        android:padding="4dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -14,15 +16,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:padding="8dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <ImageView
 
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/user" />
+                android:src="@drawable/boy003" />
 
             <TextView
                 android:id="@+id/rl_clip_author"
@@ -51,31 +53,35 @@
                 android:visibility="gone" />
             <!-- end of ids -->
 
-            <TextView
-                android:id="@+id/rl_clip_time"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_weight="0.1"
-                android:text="20 march 2018" />
 
         </LinearLayout>
 
-        <!-- row 2 => title -->
-        <TextView
-            android:id="@+id/rl_clip_title"
+        <LinearLayout
+            android:background="@color/grey_100"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="36dp"
-            android:text="title"
-            android:textSize="20dp" />
+            android:layout_height="1dp"
+            ></LinearLayout>
 
         <!-- row 3 => content -->
         <TextView
             android:id="@+id/rl_clip_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="36dp"
-            android:text="there was a time when the sun goes down" />
+            android:padding="8dp"
+            android:text="Content" />
+
+         <LinearLayout
+            android:background="@color/grey_100"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            ></LinearLayout>
+
+        <TextView
+                android:id="@+id/rl_clip_time"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_weight="0.1"
+                android:text="20 march 2018" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -20,6 +20,8 @@ public class profile_result extends AppCompatActivity {
 
         profile_result = (LinearLayout) findViewById(R.id.profile_result);
 
+        getSupportActionBar().setElevation(0);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

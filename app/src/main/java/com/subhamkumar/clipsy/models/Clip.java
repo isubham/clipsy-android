@@ -12,16 +12,14 @@ public class Clip {
     public String id,
     u_name,
     u_id,
-    clip_title,
     clip_content,
     clip_time,
     visibility;
 
-    public Clip(String id, String u_name, String u_id, String clip_title, String clip_content, String clip_time, String visibility) {
+    public Clip(String id, String u_name, String u_id, String clip_content, String clip_time, String visibility) {
         this.id = id;
         this.u_name = u_name;
         this.u_id = u_id;
-        this.clip_title = clip_title;
         this.clip_content = clip_content;
         this.clip_time = clip_time;
         this.visibility = visibility;

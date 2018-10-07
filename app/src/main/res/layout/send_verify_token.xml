@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".send_verify_token">
+
+    <!--email -->
+    <EditText
+        android:hint="email address"
+        android:id="@+id/email_to_send_verify_token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:hint="Send Verification Code"
+        android:id="@+id/initiate_send_verify_token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="send_verify_token" />
+
+</LinearLayout>
