@@ -33,4 +33,11 @@
     <string name="title_insert_link">Insert Link</string>
     <string name="hint_text_to_display">Text to display</string>
     <string name="hint_link_to">Link to</string>
+    <string name="profile_email">Profile email</string>
+    <string name="profile_name">Profile name</string>
+    <string name="follow">Follow</string>
+    <string name="clips">Clips</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="todo">TODO</string>
 </resources>

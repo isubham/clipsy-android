@@ -1,7 +1,6 @@
-package com.subhamkumar.clipsy;
+package com.subhamkumar.clipsy.auth;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.utils.wrapper;
 
 import org.json.JSONException;
 import org.json.JSONObject;

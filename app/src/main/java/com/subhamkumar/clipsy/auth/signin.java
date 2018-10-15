@@ -1,6 +1,5 @@
-package com.subhamkumar.clipsy;
+package com.subhamkumar.clipsy.auth;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,13 +7,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.CONSTANTS;
+import com.subhamkumar.clipsy.panel;
+import com.subhamkumar.clipsy.utils.wrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,7 +61,7 @@ public class signin extends wrapper {
                 String email = jsonObject.getJSONObject(user_id).getString("email");
                 String type = jsonObject.getJSONObject(user_id).getString("type");
                 String name = jsonObject.getJSONObject(user_id).getString("name");
-
+                String profile_pic = jsonObject.getJSONObject(user_id).getString("profile_pic");
 
                 /*
                 @dependency
@@ -70,7 +71,9 @@ public class signin extends wrapper {
                         .putExtra("email", email)
                         .putExtra("type", type)
                         .putExtra("name", name)
-                        .putExtra("user_id", user_id));
+                        .putExtra("user_id", user_id)
+                        .putExtra("profile_pic", profile_pic)
+                        );
 
                 save_login_details(email, type, name, user_id);
                 this.finish();

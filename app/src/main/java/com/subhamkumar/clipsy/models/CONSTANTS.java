@@ -1,7 +1,27 @@
 package com.subhamkumar.clipsy.models;
 
-public  class CONSTANTS {
+import com.subhamkumar.clipsy.R;
 
+public  class CONSTANTS {
+public  static Integer[] mThumbIds = {
+            R.drawable.boy003,
+            R.drawable.boy007,
+            R.drawable.boy016,
+            R.drawable.boy016,
+            R.drawable.girl002,
+            R.drawable.girl010,
+            R.drawable.girl017,
+            R.drawable.girl021,
+            R.drawable.man001,
+            R.drawable.man005,
+            R.drawable.man011,
+            R.drawable.man014,
+            R.drawable.woman004,
+            R.drawable.woman006,
+            R.drawable.woman012,
+            R.drawable.woman013,
+
+    };
     public static final String USER_ID = "user_id";
     public static final String STATUS = "status";
     public static final String CLIP_CREATED = "Clip Created";

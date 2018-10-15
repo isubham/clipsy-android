@@ -1,6 +1,5 @@
-package com.subhamkumar.clipsy;
+package com.subhamkumar.clipsy.auth;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +10,15 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.CONSTANTS;
+import com.subhamkumar.clipsy.utils.wrapper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 public class signup extends wrapper {
 
@@ -87,6 +86,10 @@ public class signup extends wrapper {
         } catch (JSONException e) {
             Log.e("json ex", e.getMessage());
         }
+    }
+
+    public String text(int et) {
+        return ((EditText) findViewById(et)).getText().toString().trim();
     }
 
     @Override

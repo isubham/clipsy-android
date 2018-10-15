@@ -1,15 +1,17 @@
 package com.subhamkumar.clipsy;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.subhamkumar.clipsy.fragments.fragment_complete_profile;
+
 public class profile_result extends AppCompatActivity {
+
+    // profile of user => linerarlayout ( fragment_complete_profile )
+    // TODO @input => viewed_id, viewer_id
 
     LinearLayout profile_result;
 
@@ -25,13 +27,15 @@ public class profile_result extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragment_complete_profile fragment_profile = new fragment_complete_profile();
+        fragment_complete_profile fragment_complete_profile = new fragment_complete_profile();
+
         if(getIntent().getExtras() != null) {
             Bundle user_detail = getIntent().getExtras();
             user_detail.putString("fx", "read_clips");
-            fragment_profile.setArguments(user_detail);
+            fragment_complete_profile.setArguments(user_detail);
         }
-        fragmentTransaction.add(profile_result.getId(), fragment_profile);
+
+        fragmentTransaction.add(profile_result.getId(), fragment_complete_profile);
         fragmentTransaction.commit();
     }
 }

@@ -24,4 +24,52 @@ public class Clip {
         this.clip_time = clip_time;
         this.visibility = visibility;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getU_name() {
+        return u_name;
+    }
+
+    public void setU_name(String u_name) {
+        this.u_name = u_name;
+    }
+
+    public String getU_id() {
+        return u_id;
+    }
+
+    public void setU_id(String u_id) {
+        this.u_id = u_id;
+    }
+
+    public String getClip_content() {
+        return clip_content;
+    }
+
+    public void setClip_content(String clip_content) {
+        this.clip_content = clip_content;
+    }
+
+    public String getClip_time() {
+        return clip_time;
+    }
+
+    public void setClip_time(String clip_time) {
+        this.clip_time = clip_time;
+    }
+
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
+    }
 }

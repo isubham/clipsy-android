@@ -1,31 +1,18 @@
-package com.subhamkumar.clipsy;
+package com.subhamkumar.clipsy.utils;
 
-import android.app.Activity;
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.EditText;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Map;
 
 public abstract class wrapper extends AppCompatActivity {
-
-    public String text(EditText et) {
-        return et.getText().toString().trim();
-    }
-
-    public String text(int et) {
-        return ((EditText) findViewById(et)).getText().toString().trim();
-    }
 
     public abstract Map makeParams();
 
@@ -52,7 +39,7 @@ public abstract class wrapper extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.e("Resource volley_wrapper", response.toString());
+                        Log.e("base", response.toString());
                         handle_response(response);
 
                     }
@@ -70,14 +57,12 @@ public abstract class wrapper extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
 
-                // Log.i("v_makeparam", makeParams().toString());
                 return makeParams();
 
             }
         };
 
         make_volley_request(stringRequest);
-
 
     }
 

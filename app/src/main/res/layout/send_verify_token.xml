@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".send_verify_token">
+    tools:context=".auth.send_verify_token">
 
     <!--email -->
     <EditText

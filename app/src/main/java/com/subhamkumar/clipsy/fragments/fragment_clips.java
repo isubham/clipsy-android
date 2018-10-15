@@ -1,10 +1,7 @@
-package com.subhamkumar.clipsy;
+package com.subhamkumar.clipsy.fragments;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.Clip_adapter;
 import com.subhamkumar.clipsy.models.CONSTANTS;
 import com.subhamkumar.clipsy.models.Clip;

@@ -1,7 +1,6 @@
 package com.subhamkumar.clipsy;
 
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,7 +13,10 @@ import com.android.volley.toolbox.Volley;
 import com.jkcarino.rtexteditorview.RTextEditorButton;
 import com.jkcarino.rtexteditorview.RTextEditorToolbar;
 import com.jkcarino.rtexteditorview.RTextEditorView;
+import com.subhamkumar.clipsy.fragments.InsertLinkDialogFragment;
+import com.subhamkumar.clipsy.fragments.InsertTableDialogFragment;
 import com.subhamkumar.clipsy.models.CONSTANTS;
+import com.subhamkumar.clipsy.utils.wrapper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -89,7 +91,7 @@ public class editor extends wrapper {
         editorToolbar.setEditorView(editor);
 
         // Set initial content
-        editor.setHtml("<h1>My Awesome Title</h1><p>Once upon a time ...</p>");
+        editor.setHtml("<h1>Title</h1><p>Once upon a time ...</p>");
 
 
         // Listen to the editor's text changes

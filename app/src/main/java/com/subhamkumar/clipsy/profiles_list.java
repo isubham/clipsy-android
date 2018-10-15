@@ -1,6 +1,5 @@
 package com.subhamkumar.clipsy;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +9,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.subhamkumar.clipsy.models.Profile;
 
-import com.subhamkumar.clipsy.adapter.Clip_adapter;
 import com.subhamkumar.clipsy.adapter.Profile_adapter;
+import com.subhamkumar.clipsy.utils.wrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 public class profiles_list extends wrapper {
+
+    // (following and followers) => showing a list of users
 
     @Override
     public Map makeParams() {
@@ -38,6 +39,7 @@ public class profiles_list extends wrapper {
 
         try{
             Log.i("profileList", response);
+            
 
         // fill the result
         JSONObject profiles = new JSONObject(response);
@@ -79,6 +81,7 @@ public class profiles_list extends wrapper {
     List<Profile> profileList;
     Bundle bundle;
     String user_x, fx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

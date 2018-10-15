@@ -1,4 +1,4 @@
-package com.subhamkumar.clipsy;
+package com.subhamkumar.clipsy.fragments;
 
 
 import android.app.Dialog;
@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.subhamkumar.clipsy.R;
 
 public class InsertTableDialogFragment extends AppCompatDialogFragment {
 

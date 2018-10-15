@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
         <activity
-            android:name=".signin"
+            android:name=".auth.signin"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".signup" />
+        <activity android:name=".auth.signup" />
         <activity
             android:name=".panel"
             android:theme="@style/Theme.AppCompat.Light" />
@@ -29,9 +29,9 @@
             android:theme="@style/Theme.AppCompat.Light" />
         <activity android:name=".profiles_list" />
         <activity android:name=".editor" />
-        <activity android:name=".email_verification" />
-        <activity android:name=".send_verify_token" />
-        <activity android:name=".change_password" />
+        <activity android:name=".auth.email_verification" />
+        <activity android:name=".auth.send_verify_token" />
+        <activity android:name=".auth.change_password" />
 
         <receiver android:name=".utils.CustomTabs$CopyBroadcastReceiver" />
 
