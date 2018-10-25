@@ -84,19 +84,15 @@ public class panel extends AppCompatActivity {
     private void initializeVaribles() {
         viewPager = (ViewPager) findViewById(R.id.user_panel_viewpager);
         tabLayout = (TabLayout) findViewById(R.id.user_panel_tabs);
-
-    }
-
-    private void settingVariables() {
-
         setupViewPager(viewPager);
-
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setElevation(6);
 
     }
 
+
     private void setupViewPager(ViewPager viewPager) {
+
 
         fragment_search fragment_search = new fragment_search();
         fragment_search.setArguments(user_details);
@@ -106,9 +102,7 @@ public class panel extends AppCompatActivity {
 
         fragment_clips fragment_clips = new fragment_clips();
         // TODO : add new method for fetching post of following
-        if(user_details != null) {
-            user_details.putString("fx", "following_clips");
-        }
+        user_details.putString("fx", "following_clips");
         fragment_clips.setArguments(user_details);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -138,7 +132,6 @@ public class panel extends AppCompatActivity {
         }
 
         initializeVaribles();
-        settingVariables();
         setupViewPager(viewPager);
     }
 }

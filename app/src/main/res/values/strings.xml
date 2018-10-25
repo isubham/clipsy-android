@@ -40,4 +40,9 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="todo">TODO</string>
+
+
+    <!-- app  -->
+    <string name="user_id">user_id</string>
+
 </resources>

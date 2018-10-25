@@ -41,14 +41,17 @@ public class fragment_clips extends fragment_wrapper {
     }
 
 
+    /*
+        [fx : following_clips, user_x : id]
+        [fx : read_clips,      user   : id]
+     */
     @Override
     public Map makeParams() {
         Map<String, String> read_clips = new HashMap<String, String>();
-        read_clips.put(CONSTANTS.FX, _fx); // "read_clips");
+        read_clips.put(CONSTANTS.FX, _fx); // "read_clips", "following_clips"
 
         if (_fx.equals("following_clips")) {
             read_clips.put("user_x", user_id);
-            Log.i(CONSTANTS.FRAGMENT_CLIPS, read_clips.toString());
             return read_clips;
         }
 
@@ -69,13 +72,17 @@ public class fragment_clips extends fragment_wrapper {
             for (int i = 0; i < clip_ids.length(); i++) {
                 String clip_id = clip_ids.get(i).toString();
                 JSONObject clip = jsonObject.getJSONObject(clip_id);
-                clipList.add(new Clip(clip_id,
+
+                clipList.add(
+                        new Clip(clip_id,
                         clip.getString("u_name"),
                         clip.getString("u_id"),
                         clip.getString("clip_content"),
                         clip.getString("timestamp"),
-                        clip.getString("visibility")
-                ));
+                        clip.getString("visibility"),
+                        clip.getString("profile_pic")
+                        )
+                );
 
                 clip_adapter.notifyDataSetChanged();
             }
@@ -94,7 +101,6 @@ public class fragment_clips extends fragment_wrapper {
     LinearLayoutManager linearLayoutManager;
     Clip_adapter clip_adapter;
     List<Clip> clipList;
-    FloatingActionButton create_clip_floating_button;
 
 
     private void init(View V) {
@@ -117,14 +123,21 @@ public class fragment_clips extends fragment_wrapper {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(getArguments().containsKey("user_id")) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        // in case of panel => following user posts
+        if(getArguments().containsKey(getString(R.string.user_id))) {
             user_id = getArguments().getString("user_id");
         }
+
+        // in case of fragment_complete_profile
         if (getArguments().containsKey("c_user_id")) {
             user_id = getArguments().getString("c_user_id");
         }
+
         _fx = getArguments().getString("fx");
+
         V = inflater.inflate(R.layout.fragment_clips, container, false);
         context = container.getContext();
         init(V);

@@ -14,15 +14,18 @@ public class Clip {
     u_id,
     clip_content,
     clip_time,
-    visibility;
+    visibility, profile_pic;
 
-    public Clip(String id, String u_name, String u_id, String clip_content, String clip_time, String visibility) {
+    public Clip(String id, String u_name, String u_id, String clip_content, String clip_time, String visibility, String profile_pic) {
         this.id = id;
         this.u_name = u_name;
         this.u_id = u_id;
         this.clip_content = clip_content;
         this.clip_time = clip_time;
         this.visibility = visibility;
+        this.profile_pic = profile_pic;
+
+
     }
 
     public String getId() {
@@ -63,6 +66,14 @@ public class Clip {
 
     public void setClip_time(String clip_time) {
         this.clip_time = clip_time;
+    }
+
+    public String getProfile_pic() {
+        return profile_pic;
+    }
+
+    public void setProfile_pic(String profile_pic) {
+        this.profile_pic = profile_pic;
     }
 
     public String getVisibility() {

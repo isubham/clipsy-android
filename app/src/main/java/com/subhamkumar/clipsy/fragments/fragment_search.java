@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.StringRequest;
@@ -122,18 +123,21 @@ public class fragment_search extends fragment_wrapper {
 
                                Intent to_profile_result = new Intent(getActivity(), profile_result.class);
 
-                               to_profile_result.putExtra("c_user_id",
-                                       ((TextView)view.findViewById(R.id.rl_profile_id)).getText().toString().trim());
+                               String c_user_id = ((TextView)view.findViewById(R.id.rl_profile_id)).getText().toString().trim();
+                               // if c_user_id and user_id are same
 
-                               to_profile_result.putExtra("name",
-                                       ((TextView)view.findViewById(R.id.rl_profile_name)).getText().toString().trim());
+                               /* TODO will it be added or not.
+                               if(user_id.equals(c_user_id)) {
+                                   TabHost host = (TabHost) getActivity().findViewById(android.R.id.tabhost);
+                                   host.setCurrentTab(3);
+                               }
+                               */
 
-                               to_profile_result.putExtra("email",
-                                       ((TextView)view.findViewById(R.id.rl_profile_email)).getText().toString().trim());
+                                   to_profile_result
+                                           .putExtra("c_user_id", c_user_id)
+                                           .putExtra("user_id", user_id);
+                                    startActivity(to_profile_result);
 
-                               to_profile_result.putExtra("user_id",
-                                      user_id);
-                                startActivity(to_profile_result);
 
                            }
                        })

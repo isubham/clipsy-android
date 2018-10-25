@@ -12,11 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.models.CONSTANTS;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.utils.CustomTabs;
 
@@ -32,6 +34,7 @@ public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewhol
 
                 clip_content,
                 clip_time;
+        ImageView profile_pic;
 
         Clip_viewholder(View V) {
             super(V);
@@ -41,6 +44,8 @@ public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewhol
             author_name = (TextView) V.findViewById(R.id.rl_clip_author);
             clip_time = (TextView) V.findViewById(R.id.rl_clip_time);
             clip_content = (TextView) V.findViewById(R.id.rl_clip_content);
+            profile_pic = (ImageView) V.findViewById(R.id.rl_clip_profile_pic);
+
         }
     }
 
@@ -55,7 +60,8 @@ public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewhol
     @NonNull
     @Override
     public Clip_viewholder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View V = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.rl_clip, viewGroup, false);
+        View V = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.rl_clip, viewGroup, false);
         Clip_viewholder clip_viewholder = new Clip_viewholder(V);
         context = viewGroup.getContext();
         return clip_viewholder;
@@ -98,6 +104,14 @@ public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewhol
         // clip_viewholder.clip_content.setText(Html.fromHtml(clips.get(i).clip_content));
         setTextViewHTML(clip_viewholder.clip_content, clips.get(i).clip_content);
         clip_viewholder.clip_time.setText(          clips.get(i).clip_time);
+
+        try{
+            int _profile_pic = Integer.parseInt(clips.get(i).profile_pic);
+            int imageResource = CONSTANTS.mThumbIds[_profile_pic];
+            clip_viewholder.profile_pic.setImageResource(imageResource);
+        }catch (NumberFormatException e) {
+            Log.i("002", "nullformatexception"+ e.getMessage());
+        }
 
     }
 

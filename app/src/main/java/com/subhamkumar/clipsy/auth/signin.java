@@ -68,11 +68,11 @@ public class signin extends wrapper {
                 name, user_id, type, c_user_id
                  */
                 startActivity(new Intent(signin.this, panel.class)
-                        .putExtra("email", email)
-                        .putExtra("type", type)
-                        .putExtra("name", name)
-                        .putExtra("user_id", user_id)
-                        .putExtra("profile_pic", profile_pic)
+                                .putExtra("user_id", user_id)
+                                // .putExtra("email", email)
+                                // .putExtra("type", type)
+                                // .putExtra("name", name)
+                                // .putExtra("profile_pic", profile_pic)
                         );
 
                 save_login_details(email, type, name, user_id);
@@ -84,7 +84,6 @@ public class signin extends wrapper {
             Log.e("json ex", e.getMessage());
         }
     }
-
 
     public void start_signin(View V) {
         make_request();
@@ -109,9 +108,9 @@ public class signin extends wrapper {
     public void save_login_details(String email, String type, String name, String user_id) {
         localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
         localStore.edit()
-                .putString("email", email)
-                .putString("type", type)
-                .putString("name", name)
+                // .putString("email", email)
+                // .putString("type", type)
+                // .putString("name", name)
                 .putString("user_id", user_id)
                 .commit();
 
@@ -122,9 +121,9 @@ public class signin extends wrapper {
         if (localStore.contains("email")){
             Log.i("check_login", "contains email");
                  startActivity(new Intent(signin.this, panel.class)
-                         .putExtra("email", localStore.getString("email",""))
-                        .putExtra("type", localStore.getString("type",""))
-                        .putExtra("name", localStore.getString("name",""))
+                       //  .putExtra("email", localStore.getString("email",""))
+                       // .putExtra("type", localStore.getString("type",""))
+                       // .putExtra("name", localStore.getString("name",""))
                         .putExtra("user_id", localStore.getString("user_id","")));
                  this.finish();
         }

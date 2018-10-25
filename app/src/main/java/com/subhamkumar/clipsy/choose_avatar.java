@@ -54,7 +54,7 @@ public class choose_avatar extends wrapper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_avatar);
 
-        id = getIntent().getExtras().getString("id");
+        id = getIntent().getExtras().getString("user_id");
 
         GridView gridview = (GridView) findViewById(R.id.choose_avatar_gridview);
         gridview.setAdapter(new image_adapter(this));

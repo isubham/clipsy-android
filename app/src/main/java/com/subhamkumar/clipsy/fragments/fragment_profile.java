@@ -21,6 +21,7 @@ import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.choose_avatar;
 import com.subhamkumar.clipsy.models.CONSTANTS;
 import com.subhamkumar.clipsy.profiles_list;
+import com.subhamkumar.clipsy.view_avatar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +42,7 @@ public class fragment_profile extends fragment_wrapper {
     @Override
     public Map makeParams() {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("fx", "now_type");
+        params.put("fx", "profile_matrix");
         params.put("user_x", user_x);
         params.put("user_y", user_y);
         return params;
@@ -51,34 +52,58 @@ public class fragment_profile extends fragment_wrapper {
     public void handle_response(String response) {
 
         response = response.trim();
+
         // if nothing => follow
         // []
-        if (response.equals("[]")) {
-            rx_action = "follow";
-            rx_title = "follow";
-        } else {
+        Log.i("profile_matrix 001", response.toString());
+
+
+
             try {
                 JSONObject rx_detais = new JSONObject(response);
 
-                JSONArray rx_array = rx_detais.getJSONArray(user_x);
+                String root_id = rx_detais.names().get(0).toString();
 
+                JSONArray rx_array = rx_detais.getJSONArray(root_id);
+
+                set_variables_from_response(rx_array.getJSONObject(0));
+                set_ui_text(user_email, user_name, profile_pic);
+
+
+                // single follow
                 if (rx_array.length() == 1) {
-                    // if y follow x => follow back
-                    // {"user_x":[{"user_y":"","type":"-1"}]}
-                    // if x follows y => unfollow
-                    // {"user_x":[{"user_y":"","type":"1"}]}
-                    JSONObject user_y_type = (rx_array.getJSONObject(0));
-                    String type = user_y_type.getString("type");
 
-                    if (type.equals("1")) {
-                        rx_action = "unfollow";
-                        rx_title = "unfollow";
-                    } else if (type.equals("-1")) {
-                        rx_action = "follow";
-                        rx_title = "follow back";
+                    JSONObject user_y_type = (rx_array.getJSONObject(0));
+
+                    if (!user_y_type.has("type")) {
+                            rx_action = "follow";
+                            rx_title = "follow";
+                    }
+                    // setVariables
+                    else {
+
+                        String type = user_y_type.getString("type");
+
+                        // if y follow x => follow back
+                        // {"user_y":[{id, name, email, type:"-1"}]}
+                        if (type.equals("1")) {
+                            rx_action = "unfollow";
+                            rx_title = "unfollow";
+                        }
+
+                        // if x follows y => unfollow
+                        // {"user_y":[{id, name, email, type:"1"}]}
+                        else if (type.equals("-1")) {
+                            rx_action = "follow";
+                            rx_title = "follow back";
+                        }
                     }
 
-                } else {
+                }
+
+                // mututal follow
+                else {
+
                     // if x and y follows each other => unfollow
                     // {"user_x":[{"user_y":"","type":"-1"},{"user_y":"","type":"1"}]}
                     Log.e("mutual rx", response);
@@ -91,7 +116,7 @@ public class fragment_profile extends fragment_wrapper {
             catch (JSONException e) {
                 Log.e("json Ex", "json exception in fragment_profile");
             }
-        }
+
 
         _rx.setText(rx_title);
         _rx.setOnClickListener(new View.OnClickListener() {
@@ -193,17 +218,18 @@ public class fragment_profile extends fragment_wrapper {
             }
         });
 
-
         _choose_avatar_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), choose_avatar.class).putExtra("id", user_y));
+                startActivity(new Intent(getActivity(), view_avatar.class)
+                        .putExtra("user_x", user_x)
+                        .putExtra("user_y", user_y));
             }
         });
 
     }
 
-    private void set_ui_text(String user_email, String user_name, String profile_pic){
+    private void set_ui_text(String user_email, String user_name, String profile_pic) {
         _email.setText(user_email);
         _name.setText(user_name);
 
@@ -219,36 +245,26 @@ public class fragment_profile extends fragment_wrapper {
     
     private void set_rx(String user_x, String user_y) {
 
-        if (user_x.equals(user_y)) {
+        if (user_x.equals(user_y))  {
             _rx.setVisibility(View.GONE);
-        } else {
-            make_request();
         }
 
     }
 
-    private void set_variables_from_bundle() {
-        if (getArguments() != null) {
-            Log.i("fragment_profile", "nonempty bundle");
 
-            profile_pic = getArguments().getString("profile_pic");
-            user_name = getArguments().getString("name");
-            user_email = getArguments().getString("email");
-            user_x = getArguments().getString("user_id");
+    private void set_variables_from_response(JSONObject profile_matrix) {
 
-            if (getArguments().getString("type") != null) {
-                type = getArguments().getString("type");
+            Log.i("profile_matrix", profile_matrix.toString());
+
+            try {
+                profile_pic = profile_matrix.getString("profile_pic");
+                user_name = profile_matrix.getString("name");
+                user_email = profile_matrix.getString("email");
+
+            }catch (JSONException e) {
+                Log.i("110", e.getMessage());
             }
 
-            if (getArguments().containsKey("c_user_id")) {
-                user_y = getArguments().getString("c_user_id");
-
-            } else {
-                user_y = user_x;
-            }
-        } else {
-            Log.i("fragment_profile", "empty bundle");
-        }
     }
 
     String profile_pic = "0";
@@ -265,10 +281,25 @@ public class fragment_profile extends fragment_wrapper {
 
         V = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        set_variables_from_bundle();
         set_ui_vars();
-        set_ui_text(user_email, user_name, profile_pic);
-        set_rx(user_x, user_y);
+
+        try {
+
+
+            user_x = getArguments().getString("user_id");
+
+            user_y = user_x;
+
+            if (getArguments().containsKey("c_user_id")) {
+                user_y = getArguments().getString("c_user_id");
+            }
+
+            set_rx(user_x, user_y);
+        }catch (NumberFormatException e) {
+            Log.e("0097", e.getMessage());
+        }
+
+        make_request();
         click_listeners(user_y);
 
         return V;
@@ -277,6 +308,8 @@ public class fragment_profile extends fragment_wrapper {
 
     @Override
     public void onResume() {
+        make_request();
         super.onResume();
+
     }
 }

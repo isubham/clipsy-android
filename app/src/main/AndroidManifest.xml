@@ -35,7 +35,8 @@
 
         <receiver android:name=".utils.CustomTabs$CopyBroadcastReceiver" />
 
-        <activity android:name=".choose_avatar"></activity>
+        <activity android:name=".choose_avatar" />
+        <activity android:name=".view_avatar"></activity>
     </application>
 
 </manifest>
