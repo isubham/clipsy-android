@@ -1,7 +1,6 @@
 package com.subhamkumar.clipsy;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,13 +18,15 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.view.View.GONE;
+
 public class view_avatar extends wrapper {
 
     @Override
     public Map makeParams() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("fx", "get_by_id");
-        params.put("id", user_x);
+        params.put("id", edit_avatar_button.getVisibility() == GONE ? user_y : user_x);
         return params;
     }
 
@@ -90,7 +91,7 @@ public class view_avatar extends wrapper {
             });
         }
         else {
-            edit_avatar_button.setVisibility(View.GONE);
+            edit_avatar_button.setVisibility(GONE);
         }
     }
 

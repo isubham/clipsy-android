@@ -53,7 +53,9 @@ public  static Integer[] mThumbIds = {
     public static String FIELD_USER_PASSWORD = "password";
     public static String FIELD_USER_NAME = "name";
     public static String FIELD_USER_TYPE = "following_clips";
-    public static String FIELD_USER_ID = "id";
+    public static String FIELD_ID = "id";
+    public static String FIELD_USER_ID = "user_id";
+
 
     public static String FIELD_USER_USER_USET_X = "user_x";
     public static String FIELD_USER_USER_USER_Y = "user_y";

@@ -118,7 +118,7 @@ public class signin extends wrapper {
 
     public void check_login_details() {
         localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
-        if (localStore.contains("email")){
+        if (localStore.contains("user_id")){
             Log.i("check_login", "contains email");
                  startActivity(new Intent(signin.this, panel.class)
                        //  .putExtra("email", localStore.getString("email",""))

@@ -141,6 +141,7 @@ public class fragment_profile extends fragment_wrapper {
                     public void onResponse(String response) {
 
                         Log.e("Resource volley_wrapper", response.toString());
+                        make_request();
 
                     }
 

@@ -10,6 +10,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:orientation="vertical">
 
         <!-- row 1 => user pic | name | ago-->
@@ -18,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            >
 
             <ImageView
                 android:id="@+id/rl_clip_profile_pic"

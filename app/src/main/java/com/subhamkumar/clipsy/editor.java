@@ -65,8 +65,41 @@ public class editor extends wrapper {
     }
     */
 
-    public void create_clip() {
-        make_request();
+    String clip_id;
+
+    public void create_clip(String action) {
+
+        if(action.equals("save")){
+            make_request();
+        }
+        else{
+            wrapper update_clip = new wrapper() {
+                @Override
+                public Map makeParams() {
+                Map params = new HashMap<String, String>();
+                params.put(CONSTANTS.VISIBILITY, clip_type);
+                params.put(CONSTANTS.CLIP_CONTENT, editor.getHtml());
+                params.put(CONSTANTS.FX, CONSTANTS.OPERATION_UPDATE_CLIP);
+                params.put("id", clip_id);
+                    return params;
+                }
+
+                @Override
+                public void handle_response(String response) {
+
+                }
+
+                @Override
+                public void make_volley_request(StringRequest stringRequest) {
+
+                    Volley.newRequestQueue(editor.this).add(stringRequest);
+
+                }
+            };
+
+            update_clip.make_request();
+
+        }
     }
 
     private static final String TAG = "RTextEditorView";
@@ -76,13 +109,46 @@ public class editor extends wrapper {
 
     private RTextEditorView editor;
 
+    private void initialHtml(String html) {
+        editor.setHtml(html);
+    }
+
+    String action;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editor);
+
         if (getIntent().getExtras() != null) {
             user_id = getIntent().getExtras().getString("user_id");
+            action = "save";
+            if (getIntent().getExtras().containsKey("clip_id")){
+                clip_id = getIntent().getExtras().getString("clip_id");
+
+                wrapper fetch_clip = new wrapper() {
+                    @Override
+                    public Map makeParams() {
+                        return null;
+                    }
+
+                    @Override
+                    public void handle_response(String response) {
+
+                    }
+
+                    @Override
+                    public void make_volley_request(StringRequest stringRequest) {
+
+                    }
+                };
+                fetch_clip.make_request();
+
+                action = "update";
+            }
         }
+
+
         editor = findViewById(R.id.editor_view);
         // Enable keyboard's incognito mode
         editor.setIncognitoModeEnabled(true);
@@ -91,7 +157,7 @@ public class editor extends wrapper {
         editorToolbar.setEditorView(editor);
 
         // Set initial content
-        editor.setHtml("<h1>Title</h1><p>Once upon a time ...</p>");
+        initialHtml("<h1>Title</h1><p>Once upon a time ...</p>");
 
 
         // Listen to the editor's text changes
@@ -101,8 +167,6 @@ public class editor extends wrapper {
                 Log.d(TAG, "onTextChanged: " + content);
             }
         });
-
-
 
         // Insert Link
         RTextEditorButton insertLinkButton = findViewById(R.id.insert_link);
@@ -134,7 +198,7 @@ public class editor extends wrapper {
                 editor.redo();
                 break;
             case R.id.create_menu_write:
-                create_clip();
+                create_clip(action);
                 break;
             case R.id.create_menu_close:
                 editor.this.finish();

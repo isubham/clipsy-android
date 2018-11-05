@@ -135,9 +135,8 @@ public class fragment_search extends fragment_wrapper {
 
                                    to_profile_result
                                            .putExtra("c_user_id", c_user_id)
-                                           .putExtra("user_id", user_id);
+                                           .putExtra(CONSTANTS.FIELD_USER_ID, user_id);
                                     startActivity(to_profile_result);
-
 
                            }
                        })
