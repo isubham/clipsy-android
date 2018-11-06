@@ -291,6 +291,7 @@ public class fragment_profile extends fragment_wrapper {
 
             user_y = user_x;
 
+            // when coming from search page.
             if (getArguments().containsKey("c_user_id")) {
                 user_y = getArguments().getString("c_user_id");
             }

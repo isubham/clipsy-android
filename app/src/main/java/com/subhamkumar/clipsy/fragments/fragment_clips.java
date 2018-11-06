@@ -1,6 +1,7 @@
 package com.subhamkumar.clipsy.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -18,6 +20,8 @@ import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.Clip_adapter;
 import com.subhamkumar.clipsy.models.CONSTANTS;
 import com.subhamkumar.clipsy.models.Clip;
+import com.subhamkumar.clipsy.profile_result;
+import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,6 +64,7 @@ public class fragment_clips extends fragment_wrapper {
         return read_clips;
     }
 
+    int no_of_intent;
     @Override
     public void handle_response(String response) {
         clipList.clear();
@@ -90,6 +95,39 @@ public class fragment_clips extends fragment_wrapper {
             Log.e("json ex", e.getMessage());
         }
 
+
+         rv_clip.addOnItemTouchListener(
+               new RecyclerItemClickListener(getActivity(),
+                       new RecyclerItemClickListener.OnItemClickListener() {
+                           @Override
+                           public void onItemClick(View view, int position) {
+
+                               if (no_of_intent == 0) {
+
+                                   Intent to_profile_result = new Intent(getActivity(), profile_result.class);
+
+                                   String c_user_id = ((TextView) view.findViewById(R.id.rl_clip_author_id)).getText().toString().trim();
+                                   // if c_user_id and user_id are same
+
+                               /* TODO will it be added or not.
+                               if(user_id.equals(c_user_id)) {
+                                   TabHost host = (TabHost) getActivity().findViewById(android.R.id.tabhost);
+                                   host.setCurrentTab(3);
+                               }
+                               */
+
+                                   to_profile_result
+                                           .putExtra("c_user_id", c_user_id)
+                                           .putExtra(CONSTANTS.FIELD_USER_ID, user_id);
+                                   startActivity(to_profile_result);
+                               }
+
+                               no_of_intent++;
+
+                           }
+
+                       }));
+
     }
 
     @Override
@@ -104,6 +142,7 @@ public class fragment_clips extends fragment_wrapper {
 
 
     private void init(View V) {
+        no_of_intent = 0;
         rv_clip = (RecyclerView) V.findViewById(R.id.clip_fragment_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         clipList = new ArrayList<>();
@@ -113,6 +152,8 @@ public class fragment_clips extends fragment_wrapper {
         rv_clip.setLayoutManager(linearLayoutManager);
 
         make_request();
+
+
 
     }
 

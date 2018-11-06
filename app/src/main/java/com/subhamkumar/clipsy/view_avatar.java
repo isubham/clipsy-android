@@ -26,7 +26,7 @@ public class view_avatar extends wrapper {
     public Map makeParams() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("fx", "get_by_id");
-        params.put("id", edit_avatar_button.getVisibility() == GONE ? user_y : user_x);
+        params.put("id", are_same_user ? user_x : user_y);
         return params;
     }
 
@@ -34,23 +34,23 @@ public class view_avatar extends wrapper {
     public void handle_response(String response) {
         // {"14":{"name":"isubham","email":"subhamkumarchandrawansi@gmail.com","type":"1","profile_pic":"1"}}
 
-        try{
+        try {
             JSONObject user_json = new JSONObject(response);
 
-            JSONObject user_detail = user_json.getJSONObject(user_x);
+            JSONObject user_detail = user_json.getJSONObject(are_same_user ? user_x : user_y);
 
             String profile_pic = user_detail.getString("profile_pic");
 
-            try{
-            int _profile_pic = Integer.parseInt(profile_pic);
-            int imageResource = CONSTANTS.mThumbIds[_profile_pic];
-            medium_avatar.setImageResource(imageResource);
+            try {
+                int _profile_pic = Integer.parseInt(profile_pic);
+                int imageResource = CONSTANTS.mThumbIds[_profile_pic];
+                medium_avatar.setImageResource(imageResource);
 
-        }catch (NumberFormatException e) {
-            Log.i("002", "nullformatexception"+ e.getMessage());
-        }
+            } catch (NumberFormatException e) {
+                Log.i("002", "nullformatexception" + e.getMessage());
+            }
 
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             Log.i("jsonex", "inside view avatar" + e.getMessage());
         }
     }
@@ -63,6 +63,7 @@ public class view_avatar extends wrapper {
     String user_x, user_y;
     Button edit_avatar_button;
     ImageView medium_avatar;
+    boolean are_same_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,8 @@ public class view_avatar extends wrapper {
         edit_avatar_button = (Button) findViewById(R.id.edit_avatar);
         medium_avatar = (ImageView) findViewById(R.id.medium_avatar);
 
-        showEditAction(user_x.equals(user_y));
+        are_same_user = user_x.equals(user_y);
+        showEditAction(are_same_user);
 
         make_request();
 

@@ -64,7 +64,7 @@ public class fragment_search extends fragment_wrapper {
             for(int profile_index = 0; profile_index < profile_ids.length(); profile_index++) {
                 String profile_id = profile_ids.get(profile_index).toString();
                 JSONObject _profile =  profiles.getJSONObject(profile_id);
-                profileList.add(new Profile(profile_id, _profile.getString("email"), _profile.getString("name")));
+                profileList.add(new Profile(profile_id, _profile.getString("email"), _profile.getString("name"), _profile.getString("profile_pic")));
 
                 Profile_adapter.notifyDataSetChanged();
             }
