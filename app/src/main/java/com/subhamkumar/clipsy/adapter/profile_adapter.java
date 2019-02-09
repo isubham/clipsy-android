@@ -11,12 +11,11 @@ import android.widget.TextView;
 
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.CONSTANTS;
-import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.models.Profile;
 
 import java.util.List;
 
-public class Profile_adapter extends RecyclerView.Adapter<Profile_adapter.Profile_viewholder> {
+public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profile_viewholder> {
 
     public static class Profile_viewholder extends RecyclerView.ViewHolder {
         public TextView id, name, email; ImageView profile_pic;
@@ -32,7 +31,7 @@ public class Profile_adapter extends RecyclerView.Adapter<Profile_adapter.Profil
 
     public List<Profile> profiles;
 
-    public Profile_adapter(List<Profile> profiles) {
+    public profile_adapter(List<Profile> profiles) {
         this.profiles = profiles;
     }
 

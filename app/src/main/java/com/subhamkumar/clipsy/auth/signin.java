@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,6 +31,22 @@ public class signin extends wrapper {
     @Override
     public void make_volley_request(StringRequest stringRequest) {
         Volley.newRequestQueue(signin.this).add(stringRequest);
+    }
+
+    public String getDeviceIMEI() {
+        String deviceUniqueIdentifier = null;
+        try {
+            TelephonyManager tm = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+            if (null != tm) {
+                deviceUniqueIdentifier = tm.getDeviceId();
+            }
+            if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length()) {
+                deviceUniqueIdentifier = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+            }
+        }catch (SecurityException e){
+            Toast.makeText(this, "Allow IMEI to Continue", Toast.LENGTH_SHORT).show();
+        }
+        return deviceUniqueIdentifier;
     }
 
     @Override
@@ -98,8 +116,8 @@ public class signin extends wrapper {
                 ((EditText) findViewById(R.id.signin_email)).getText().toString().trim()));
      }
 
-     String email;
 
+    String email;
     Bundle bundle;
 
     SharedPreferences localStore;

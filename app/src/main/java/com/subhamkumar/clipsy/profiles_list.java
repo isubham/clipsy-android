@@ -9,7 +9,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.subhamkumar.clipsy.models.Profile;
 
-import com.subhamkumar.clipsy.adapter.Profile_adapter;
+import com.subhamkumar.clipsy.adapter.profile_adapter;
 import com.subhamkumar.clipsy.utils.wrapper;
 
 import org.json.JSONArray;
@@ -50,7 +50,7 @@ public class profiles_list extends wrapper {
                 JSONObject _profile =  profiles.getJSONObject(profile_id);
                 profileList.add(new Profile(profile_id, _profile.getString("email"), _profile.getString("name"), _profile.getString("profile_pic")));
 
-                Profile_adapter.notifyDataSetChanged();
+                profile_adapter.notifyDataSetChanged();
             }
 
         }catch (JSONException e) {
@@ -70,14 +70,14 @@ public class profiles_list extends wrapper {
         linearLayoutManager = new LinearLayoutManager(this);
         profileList = new ArrayList<>();
 
-        Profile_adapter = new Profile_adapter(profileList);
-        rv_profile.setAdapter(Profile_adapter);
+        profile_adapter = new profile_adapter(profileList);
+        rv_profile.setAdapter(profile_adapter);
         rv_profile.setLayoutManager(linearLayoutManager);
     }
 
     RecyclerView rv_profile;
     LinearLayoutManager linearLayoutManager;
-    Profile_adapter Profile_adapter;
+    profile_adapter profile_adapter;
     List<Profile> profileList;
     Bundle bundle;
     String user_x, fx;

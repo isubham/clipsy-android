@@ -15,14 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.CONSTANTS;
-import com.subhamkumar.clipsy.adapter.Profile_adapter;
+import com.subhamkumar.clipsy.adapter.profile_adapter;
 import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.profile_result;
 import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
@@ -53,7 +52,7 @@ public class fragment_search extends fragment_wrapper {
         // empty set
         profileList.clear();
         // notify
-        Profile_adapter.notifyDataSetChanged();
+        profile_adapter.notifyDataSetChanged();
 
         try{
 
@@ -66,7 +65,7 @@ public class fragment_search extends fragment_wrapper {
                 JSONObject _profile =  profiles.getJSONObject(profile_id);
                 profileList.add(new Profile(profile_id, _profile.getString("email"), _profile.getString("name"), _profile.getString("profile_pic")));
 
-                Profile_adapter.notifyDataSetChanged();
+                profile_adapter.notifyDataSetChanged();
             }
 
         }catch (JSONException e) {
@@ -86,7 +85,7 @@ public class fragment_search extends fragment_wrapper {
 
     RecyclerView rv_profile;
     LinearLayoutManager linearLayoutManager;
-    Profile_adapter Profile_adapter;
+    profile_adapter profile_adapter;
     List<Profile> profileList;
 
     EditText live_search;
@@ -96,8 +95,8 @@ public class fragment_search extends fragment_wrapper {
         linearLayoutManager = new LinearLayoutManager(getActivity());
         profileList = new ArrayList<>();
 
-        Profile_adapter = new Profile_adapter(profileList);
-        rv_profile.setAdapter(Profile_adapter);
+        profile_adapter = new profile_adapter(profileList);
+        rv_profile.setAdapter(profile_adapter);
         rv_profile.setLayoutManager(linearLayoutManager);
         live_search = V.findViewById(R.id.live_search);
         live_search.addTextChangedListener(new TextWatcher() {
@@ -151,7 +150,7 @@ public class fragment_search extends fragment_wrapper {
          else
              profileList.clear();
 
-         Profile_adapter.notifyDataSetChanged();
+         profile_adapter.notifyDataSetChanged();
     }
 
     String user_id;

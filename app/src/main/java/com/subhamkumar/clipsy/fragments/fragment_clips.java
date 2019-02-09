@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.adapter.Clip_adapter;
+import com.subhamkumar.clipsy.adapter.clip_adapter;
 import com.subhamkumar.clipsy.models.CONSTANTS;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.profile_result;
@@ -64,7 +63,7 @@ public class fragment_clips extends fragment_wrapper {
         return read_clips;
     }
 
-    int no_of_intent;
+    // int no_of_intent;
     @Override
     public void handle_response(String response) {
         clipList.clear();
@@ -96,6 +95,7 @@ public class fragment_clips extends fragment_wrapper {
         }
 
 
+        /*
          rv_clip.addOnItemTouchListener(
                new RecyclerItemClickListener(getActivity(),
                        new RecyclerItemClickListener.OnItemClickListener() {
@@ -109,12 +109,6 @@ public class fragment_clips extends fragment_wrapper {
                                    String c_user_id = ((TextView) view.findViewById(R.id.rl_clip_author_id)).getText().toString().trim();
                                    // if c_user_id and user_id are same
 
-                               /* TODO will it be added or not.
-                               if(user_id.equals(c_user_id)) {
-                                   TabHost host = (TabHost) getActivity().findViewById(android.R.id.tabhost);
-                                   host.setCurrentTab(3);
-                               }
-                               */
 
                                    to_profile_result
                                            .putExtra("c_user_id", c_user_id)
@@ -122,11 +116,13 @@ public class fragment_clips extends fragment_wrapper {
                                    startActivity(to_profile_result);
                                }
 
-                               no_of_intent++;
+                               // no_of_intent++;
 
                            }
 
                        }));
+
+            */
 
     }
 
@@ -137,17 +133,17 @@ public class fragment_clips extends fragment_wrapper {
 
     RecyclerView rv_clip;
     LinearLayoutManager linearLayoutManager;
-    Clip_adapter clip_adapter;
+    com.subhamkumar.clipsy.adapter.clip_adapter clip_adapter;
     List<Clip> clipList;
 
 
     private void init(View V) {
-        no_of_intent = 0;
+        // no_of_intent = 0;
         rv_clip = (RecyclerView) V.findViewById(R.id.clip_fragment_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         clipList = new ArrayList<>();
 
-        clip_adapter = new Clip_adapter(clipList);
+        clip_adapter = new clip_adapter(clipList);
         rv_clip.setAdapter(clip_adapter);
         rv_clip.setLayoutManager(linearLayoutManager);
 

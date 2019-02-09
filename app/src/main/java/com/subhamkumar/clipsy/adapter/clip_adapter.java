@@ -12,9 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.subhamkumar.clipsy.R;
@@ -24,7 +24,7 @@ import com.subhamkumar.clipsy.utils.CustomTabs;
 
 import java.util.List;
 
-public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewholder> {
+public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewholder> {
 
     public static class Clip_viewholder extends RecyclerView.ViewHolder {
         public TextView id,
@@ -32,9 +32,10 @@ public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewhol
         author_name,
                 author_id,
 
-                clip_content,
                 clip_time;
         ImageView profile_pic;
+        WebView
+                clip_content;
 
         Clip_viewholder(View V) {
             super(V);
@@ -43,7 +44,7 @@ public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewhol
             author_id = (TextView) V.findViewById(R.id.rl_clip_author_id);
             author_name = (TextView) V.findViewById(R.id.rl_clip_author);
             clip_time = (TextView) V.findViewById(R.id.rl_clip_time);
-            clip_content = (TextView) V.findViewById(R.id.rl_clip_content);
+            clip_content = (WebView) V.findViewById(R.id.rl_clip_content);
             profile_pic = (ImageView) V.findViewById(R.id.rl_clip_profile_pic);
 
         }
@@ -52,8 +53,7 @@ public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewhol
     public List<Clip> clips;
     Context context;
 
-    public
-    Clip_adapter(List<Clip> clips) {
+    public clip_adapter(List<Clip> clips) {
         this.clips = clips;
     }
 
@@ -101,8 +101,7 @@ public class Clip_adapter extends RecyclerView.Adapter<Clip_adapter.Clip_viewhol
         clip_viewholder.id.setText(                 clips.get(i).id);
         clip_viewholder.author_name.setText(        clips.get(i).u_name);
         clip_viewholder.author_id.setText(          clips.get(i).u_id);
-        // clip_viewholder.clip_content.setText(Html.fromHtml(clips.get(i).clip_content));
-        setTextViewHTML(clip_viewholder.clip_content, clips.get(i).clip_content);
+        clip_viewholder.clip_content.loadData(clips.get(i).clip_content, "text/html", "UTF-8");
         clip_viewholder.clip_time.setText(          clips.get(i).clip_time);
 
         try{

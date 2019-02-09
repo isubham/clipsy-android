@@ -157,7 +157,7 @@ public class editor extends wrapper {
         editorToolbar.setEditorView(editor);
 
         // Set initial content
-        initialHtml("<h1>Title</h1><p>Once upon a time ...</p>");
+        initialHtml("<p>Once upon a time ...</p>");
 
 
         // Listen to the editor's text changes

@@ -33,6 +33,8 @@ public  static Integer[] mThumbIds = {
     public static final String USER = "user";
     public static final String VISIBILITY = "visibility";
     public static final String FRAGMENT_CLIPS = "fragment_clips";
+
+
     public static String OPERATION_SIGN_UP = "sign_up";
     public static String OPERATION_SIGN_IN = "sign_in";
     public static String OPERATION_UPDATE_USER = "update_user";

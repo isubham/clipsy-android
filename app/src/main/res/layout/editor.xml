@@ -106,7 +106,6 @@
                 android:padding="@dimen/toolbar_item_padding"
                 app:srcCompat="@drawable/ic_format_clear"
                 app:toolType="removeFormat" />
-            -->
 
 
             <com.jkcarino.rtexteditorview.RTextEditorButton
@@ -117,7 +116,6 @@
                 app:srcCompat="@drawable/ic_format_h1"
                 app:toolType="h1" />
 
-            <!--
             <com.jkcarino.rtexteditorview.RTextEditorButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -193,7 +191,6 @@
                 android:padding="@dimen/toolbar_item_padding"
                 app:srcCompat="@drawable/ic_format_color_fill"
                 app:toolType="textBackColor" />
-                -->
 
             <com.jkcarino.rtexteditorview.RTextEditorButton
                 android:layout_width="wrap_content"
@@ -203,7 +200,6 @@
                 app:srcCompat="@drawable/ic_format_quote"
                 app:toolType="blockQuote" />
 
-            <!--
             <com.jkcarino.rtexteditorview.RTextEditorButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -211,6 +207,7 @@
                 android:padding="@dimen/toolbar_item_padding"
                 app:srcCompat="@drawable/ic_format_code"
                 app:toolType="blockCode" />
+                -->
 
 
 
@@ -247,6 +244,7 @@
                 app:srcCompat="@drawable/ic_format_align_justify"
                 app:toolType="alignJustify" />
 
+            <!--
             <com.jkcarino.rtexteditorview.RTextEditorButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
