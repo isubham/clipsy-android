@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".view_avatar">
+    tools:context=".panel.view_avatar">
 
     <ImageView
         android:id="@+id/medium_avatar"

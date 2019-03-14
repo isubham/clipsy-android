@@ -2,7 +2,7 @@ package com.subhamkumar.clipsy.models;
 
 import com.subhamkumar.clipsy.R;
 
-public  class CONSTANTS {
+public  class Constants {
 public  static Integer[] mThumbIds = {
             R.drawable.boy003,
             R.drawable.boy007,
@@ -33,6 +33,8 @@ public  static Integer[] mThumbIds = {
     public static final String USER = "user";
     public static final String VISIBILITY = "visibility";
     public static final String FRAGMENT_CLIPS = "fragment_clips";
+    public static final String TOKEN = "token";
+
 
 
     public static String OPERATION_SIGN_UP = "sign_up";
@@ -57,6 +59,8 @@ public  static Integer[] mThumbIds = {
     public static String FIELD_USER_TYPE = "following_clips";
     public static String FIELD_ID = "id";
     public static String FIELD_USER_ID = "user_id";
+    public static String FIELD_TOKEN = "token";
+
 
 
     public static String FIELD_USER_USER_USET_X = "user_x";

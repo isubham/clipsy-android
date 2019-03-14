@@ -45,4 +45,139 @@
     <!-- app  -->
     <string name="user_id">user_id</string>
 
+
+    <!--network-->
+    <string name="base_url">http://api.pitavya.com/clipsy/</string>
+
+    <!--user-->
+    <string name="request_user_sign_up">http://api.pitavya.com/clipsy/signup/</string>
+    <string name="request_user_verify_email">http://api.pitavya.com/clipsy/verify_email_verification</string>
+    <string name="request_user_sign_in">http://api.pitavya.com/clipsy/signin</string>
+    <string name="request_user_get_user">http://api.pitavya.com/clipsy/get/%1$s</string>
+    <string name="request_user_update_avatar">http://api.pitavya.com/clipsy/update_avatar/%1$s</string>
+    <string name="request_user_update_password">http://api.pitavya.com/clipsy/update_password</string>
+    <string name="request_user_search_user">http://api.pitavya.com/clipsy/search/%1$s</string>
+    <string name="request_user_forgot_password">http://api.pitavya.com/clipsy/forgot_password</string>
+
+    <!--clip-->
+    <string name="request_clip_create">http://api.pitavya.com/clipsy/create_clip</string>
+    <string name="request_clip_read">http://api.pitavya.com/clipsy/read_clip/%1$s</string>
+    <string name="request_clip_update">http://api.pitavya.com/clipsy/update_clip/%1$s</string>
+    <string name="request_clip_delete">http://api.pitavya.com/clipsy/delete_clip/%1$s</string>
+
+    <string name="request_clip_reads">http://api.pitavya.com/clipsy/read_clips</string>
+    <string name="request_clip_reads_user">http://api.pitavya.com/clipsy/read_clips/%1$s</string>
+
+    <string name="request_clip_following">http://api.pitavya.com/clipsy/following_clips</string>
+
+
+    <!--user user-->
+
+    <string name="request_user_user_follow">http://api.pitavya.com/clipsy/follow/%1$s</string>
+    <string name="request_user_user_unfollow">http://api.pitavya.com/clipsy/unfollow/%1$s</string>
+
+    <string name="request_user_user_following">http://api.pitavya.com/clipsy/following</string>
+    <string name="request_user_user_follower">http://api.pitavya.com/clipsy/follower</string>
+    <string name="request_user_user_profile_matrix">http://api.pitavya.com/clipsy/profile_matrix/%1$s</string>
+
+
+    <!--params-->
+
+
+    <string name="params_user_searched_id">email</string>
+    <string name="params_user_email">email</string>
+    <string name="params_user_password">password</string>
+    <string name="params_user_type">type</string>
+    <string name="params_user_name">name</string>
+    <string name="params_user_verify_token">verify_token</string>
+
+    <string name="params_clip_clip_content">clip_content</string>
+
+    <string name="params_user_user_follow">follow</string>
+    <string name="params_user_user_unfollow">unfollow</string>
+
+
+    <string name="header_authentication">Authentication</string>
+
+    <!--messages of response-->
+    <string name="message_signin_success">Successfully signed in</string>
+
+    <string name="message_signin_faillure_email_not_found">email not found</string>
+    <string name="message_signin_failure_wrong_password">Incorrect password</string>
+
+
+    <!--api response-->
+
+    <string name="apiResponse_success_true">1</string>
+    <string name="apiResponse_success_false">2</string>
+
+    <!--Signup page constants-->
+
+    <string name="message_signup_account_created">Account Created</string>
+
+
+    <string name="status_email_verification_email_verified">1</string>
+    <string name="status_email_verification_email_unverified">0</string>
+
+    <string name="status_signin_failed">0</string>
+    <string name="status_signin_success">1</string>
+
+    <string name="status_success">1</string>
+    <string name="status_failed">0</string>
+
+
+    <string name="bundle_param_caller_activity_to_email_verification">callback</string>
+    <string name="bundle_param_caller_activity_to_fragment_clips">where_to_fragment_clips</string>
+
+    <string name="bundle_param_caller_activity_fragment_profile_list_to_profile_result">profile_list_to_complete_profile</string>
+    <string name="bundle_param_caller_button_to_profile_list">profile_list</string>
+
+    <string name="bundle_param_caller_button_followers">follower</string>
+    <string name="bundle_param_caller_button_following">following</string>
+
+
+
+
+    <string name="bundle_param_caller_activity_signup">signup</string>
+    <string name="bundle_param_caller_activity_following_clips">following_clips</string>
+    <string name="bundle_param_caller_activity_current_clips">Current Clips</string>
+    <string name="bundle_param_caller_activity_panel">panel</string>
+    <string name="bundle_param_caller_activity_complete_profile">complete_profile</string>
+    <string name="bundle_param_caller_activity_profile_result">profile_result</string>
+    <string name="bundle_param_caller_activity_fragment_search">fragment_search</string>
+    <string name="bundle_param_caller_activity_fragment_complete_profile">fragment_complete_profile</string>
+
+
+    <string name="bundle_param_profile_result_searched_user_id">searched_id</string>
+
+
+
+
+
+    <!--clip-->
+
+
+
+
+
+    <!--params-->
+
+
+    <string name="params_search_id">search_id</string>
+    <string name="params_email">email</string>
+    <string name="params_password">password</string>
+    <string name="params_name">name</string>
+    <string name="params_type">type</string>
+    <string name="params_token">token</string>
+    <string name="params_id">id</string>
+
+
+    <string name="params_value_private">1</string>
+    <string name="params_value_public">2</string>
+
+
+
+    <string name="params_verify_token">verify_token</string>
+
+
 </resources>

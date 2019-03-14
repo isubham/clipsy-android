@@ -62,7 +62,7 @@
             android:layout_height="1dp"
             ></LinearLayout>
 
-        <!-- row 3 => content -->
+        <!-- row 3 => clip_content -->
         <WebView
             android:id="@+id/rl_clip_content"
             android:layout_width="match_parent"

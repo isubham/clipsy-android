@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/fragment_complete_profile_linearLayout"
-    tools:context=".fragments.fragment_complete_profile">
+    tools:context=".panel.fragments.fragment_complete_profile">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.subhamkumar.clipsy.fragments;
+package com.subhamkumar.clipsy.panel.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,18 +17,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.models.CONSTANTS;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.adapter.profile_adapter;
 import com.subhamkumar.clipsy.models.Profile;
-import com.subhamkumar.clipsy.profile_result;
+import com.subhamkumar.clipsy.models.ProfileApiResponse;
+import com.subhamkumar.clipsy.panel.profile_result;
 import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,44 +36,39 @@ import java.util.Map;
 
 
 public class fragment_search extends fragment_wrapper {
+    @Override
+    public int setHttpMethod() {
+        return Request.Method.GET;
+    }
+
+    @Override
+    public String setHttpUrl() {
+        String url = String.format(getString(R.string.request_user_search_user), query);
+        return url;
+    }
+
+    @Override
+    public Map<String, String> _getHeaders() {
+        Map params = new HashMap<String, String>();
+        params.put(getString(R.string.header_authentication), token);
+        return params;
+    }
 
     @Override
     public Map makeParams() {
-        Map<String, String> params = new HashMap<String, String>();
-        params .put("fx", "_search");
-        params.put("pattern", query);
-        return params;
+        return null;
     }
 
     @Override
     public void handle_response(String response) {
         Log.i("search_response", response);
-        // empty set
+
+        Gson gson = new Gson();
+
+        ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
         profileList.clear();
-        // notify
+        profileList.addAll(profileApiResponse.data);
         profile_adapter.notifyDataSetChanged();
-
-        try{
-
-        // fill the result
-        JSONObject profiles = new JSONObject(response);
-            JSONArray profile_ids = profiles.names();
-
-            for(int profile_index = 0; profile_index < profile_ids.length(); profile_index++) {
-                String profile_id = profile_ids.get(profile_index).toString();
-                JSONObject _profile =  profiles.getJSONObject(profile_id);
-                profileList.add(new Profile(profile_id, _profile.getString("email"), _profile.getString("name"), _profile.getString("profile_pic")));
-
-                profile_adapter.notifyDataSetChanged();
-            }
-
-        }catch (JSONException e) {
-
-            Log.e("json ex", e.getMessage());
-        }
-
-        // notify
-
     }
 
     @Override
@@ -93,11 +87,10 @@ public class fragment_search extends fragment_wrapper {
     private void init(View V) {
         rv_profile = (RecyclerView) V.findViewById(R.id.profile_fragment_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        profileList = new ArrayList<>();
-
+        profileList = new ArrayList<Profile>();
         profile_adapter = new profile_adapter(profileList);
-        rv_profile.setAdapter(profile_adapter);
         rv_profile.setLayoutManager(linearLayoutManager);
+        rv_profile.setAdapter(profile_adapter);
         live_search = V.findViewById(R.id.live_search);
         live_search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -120,45 +113,65 @@ public class fragment_search extends fragment_wrapper {
                            @Override
                            public void onItemClick(View view, int position) {
 
-                               Intent to_profile_result = new Intent(getActivity(), profile_result.class);
-
-                               String c_user_id = ((TextView)view.findViewById(R.id.rl_profile_id)).getText().toString().trim();
-                               // if c_user_id and user_id are same
-
-                               /* TODO will it be added or not.
-                               if(user_id.equals(c_user_id)) {
-                                   TabHost host = (TabHost) getActivity().findViewById(android.R.id.tabhost);
-                                   host.setCurrentTab(3);
-                               }
-                               */
-
-                                   to_profile_result
-                                           .putExtra("c_user_id", c_user_id)
-                                           .putExtra(CONSTANTS.FIELD_USER_ID, user_id);
-                                    startActivity(to_profile_result);
+                               gotToProfileResult(view);
 
                            }
                        })
         );
     }
 
+    private void fillDummyAndCheck() {
+        List<Profile> dummyProfileList = new ArrayList<Profile>();
+        for(int i = 0; i < 10; i++) {
+            dummyProfileList.add(Profile.dummyProfile());
+        }
+        profileList.addAll(dummyProfileList);
+        profile_adapter.notifyDataSetChanged();
+    }
+
+    private void gotToProfileResult(View view) {
+        Intent to_profile_result = new Intent(getActivity(), profile_result.class);
+
+        String searchedUserId = ((TextView) view.findViewById(R.id.rl_profile_id)).getText().toString().trim();
+
+        // if c_user_id and token are same
+
+        /* TODO will it be added or not.
+        if(token.equals(c_user_id)) {
+        TabHost host = (TabHost) getActivity().findViewById(android.R.id.tabhost);
+        host.setCurrentTab(3);
+        }
+        */
+
+        userDetails.putString(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId);
+        userDetails.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
+                getString(R.string.bundle_param_caller_activity_fragment_search));
+
+        to_profile_result.putExtras(userDetails);
+        startActivity(to_profile_result);
+    }
+
     String query;
     public void fillSearchResult(CharSequence charSequence){
          query = charSequence.toString();
-         if(query.length() > 2)
-            make_request();
-         else
+         if(query.length() > 2) {
+             make_request();
+         }
+         else {
              profileList.clear();
+             profile_adapter.notifyDataSetChanged();
+         }
 
-         profile_adapter.notifyDataSetChanged();
     }
 
-    String user_id;
+    Bundle userDetails;
+    String token;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        user_id = getArguments().getString(CONSTANTS.USER_ID);
+        userDetails = getArguments();
+        token = userDetails.getString(Constants.TOKEN);
 
         View V = inflater.inflate(R.layout.fragment_search, container, false);
         init(V);

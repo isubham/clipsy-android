@@ -1,8 +1,7 @@
-package com.subhamkumar.clipsy.fragments;
+package com.subhamkumar.clipsy.panel.fragments;
 
-
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -10,35 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.android.volley.toolbox.StringRequest;
 import com.subhamkumar.clipsy.R;
-
-import java.util.Map;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class fragment_complete_profile extends fragment_wrapper {
-
-    @Override
-    public Map makeParams() {
-        return null;
-    }
-
-    @Override
-    public void handle_response(String response) {
-
-    }
-
-    @Override
-    public void make_volley_request(StringRequest stringRequest) {
-
-    }
-
-    public fragment_complete_profile() {
-        // Required empty public constructor
-    }
+public class fragment_complete_profile extends Fragment {
 
 
     LinearLayout _profile, _clips;
@@ -63,8 +40,6 @@ public class fragment_complete_profile extends fragment_wrapper {
         if(getActivity().getIntent().getExtras() != null) {
             Bundle user_detail = getActivity().getIntent().getExtras();
             fragment_profile.setArguments(user_detail);
-
-            user_detail.putString("fx", "read_clips");
             fragment_clips.setArguments(user_detail);
         }
 

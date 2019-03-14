@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:paddingBottom="8dp"
     android:paddingTop="8dp"
-    tools:context=".fragments.fragment_profile">
+    tools:context=".panel.fragments.fragment_profile">
 
     <ImageView
         android:layout_gravity="center"

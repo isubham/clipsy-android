@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import static com.subhamkumar.clipsy.models.CONSTANTS.mThumbIds;
+import static com.subhamkumar.clipsy.models.Constants.mThumbIds;
 
 
 public class image_adapter  extends BaseAdapter {

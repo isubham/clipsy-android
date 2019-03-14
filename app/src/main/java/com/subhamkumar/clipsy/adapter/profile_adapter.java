@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.models.CONSTANTS;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Profile;
 
 import java.util.List;
@@ -57,7 +57,7 @@ public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profil
                 _profile_pic = 0;
             }
             _profile_pic = Integer.parseInt(profiles.get(i).profile_pic);
-            int imageResource = CONSTANTS.mThumbIds[_profile_pic];
+            int imageResource = Constants.mThumbIds[_profile_pic];
 
             clip_viewholder.profile_pic.setImageResource(imageResource);
         }catch (NumberFormatException e) {

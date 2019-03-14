@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.models.CONSTANTS;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.utils.CustomTabs;
 
@@ -98,18 +98,21 @@ public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewhol
     @Override
     public void onBindViewHolder(@NonNull Clip_viewholder clip_viewholder, int i) {
 
-        clip_viewholder.id.setText(                 clips.get(i).id);
-        clip_viewholder.author_name.setText(        clips.get(i).u_name);
-        clip_viewholder.author_id.setText(          clips.get(i).u_id);
+        clip_viewholder.id.setText(                 clips.get(i).profile.id);
+        clip_viewholder.author_name.setText(        clips.get(i).profile.name);
+        clip_viewholder.author_id.setText(          clips.get(i).clip_id);
         clip_viewholder.clip_content.loadData(clips.get(i).clip_content, "text/html", "UTF-8");
         clip_viewholder.clip_time.setText(          clips.get(i).clip_time);
 
         try{
-            int _profile_pic = Integer.parseInt(clips.get(i).profile_pic);
-            int imageResource = CONSTANTS.mThumbIds[_profile_pic];
+            int _profile_pic = Integer.parseInt(clips.get(i).profile.profile_pic);
+            int imageResource = Constants.mThumbIds[_profile_pic];
             clip_viewholder.profile_pic.setImageResource(imageResource);
         }catch (NumberFormatException e) {
-            Log.i("002", "nullformatexception"+ e.getMessage());
+        }
+        finally {
+            int _profile_pic = 1;
+            int imageResource = Constants.mThumbIds[_profile_pic];
         }
 
     }

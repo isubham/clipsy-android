@@ -8,24 +8,62 @@
     tools:context=".auth.signup">
 
 
+    <!-- status -->
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/signup_error_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red_400"
+        />
+
+
+    <!--name-->
     <EditText
         android:id="@+id/signup_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="name" />
 
+    <TextView
+        android:id="@+id/signup_name_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:textColor="@color/red_500"
+         />
+
+
+    <!--email-->
     <EditText
         android:id="@+id/signup_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="email" />
 
+    <TextView
+        android:id="@+id/signup_email_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:textColor="@color/red_500"
+         />
+
+
+    <!--password-->
     <EditText
         android:id="@+id/signup_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="password" />
 
+    <TextView
+        android:id="@+id/signup_password_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:textColor="@color/red_500"
+         />
+
+<!--
+    &lt;!&ndash;type&ndash;&gt;
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -35,28 +73,37 @@
             android:id="@+id/__public"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="select_type"
+            android:onClick="selectType"
             android:text="Public" />
 
         <RadioButton
             android:id="@+id/__private"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="select_type"
+            android:onClick="selectType"
             android:text="Private" />
 
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/signup_type_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:textColor="@color/red_500"
+         />-->
+
+
+    <!--buttons-->
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="create_account"
+        android:onClick="createAccount"
         android:text="Signup" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="to_login"
+        android:onClick="toLogin"
         android:text="Login" />
 
 </LinearLayout>

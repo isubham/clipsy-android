@@ -1,4 +1,4 @@
-package com.subhamkumar.clipsy;
+package com.subhamkumar.clipsy.panel;
 
 import android.support.annotation.NonNull;
 import android.os.Bundle;
@@ -8,14 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jkcarino.rtexteditorview.RTextEditorButton;
 import com.jkcarino.rtexteditorview.RTextEditorToolbar;
 import com.jkcarino.rtexteditorview.RTextEditorView;
-import com.subhamkumar.clipsy.fragments.InsertLinkDialogFragment;
-import com.subhamkumar.clipsy.fragments.InsertTableDialogFragment;
-import com.subhamkumar.clipsy.models.CONSTANTS;
+import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.panel.fragments.InsertLinkDialogFragment;
+import com.subhamkumar.clipsy.panel.fragments.InsertTableDialogFragment;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.utils.wrapper;
 
 import org.json.JSONException;
@@ -25,43 +27,56 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class editor extends wrapper {
+    @Override
+    public Map<String, String> _getHeaders() {
+        return null;
+    }
 
-    String user_id, clip_type = CONSTANTS.PUBLIC;
+    String user_id, clip_type = Constants.PUBLIC;
 
     @Override
     public Map makeParams() {
         Map params = new HashMap<String, String>();
-        params.put(CONSTANTS.VISIBILITY, clip_type);
-        params.put(CONSTANTS.USER, user_id);
-        params.put(CONSTANTS.CLIP_CONTENT, editor.getHtml());
-        params.put(CONSTANTS.FX, CONSTANTS.CREATE_CLIP);
+        params.put(Constants.VISIBILITY, clip_type);
+        params.put(Constants.USER, user_id);
+        params.put(Constants.CLIP_CONTENT, editor.getHtml());
         return params;
     }
 
     @Override
-    public void make_volley_request(StringRequest stringRequest) {
+    public int setHttpMethod() {
+        return Request.Method.POST;
+    }
+
+    @Override
+    public String setHttpUrl() {
+        return getString(R.string.request_clip_create);
+    }
+
+    @Override
+    public void makeVolleyRequest(StringRequest stringRequest) {
         Volley.newRequestQueue(editor.this).add(stringRequest);
     }
 
     @Override
-    public void handle_response(String response) {
+    public void handleResponse(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
 
-            if (jsonObject.has(CONSTANTS.STATUS)) {
+            if (jsonObject.has(Constants.STATUS)) {
                 editor.this.finish();
             } else {
-                Toast.makeText(this, jsonObject.getString(CONSTANTS.STATUS), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, jsonObject.getString(Constants.STATUS), Toast.LENGTH_SHORT).show();
             }
 
         } catch (JSONException e) {
-            Log.e(CONSTANTS.JSON_EX, e.getMessage());
+            Log.e(Constants.JSON_EX, e.getMessage());
         }
     }
 
     /*
-    public void select_type(View V) {
-        clip_type = V.getId() == R.id._private ? CONSTANTS.PRIVATE : CONSTANTS.PUBLIC;
+    public void selectType(View V) {
+        clip_type = V.getId() == R.id._private ? Constants.PRIVATE : Constants.PUBLIC;
     }
     */
 
@@ -70,34 +85,49 @@ public class editor extends wrapper {
     public void create_clip(String action) {
 
         if(action.equals("save")){
-            make_request();
+            makeRequest();
         }
         else{
             wrapper update_clip = new wrapper() {
                 @Override
+                public Map<String, String> _getHeaders() {
+                    return null;
+                }
+
+                @Override
                 public Map makeParams() {
                 Map params = new HashMap<String, String>();
-                params.put(CONSTANTS.VISIBILITY, clip_type);
-                params.put(CONSTANTS.CLIP_CONTENT, editor.getHtml());
-                params.put(CONSTANTS.FX, CONSTANTS.OPERATION_UPDATE_CLIP);
+                params.put(Constants.VISIBILITY, clip_type);
+                params.put(Constants.CLIP_CONTENT, editor.getHtml());
+                params.put(Constants.FX, Constants.OPERATION_UPDATE_CLIP);
                 params.put("id", clip_id);
                     return params;
                 }
 
                 @Override
-                public void handle_response(String response) {
+                public void handleResponse(String response) {
 
+                }
+                 @Override
+                public int setHttpMethod() {
+                    return Request.Method.POST;
                 }
 
                 @Override
-                public void make_volley_request(StringRequest stringRequest) {
+                public String setHttpUrl() {
+                    return getString(R.string.request_clip_update);
+                }
+
+
+                @Override
+                public void makeVolleyRequest(StringRequest stringRequest) {
 
                     Volley.newRequestQueue(editor.this).add(stringRequest);
 
                 }
             };
 
-            update_clip.make_request();
+            update_clip.makeRequest();
 
         }
     }
@@ -121,28 +151,44 @@ public class editor extends wrapper {
         setContentView(R.layout.editor);
 
         if (getIntent().getExtras() != null) {
-            user_id = getIntent().getExtras().getString("user_id");
+            user_id = getIntent().getExtras().getString("token");
             action = "save";
             if (getIntent().getExtras().containsKey("clip_id")){
                 clip_id = getIntent().getExtras().getString("clip_id");
 
                 wrapper fetch_clip = new wrapper() {
                     @Override
+                    public Map<String, String> _getHeaders() {
+                        return null;
+                    }
+
+                    @Override
                     public Map makeParams() {
                         return null;
                     }
 
                     @Override
-                    public void handle_response(String response) {
+                    public void handleResponse(String response) {
 
                     }
 
                     @Override
-                    public void make_volley_request(StringRequest stringRequest) {
+                    public int setHttpMethod() {
+                        return Request.Method.GET;
+                    }
+
+                    @Override
+                    public String setHttpUrl() {
+                        return getString(R.string.request_clip_read);
+                    }
+
+
+                    @Override
+                    public void makeVolleyRequest(StringRequest stringRequest) {
 
                     }
                 };
-                fetch_clip.make_request();
+                fetch_clip.makeRequest();
 
                 action = "update";
             }
@@ -156,7 +202,7 @@ public class editor extends wrapper {
         RTextEditorToolbar editorToolbar = findViewById(R.id.editor_toolbar);
         editorToolbar.setEditorView(editor);
 
-        // Set initial content
+        // Set initial clip_content
         initialHtml("<p>Once upon a time ...</p>");
 
 

@@ -27,20 +27,20 @@
             android:name=".auth.signup" />
         <activity
             android:screenOrientation="portrait"
-            android:name=".panel"
+            android:name=".panel.panel"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:screenOrientation="portrait"
-            android:name=".profile_result"
+            android:name=".panel.profile_result"
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
 
             android:screenOrientation="portrait"
-            android:name=".profiles_list" />
+            android:name=".panel.profiles_list" />
         <activity
 
             android:screenOrientation="portrait"
-            android:name=".editor" />
+            android:name=".panel.editor" />
         <activity
 
             android:screenOrientation="portrait"
@@ -48,7 +48,7 @@
         <activity
 
             android:screenOrientation="portrait"
-            android:name=".auth.send_verify_token" />
+            android:name=".auth.forgot_password" />
         <activity
             android:screenOrientation="portrait"
             android:name=".auth.change_password" />
@@ -58,11 +58,11 @@
         <activity
 
             android:screenOrientation="portrait"
-            android:name=".choose_avatar" />
+            android:name=".panel.choose_avatar" />
         <activity
 
             android:screenOrientation="portrait"
-            android:name=".view_avatar"></activity>
+            android:name=".panel.view_avatar"></activity>
     </application>
 
 </manifest>

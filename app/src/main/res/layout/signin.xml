@@ -4,14 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/signin_view"
     android:padding="8dp"
     tools:context=".auth.signin">
+
+     <TextView
+        android:id="@+id/signin_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:textColor="@color/red_500"
+         android:gravity="center_horizontal"
+         android:layout_margin="10dp"
+         />
+
 
     <EditText
         android:id="@+id/signin_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="email" />
+        android:hint="email"
+        />
+
+    <TextView
+        android:id="@+id/signin_email_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:textColor="@color/red_500"
+         />
 
     <EditText
         android:id="@+id/signin_pass"
@@ -20,23 +39,29 @@
         android:hint="password"
 
         />
+     <TextView
+        android:id="@+id/signin_pass_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:textColor="@color/red_500"
+         />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="start_signin"
+        android:onClick="startSignin"
         android:text="Login" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="start_forget_password"
+        android:onClick="startForgetPassword"
         android:text="Forgot Password" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="gotosignup"
+        android:onClick="gotoSignup"
         android:text="Signup" />
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.subhamkumar.clipsy;
+package com.subhamkumar.clipsy.panel;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,9 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.subhamkumar.clipsy.models.CONSTANTS;
+import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.utils.wrapper;
 
 import org.json.JSONException;
@@ -21,6 +23,20 @@ import java.util.Map;
 import static android.view.View.GONE;
 
 public class view_avatar extends wrapper {
+    @Override
+    public Map<String, String> _getHeaders() {
+        return null;
+    }
+
+    @Override
+    public int setHttpMethod() {
+        return Request.Method.GET;
+    }
+
+    @Override
+    public String setHttpUrl() {
+        return getString(R.string.request_user_get_user);
+    }
 
     @Override
     public Map makeParams() {
@@ -31,7 +47,7 @@ public class view_avatar extends wrapper {
     }
 
     @Override
-    public void handle_response(String response) {
+    public void handleResponse(String response) {
         // {"14":{"name":"isubham","email":"subhamkumarchandrawansi@gmail.com","type":"1","profile_pic":"1"}}
 
         try {
@@ -43,7 +59,7 @@ public class view_avatar extends wrapper {
 
             try {
                 int _profile_pic = Integer.parseInt(profile_pic);
-                int imageResource = CONSTANTS.mThumbIds[_profile_pic];
+                int imageResource = Constants.mThumbIds[_profile_pic];
                 medium_avatar.setImageResource(imageResource);
 
             } catch (NumberFormatException e) {
@@ -56,7 +72,7 @@ public class view_avatar extends wrapper {
     }
 
     @Override
-    public void make_volley_request(StringRequest stringRequest) {
+    public void makeVolleyRequest(StringRequest stringRequest) {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
@@ -78,7 +94,7 @@ public class view_avatar extends wrapper {
         are_same_user = user_x.equals(user_y);
         showEditAction(are_same_user);
 
-        make_request();
+        makeRequest();
 
     }
 
@@ -88,7 +104,7 @@ public class view_avatar extends wrapper {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(view_avatar.this, choose_avatar.class)
-                            .putExtra("user_id", user_x));
+                            .putExtra("token", user_x));
                 }
             });
         }
@@ -100,7 +116,7 @@ public class view_avatar extends wrapper {
 
     @Override
     protected void onRestart() {
-        make_request();
+        makeRequest();
         super.onRestart();
     }
 }

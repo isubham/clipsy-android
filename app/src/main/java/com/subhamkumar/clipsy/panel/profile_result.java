@@ -1,4 +1,4 @@
-package com.subhamkumar.clipsy;
+package com.subhamkumar.clipsy.panel;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -6,7 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
-import com.subhamkumar.clipsy.fragments.fragment_complete_profile;
+import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.panel.fragments.fragment_complete_profile;
 
 public class profile_result extends AppCompatActivity {
 
@@ -31,7 +32,6 @@ public class profile_result extends AppCompatActivity {
 
         if(getIntent().getExtras() != null) {
             Bundle user_detail = getIntent().getExtras();
-            user_detail.putString("fx", "read_clips");
             fragment_complete_profile.setArguments(user_detail);
         }
 

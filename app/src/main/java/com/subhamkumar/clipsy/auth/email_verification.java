@@ -6,58 +6,61 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.models.ApiResponse;
 import com.subhamkumar.clipsy.utils.wrapper;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class email_verification extends wrapper {
+    @Override
+    public Map<String, String> _getHeaders() {
+        return null;
+    }
 
     @Override
     public Map makeParams() {
-        Map<String, String> params = new HashMap();
-        params.put("email", email);
-        params.put("fx", "verify_email_verification");
-        params.put("verify_token", verify_token.getText().toString().trim());
-
+        Map params = new HashMap<String, String>();
+        params.put(getString(R.string.params_email), email);
+        params.put(getString(R.string.params_verify_token), verify_token.getText().toString().trim());
         return params;
     }
 
     @Override
-    public void handle_response(String response) {
-        Log.i("response", "email_verification : " + response);
-
-        // TODO handles response
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-
-            if (jsonObject.getString("status").equals("verified") ) {
-
-                switch (callback) {
-                    case "1": startActivity(new Intent(email_verification.this, signin.class)
-                            .putExtra("email", email)); break;
-                    case "2": startActivity(new Intent(email_verification.this, change_password.class)
-                            .putExtra("email", email)); break;
-                }
-            } else {
-                Toast.makeText(this, "Code is invalid", Toast.LENGTH_SHORT).show();
-            }
-
-        } catch (JSONException e) {
-            Log.e("json ex", e.getMessage());
-        }
+    public int setHttpMethod() {
+        return Request.Method.POST;
     }
 
     @Override
-    public void make_volley_request(StringRequest stringRequest) {
+    public String setHttpUrl() {
+        return getString(R.string.request_user_verify_email);
+    }
+
+    @Override
+    public void handleResponse(String response) {
+        Log.i("response", "email_verification : " + response);
+
+        Gson gson = new Gson();
+        ApiResponse apiResponse = gson.fromJson(response, ApiResponse.class);
+
+        if (apiResponse.success.equals(getString(R.string.status_email_verification_email_verified))) {
+            startActivity(new Intent(email_verification.this, signin.class));
+        }
+        else if(apiResponse.success.equals(getString(R.string.status_email_verification_email_unverified))){
+            ((TextView) findViewById(R.id.email_verification_status_message)).setText(apiResponse.message);
+        }
+
+    }
+
+    @Override
+    public void makeVolleyRequest(StringRequest stringRequest) {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
@@ -73,23 +76,25 @@ public class email_verification extends wrapper {
     String callback;
     Bundle bundle;
 
+    private void setCallbackFromBundle() {
+        bundle = getIntent().getExtras();
+        email = "";
+        if (bundle != null) {
+            email = getIntent().getExtras().getString("email");
+            callback = getIntent().getExtras().getString(getString(R.string.bundle_param_caller_activity_to_email_verification));
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.email_verification);
-
-        bundle = getIntent().getExtras();
-        email = "";
-        if(bundle!= null) {
-            email = getIntent().getExtras().getString("email");
-            callback = getIntent().getExtras().getString("callback");
-
-        }
+        setCallbackFromBundle();
         init();
         button_to_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                make_request();
+                makeRequest();
             }
         });
 

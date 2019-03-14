@@ -1,13 +1,21 @@
 package com.subhamkumar.clipsy.models;
 
 public class Profile {
-    public String id, email, name, profile_pic;
+    public String id, email, name, profile_pic, type, token;
+
+    public Profile() {
+
+    }
 
     public Profile(String id, String email, String name, String profile_pic) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.profile_pic = profile_pic;
+    }
+
+    public static Profile dummyProfile() {
+        return new Profile("1", "subham@gmail.com", "subham", "1");
     }
 
     public String getProfile_pic() {

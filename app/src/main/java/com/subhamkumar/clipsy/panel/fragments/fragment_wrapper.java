@@ -1,11 +1,10 @@
-package com.subhamkumar.clipsy.fragments;
+package com.subhamkumar.clipsy.panel.fragments;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.android.volley.Request;
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -27,6 +26,11 @@ public abstract class fragment_wrapper extends Fragment {
 
     public abstract void make_volley_request(StringRequest stringRequest);
 
+    public abstract int setHttpMethod();
+    public abstract String setHttpUrl();
+    public abstract Map<String, String> _getHeaders();
+
+
     public void handle_error_response(VolleyError error) {
         Log.e("v_handle_error_res", error.getMessage());
     }
@@ -37,10 +41,10 @@ public abstract class fragment_wrapper extends Fragment {
 
     public void make_request() {
 
-        String url = "http://api.pitavya.com/clipsy/";
+        String url = setHttpUrl();
 
         StringRequest stringRequest = new StringRequest(
-                Request.Method.POST,
+                setHttpMethod(),
                 url,
                 new Response.Listener<String>() {
                     @Override
@@ -67,6 +71,11 @@ public abstract class fragment_wrapper extends Fragment {
                 // Log.i("v_makeparam", makeParams().toString());
                 return makeParams();
 
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                return _getHeaders();
             }
         };
 

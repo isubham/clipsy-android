@@ -1,4 +1,4 @@
-package com.subhamkumar.clipsy.fragments;
+package com.subhamkumar.clipsy.panel.fragments;
 
 
 import android.app.Dialog;
@@ -15,12 +15,12 @@ import android.view.WindowManager;
 
 import com.subhamkumar.clipsy.R;
 
-public class InsertTableDialogFragment extends AppCompatDialogFragment {
+public class InsertLinkDialogFragment extends AppCompatDialogFragment {
 
     private OnInsertClickListener listener;
 
-    public static InsertTableDialogFragment newInstance() {
-        return new InsertTableDialogFragment();
+    public static InsertLinkDialogFragment newInstance() {
+        return new InsertLinkDialogFragment();
     }
 
     public void setOnInsertClickListener(@NonNull OnInsertClickListener listener) {
@@ -46,21 +46,21 @@ public class InsertTableDialogFragment extends AppCompatDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_insert_table, null);
-        final TextInputEditText columnCountEditText = view.findViewById(R.id.column_count);
-        final TextInputEditText rowCountEditText = view.findViewById(R.id.row_count);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_insert_link, null);
+        final TextInputEditText textToDisplayEditText = view.findViewById(R.id.text_to_display);
+        final TextInputEditText linkToEditText = view.findViewById(R.id.link_to);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(R.string.title_insert_table);
+        dialog.setTitle(R.string.title_insert_link);
         dialog.setView(view);
         dialog.setPositiveButton(R.string.insert, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String colCount = columnCountEditText.getText().toString().trim();
-                String rowCount = rowCountEditText.getText().toString().trim();
+                String title = textToDisplayEditText.getText().toString().trim();
+                String url = linkToEditText.getText().toString().trim();
 
                 if (listener != null) {
-                    listener.onInsertClick(Integer.valueOf(colCount), Integer.valueOf(rowCount));
+                    listener.onInsertClick(title, url);
                 }
             }
         });
@@ -75,6 +75,6 @@ public class InsertTableDialogFragment extends AppCompatDialogFragment {
     }
 
     public interface OnInsertClickListener {
-        void onInsertClick(int colCount, int rowCount);
+        void onInsertClick(@NonNull String title, @NonNull String url);
     }
 }
