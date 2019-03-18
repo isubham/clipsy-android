@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -18,12 +19,8 @@ import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.clip_adapter;
 import com.subhamkumar.clipsy.models.ClipApiResonse;
-import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Clip;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +41,8 @@ public class fragment_clips extends fragment_wrapper {
 
     @Override
     public String setHttpUrl() {
-        return getUrl(getArguments().getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips)));
+        String from = getArguments().getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips));
+        return getUrl(from);
     }
 
     @Override
@@ -109,31 +107,41 @@ public class fragment_clips extends fragment_wrapper {
     public String getUrl(String from) {
         String fromPanel = getString(R.string.bundle_param_caller_activity_panel);
         String fromSearch = getString(R.string.bundle_param_caller_activity_fragment_search);
-        String fromCompleteProfile = getString(R.string.bundle_param_caller_activity_fragment_search);
         String fromProfileResult = getString(R.string.bundle_param_caller_activity_fragment_profile_list_to_profile_result);
 
+        if(from != null) {
+            if (from.equals(fromPanel)) {
+                return String.format(getString(R.string.request_clip_following));
+            }
+            if (from.equals(fromSearch) || from.equals(fromProfileResult)) {
+                searched_id = getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
+                return String.format(getString(R.string.request_clip_reads_user), searched_id);
+            }
+        }
 
-        if (from.equals(fromPanel)) {
-            return String.format(getString(R.string.request_clip_following));
-        }
-        if (from.equals(fromSearch) || from.equals(fromProfileResult)) {
-            searched_id = getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
-            return String.format(getString(R.string.request_clip_reads_user), searched_id);
-        }
-        if(from.equals(fromCompleteProfile)) {
-            return String.format(getString(R.string.request_clip_reads));
-        }
-        return "";
+        return String.format(getString(R.string.request_clip_reads));
+
     }
 
+    Bundle bundle;
+    String from;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        bundle = getArguments();
 
-        id = getArguments().getString(getString(R.string.params_id));
-        token = getArguments().getString(getString(R.string.params_token));
+        try {
+            id = bundle.getString(getString(R.string.params_id));
+            token = bundle.getString(getString(R.string.params_token));
+            from = bundle.getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips));
+
+        }
+        catch (NullPointerException e) {
+            Toast.makeText(context, "null on" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("null on" , e.getMessage());
+        }
 
 
         V = inflater.inflate(R.layout.fragment_clips, container, false);

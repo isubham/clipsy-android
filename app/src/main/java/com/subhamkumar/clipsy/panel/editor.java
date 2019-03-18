@@ -2,6 +2,7 @@ package com.subhamkumar.clipsy.panel;
 
 import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,124 +12,140 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.jkcarino.rtexteditorview.RTextEditorButton;
 import com.jkcarino.rtexteditorview.RTextEditorToolbar;
 import com.jkcarino.rtexteditorview.RTextEditorView;
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.models.Clip;
+import com.subhamkumar.clipsy.models.ClipApiResonse;
 import com.subhamkumar.clipsy.panel.fragments.InsertLinkDialogFragment;
 import com.subhamkumar.clipsy.panel.fragments.InsertTableDialogFragment;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.utils.wrapper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class editor extends wrapper {
-    @Override
-    public Map<String, String> _getHeaders() {
-        return null;
-    }
+public class editor extends AppCompatActivity {
 
-    String user_id, clip_type = Constants.PUBLIC;
+    public void saveClip() {
 
-    @Override
-    public Map makeParams() {
-        Map params = new HashMap<String, String>();
-        params.put(Constants.VISIBILITY, clip_type);
-        params.put(Constants.USER, user_id);
-        params.put(Constants.CLIP_CONTENT, editor.getHtml());
-        return params;
-    }
+        wrapper saveClip = new wrapper() {
 
-    @Override
-    public int setHttpMethod() {
-        return Request.Method.POST;
-    }
-
-    @Override
-    public String setHttpUrl() {
-        return getString(R.string.request_clip_create);
-    }
-
-    @Override
-    public void makeVolleyRequest(StringRequest stringRequest) {
-        Volley.newRequestQueue(editor.this).add(stringRequest);
-    }
-
-    @Override
-    public void handleResponse(String response) {
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-
-            if (jsonObject.has(Constants.STATUS)) {
-                editor.this.finish();
-            } else {
-                Toast.makeText(this, jsonObject.getString(Constants.STATUS), Toast.LENGTH_SHORT).show();
+            @Override
+            public Map<String, String> _getHeaders() {
+                Map params = new HashMap<String, String>();
+                params.put(Constants.header_authentication, getToken());
+                return params;
             }
 
-        } catch (JSONException e) {
-            Log.e(Constants.JSON_EX, e.getMessage());
-        }
+            // save clip
+            @Override
+            public Map makeParams() {
+                Map params = new HashMap<String, String>();
+                params.put(Constants.CLIP_CONTENT, editor.getHtml());
+                return params;
+            }
+
+            @Override
+            public int setHttpMethod() {
+                return Request.Method.POST;
+            }
+
+            @Override
+            public String setHttpUrl() {
+                return Constants.request_clip_create;
+            }
+
+            @Override
+            public void makeVolleyRequest(StringRequest stringRequest) {
+                Volley.newRequestQueue(editor.this).add(stringRequest);
+            }
+
+            @Override
+            public void handleResponse(String response) {
+                Gson gson = new Gson();
+                ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
+
+                if(clipApiResonse.success.equals("1")) {
+                    currentclip = clipApiResonse.data.get(0);
+                    Toast.makeText(editor.this, clipApiResonse.message, Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    // TODO handle no changes or empty or error
+                }
+
+
+            }
+        };
+        saveClip.makeRequest();
     }
 
-    /*
-    public void selectType(View V) {
-        clip_type = V.getId() == R.id._private ? Constants.PRIVATE : Constants.PUBLIC;
+    Clip currentclip;
+
+    private void updateClip(final String clipId) {
+        wrapper update_clip = new wrapper() {
+
+            @Override
+            public Map<String, String> _getHeaders() {
+                Map params = new HashMap<String, String>();
+                params.put(Constants.header_authentication, getToken());
+                return params;
+            }
+
+            @Override
+            public Map makeParams() {
+                Map params = new HashMap<String, String>();
+                params.put(Constants.CLIP_CONTENT, editor.getHtml());
+                return params;
+            }
+
+            @Override
+            public void handleResponse(String response) {
+
+                Gson gson = new Gson();
+                ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
+
+                if(clipApiResonse.success.equals("1")) {
+                    currentclip = clipApiResonse.data.get(0);
+                    Toast.makeText(editor.this, clipApiResonse.message, Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    // TODO handle no changes or empty or error
+                }
+
+            }
+             @Override
+            public int setHttpMethod() {
+                return Request.Method.POST;
+            }
+
+            @Override
+            public String setHttpUrl() {
+                return String.format(Constants.request_clip_update, clipId);
+            }
+
+            @Override
+            public void makeVolleyRequest(StringRequest stringRequest) {
+                Volley.newRequestQueue(editor.this).add(stringRequest);
+            }
+        };
+
+        update_clip.makeRequest();
     }
-    */
 
-    String clip_id;
+    private String getToken() {
+        return getIntent().getExtras().getString("token");
+    }
 
-    public void create_clip(String action) {
 
-        if(action.equals("save")){
-            makeRequest();
+    private void applyChangesToClip() {
+        if(currentclip.clip_id.equals(Constants.response_invalid_clip_id)) {
+            saveClip();
         }
         else{
-            wrapper update_clip = new wrapper() {
-                @Override
-                public Map<String, String> _getHeaders() {
-                    return null;
-                }
-
-                @Override
-                public Map makeParams() {
-                Map params = new HashMap<String, String>();
-                params.put(Constants.VISIBILITY, clip_type);
-                params.put(Constants.CLIP_CONTENT, editor.getHtml());
-                params.put(Constants.FX, Constants.OPERATION_UPDATE_CLIP);
-                params.put("id", clip_id);
-                    return params;
-                }
-
-                @Override
-                public void handleResponse(String response) {
-
-                }
-                 @Override
-                public int setHttpMethod() {
-                    return Request.Method.POST;
-                }
-
-                @Override
-                public String setHttpUrl() {
-                    return getString(R.string.request_clip_update);
-                }
-
-
-                @Override
-                public void makeVolleyRequest(StringRequest stringRequest) {
-
-                    Volley.newRequestQueue(editor.this).add(stringRequest);
-
-                }
-            };
-
-            update_clip.makeRequest();
-
+            updateClip(currentclip.clip_id);
         }
     }
 
@@ -143,76 +160,13 @@ public class editor extends wrapper {
         editor.setHtml(html);
     }
 
-    String action;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editor);
-
-        if (getIntent().getExtras() != null) {
-            user_id = getIntent().getExtras().getString("token");
-            action = "save";
-            if (getIntent().getExtras().containsKey("clip_id")){
-                clip_id = getIntent().getExtras().getString("clip_id");
-
-                wrapper fetch_clip = new wrapper() {
-                    @Override
-                    public Map<String, String> _getHeaders() {
-                        return null;
-                    }
-
-                    @Override
-                    public Map makeParams() {
-                        return null;
-                    }
-
-                    @Override
-                    public void handleResponse(String response) {
-
-                    }
-
-                    @Override
-                    public int setHttpMethod() {
-                        return Request.Method.GET;
-                    }
-
-                    @Override
-                    public String setHttpUrl() {
-                        return getString(R.string.request_clip_read);
-                    }
+        init();
 
 
-                    @Override
-                    public void makeVolleyRequest(StringRequest stringRequest) {
-
-                    }
-                };
-                fetch_clip.makeRequest();
-
-                action = "update";
-            }
-        }
-
-
-        editor = findViewById(R.id.editor_view);
-        // Enable keyboard's incognito mode
-        editor.setIncognitoModeEnabled(true);
-
-        RTextEditorToolbar editorToolbar = findViewById(R.id.editor_toolbar);
-        editorToolbar.setEditorView(editor);
-
-        // Set initial clip_content
-        initialHtml("<p>Once upon a time ...</p>");
-
-
-        // Listen to the editor's text changes
-        editor.setOnTextChangeListener(new RTextEditorView.OnTextChangeListener() {
-            @Override
-            public void onTextChanged(String content) {
-                Log.d(TAG, "onTextChanged: " + content);
-            }
-        });
 
         // Insert Link
         RTextEditorButton insertLinkButton = findViewById(R.id.insert_link);
@@ -225,6 +179,42 @@ public class editor extends wrapper {
             }
         });
     }
+
+    Bundle bundle;
+    private void init() {
+
+        setInvalidClipOrValidClip();
+
+        editor = findViewById(R.id.editor_view);
+        // Enable keyboard's incognito mode
+        editor.setIncognitoModeEnabled(true);
+
+        RTextEditorToolbar editorToolbar = findViewById(R.id.editor_toolbar);
+        editorToolbar.setEditorView(editor);
+        // Set initial clip_content
+        initialHtml("<p>Once upon a time ...</p>");
+
+        // TODO ? save every edit.
+        editor.setOnTextChangeListener(new RTextEditorView.OnTextChangeListener() {
+            @Override
+            public void onTextChanged(String content) {
+                Log.d(TAG, "onTextChanged: " + content);
+                //  ? applyChangesToClip();
+            }
+        });
+    }
+
+    private void setInvalidClipOrValidClip() {
+        currentclip = new Clip();
+        currentclip.clip_id = Constants.response_invalid_clip_id;
+
+        bundle = getIntent().getExtras();
+
+        if(bundle.containsKey("clip")) {
+            currentclip = new Clip(bundle);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -244,7 +234,7 @@ public class editor extends wrapper {
                 editor.redo();
                 break;
             case R.id.create_menu_write:
-                create_clip(action);
+                applyChangesToClip();
                 break;
             case R.id.create_menu_close:
                 editor.this.finish();

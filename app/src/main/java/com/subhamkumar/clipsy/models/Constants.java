@@ -26,7 +26,7 @@ public  static Integer[] mThumbIds = {
     public static final String STATUS = "status";
     public static final String CLIP_CREATED = "Clip Created";
     public static final String JSON_EX = "json ex";
-    public static final String CREATE_CLIP = "create_clip";
+    public static final String CREATE_CLIP = "applyChangesToClip";
     public static final String FX = "fx";
     public static final String CLIP_CONTENT = "clip_content";
     public static final String CLIP_TITLE = "clip_title";
@@ -41,7 +41,7 @@ public  static Integer[] mThumbIds = {
     public static String OPERATION_SIGN_IN = "sign_in";
     public static String OPERATION_UPDATE_USER = "update_user";
 
-    public static String OPERATION_CREATE_CLIP = "create_clip";
+    public static String OPERATION_CREATE_CLIP = "applyChangesToClip";
     public static String OPERATION_READ_CLIPS = "read_clips";
     public static String OPERATION_UPDATE_CLIP = "update_clip";
     public static String OPERATION_DELETE_CLIP = "delete_clip";
@@ -78,4 +78,11 @@ public  static Integer[] mThumbIds = {
     public static String PUBLIC = "1";
     public static String PRIVATE = "2";
 
+    public static String request_clip_create = "http://api.pitavya.com/clipsy/create_clip";
+    public static String header_authentication = "Authentication";
+
+   public static String response_invalid_clip_id = "-1";
+    public static String request_clip_update = "http://api.pitavya.com/clipsy/update_clip/%1$s";
+    public static String request_user_get_user = "http://api.pitavya.com/clipsy/get/%1$s";
+    public static String request_user_update_avatar = "http://api.pitavya.com/clipsy/update_avatar/%1$s";
 }

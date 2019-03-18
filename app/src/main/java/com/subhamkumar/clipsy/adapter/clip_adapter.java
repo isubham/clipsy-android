@@ -1,6 +1,7 @@
 package com.subhamkumar.clipsy.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +47,10 @@ public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewhol
             author_name = (TextView) V.findViewById(R.id.rl_clip_author);
             clip_time = (TextView) V.findViewById(R.id.rl_clip_time);
             clip_content = (WebView) V.findViewById(R.id.rl_clip_content);
+
+            WebSettings webSettings = clip_content.getSettings();
+            webSettings.setTextSize(WebSettings.TextSize.SMALLER);
+
             profile_pic = (ImageView) V.findViewById(R.id.rl_clip_profile_pic);
 
         }
@@ -109,9 +115,7 @@ public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewhol
             int imageResource = Constants.mThumbIds[_profile_pic];
             clip_viewholder.profile_pic.setImageResource(imageResource);
         }catch (NumberFormatException e) {
-        }
-        finally {
-            int _profile_pic = 1;
+            int _profile_pic = 0;
             int imageResource = Constants.mThumbIds[_profile_pic];
         }
 

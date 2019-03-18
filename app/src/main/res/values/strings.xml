@@ -1,28 +1,11 @@
 <resources>
     <string name="app_name">Clipsy</string>
 
-    <string name="just_now">Right now</string>
-    <string name="a_min_ago">1 minute ago</string>
-    <string name="mins_ago">" minutes ago"</string>
-    <string name="a_hour_ago">1 hour ago</string>
-    <string name="yesterday">Yesterday</string>
-    <string name="days_ago">" days ago"</string>
-    <string name="week_ago">" week ago"</string>
-    <string name="weeks_ago">" weeks ago"</string>
-    <string name="title_activity_user_detail">user_detail</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="action_undo">Undo</string>
     <string name="action_redo">Redo</string>
     <string name="insert">Insert</string>
-
-    <string name="dialog_title_text_color">Select a Text Color</string>
-    <string name="dialog_title_text_back_color">Select a Text Background Color</string>
 
     <!-- Insert Table -->
     <string name="title_insert_table">Insert Table</string>
@@ -33,21 +16,12 @@
     <string name="title_insert_link">Insert Link</string>
     <string name="hint_text_to_display">Text to display</string>
     <string name="hint_link_to">Link to</string>
-    <string name="profile_email">Profile email</string>
-    <string name="profile_name">Profile name</string>
-    <string name="follow">Follow</string>
-    <string name="clips">Clips</string>
-    <string name="followers">Followers</string>
-    <string name="following">Following</string>
-    <string name="todo">TODO</string>
 
 
     <!-- app  -->
-    <string name="user_id">user_id</string>
 
 
     <!--network-->
-    <string name="base_url">http://api.pitavya.com/clipsy/</string>
 
     <!--user-->
     <string name="request_user_sign_up">http://api.pitavya.com/clipsy/signup/</string>
@@ -63,7 +37,6 @@
     <string name="request_clip_create">http://api.pitavya.com/clipsy/create_clip</string>
     <string name="request_clip_read">http://api.pitavya.com/clipsy/read_clip/%1$s</string>
     <string name="request_clip_update">http://api.pitavya.com/clipsy/update_clip/%1$s</string>
-    <string name="request_clip_delete">http://api.pitavya.com/clipsy/delete_clip/%1$s</string>
 
     <string name="request_clip_reads">http://api.pitavya.com/clipsy/read_clips</string>
     <string name="request_clip_reads_user">http://api.pitavya.com/clipsy/read_clips/%1$s</string>
@@ -71,45 +44,38 @@
     <string name="request_clip_following">http://api.pitavya.com/clipsy/following_clips</string>
 
 
+
+
+    <string name="response_invalid_clip_id">-1</string>
+
+
     <!--user user-->
 
     <string name="request_user_user_follow">http://api.pitavya.com/clipsy/follow/%1$s</string>
     <string name="request_user_user_unfollow">http://api.pitavya.com/clipsy/unfollow/%1$s</string>
 
+    <!--
     <string name="request_user_user_following">http://api.pitavya.com/clipsy/following</string>
     <string name="request_user_user_follower">http://api.pitavya.com/clipsy/follower</string>
+    -->
+
+    <string name="request_user_user_following">http://api.pitavya.com/clipsy/following/%1$s</string>
+    <string name="request_user_user_follower">http://api.pitavya.com/clipsy/follower/%1$s</string>
+
     <string name="request_user_user_profile_matrix">http://api.pitavya.com/clipsy/profile_matrix/%1$s</string>
 
 
     <!--params-->
 
 
-    <string name="params_user_searched_id">email</string>
-    <string name="params_user_email">email</string>
-    <string name="params_user_password">password</string>
-    <string name="params_user_type">type</string>
-    <string name="params_user_name">name</string>
-    <string name="params_user_verify_token">verify_token</string>
-
-    <string name="params_clip_clip_content">clip_content</string>
-
-    <string name="params_user_user_follow">follow</string>
-    <string name="params_user_user_unfollow">unfollow</string>
-
-
     <string name="header_authentication">Authentication</string>
 
     <!--messages of response-->
-    <string name="message_signin_success">Successfully signed in</string>
-
-    <string name="message_signin_faillure_email_not_found">email not found</string>
-    <string name="message_signin_failure_wrong_password">Incorrect password</string>
 
 
     <!--api response-->
 
     <string name="apiResponse_success_true">1</string>
-    <string name="apiResponse_success_false">2</string>
 
     <!--Signup page constants-->
 
@@ -120,10 +86,8 @@
     <string name="status_email_verification_email_unverified">0</string>
 
     <string name="status_signin_failed">0</string>
-    <string name="status_signin_success">1</string>
 
     <string name="status_success">1</string>
-    <string name="status_failed">0</string>
 
 
     <string name="bundle_param_caller_activity_to_email_verification">callback</string>
@@ -136,16 +100,8 @@
     <string name="bundle_param_caller_button_following">following</string>
 
 
-
-
-    <string name="bundle_param_caller_activity_signup">signup</string>
-    <string name="bundle_param_caller_activity_following_clips">following_clips</string>
-    <string name="bundle_param_caller_activity_current_clips">Current Clips</string>
     <string name="bundle_param_caller_activity_panel">panel</string>
-    <string name="bundle_param_caller_activity_complete_profile">complete_profile</string>
-    <string name="bundle_param_caller_activity_profile_result">profile_result</string>
     <string name="bundle_param_caller_activity_fragment_search">fragment_search</string>
-    <string name="bundle_param_caller_activity_fragment_complete_profile">fragment_complete_profile</string>
 
 
     <string name="bundle_param_profile_result_searched_user_id">searched_id</string>
@@ -172,12 +128,17 @@
     <string name="params_id">id</string>
 
 
-    <string name="params_value_private">1</string>
     <string name="params_value_public">2</string>
 
 
 
     <string name="params_verify_token">verify_token</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="clips">Clips</string>
+    <string name="follow">Follow</string>
+    <string name="profile_email">Profile email</string>
+    <string name="profile_name">Profile name</string>
 
 
 </resources>

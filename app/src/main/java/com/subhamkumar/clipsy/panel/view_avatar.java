@@ -10,8 +10,11 @@ import android.widget.ImageView;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
+import com.subhamkumar.clipsy.models.Profile;
+import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.utils.wrapper;
 
 import org.json.JSONException;
@@ -25,7 +28,9 @@ import static android.view.View.GONE;
 public class view_avatar extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
-        return null;
+        Map params = new HashMap<String, String>();
+        params.put(getString(R.string.header_authentication), token);
+        return params;
     }
 
     @Override
@@ -35,40 +40,32 @@ public class view_avatar extends wrapper {
 
     @Override
     public String setHttpUrl() {
-        return getString(R.string.request_user_get_user);
+        return String.format(Constants.request_user_get_user, areSameUser ? id : searcheUserId);
     }
 
     @Override
     public Map makeParams() {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("fx", "get_by_id");
-        params.put("id", are_same_user ? user_x : user_y);
         return params;
     }
 
     @Override
     public void handleResponse(String response) {
-        // {"14":{"name":"isubham","email":"subhamkumarchandrawansi@gmail.com","type":"1","profile_pic":"1"}}
 
-        try {
-            JSONObject user_json = new JSONObject(response);
+        Gson gson = new Gson();
 
-            JSONObject user_detail = user_json.getJSONObject(are_same_user ? user_x : user_y);
+        ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
 
-            String profile_pic = user_detail.getString("profile_pic");
+        String profilePic = profileApiResponse.data.get(0).profile_pic;
 
-            try {
-                int _profile_pic = Integer.parseInt(profile_pic);
-                int imageResource = Constants.mThumbIds[_profile_pic];
-                medium_avatar.setImageResource(imageResource);
+        String parsedProficPic = profilePic.equals("") ? "0" : profilePic;
 
-            } catch (NumberFormatException e) {
-                Log.i("002", "nullformatexception" + e.getMessage());
-            }
+        int _profile_pic = Integer.parseInt(parsedProficPic);
 
-        } catch (JSONException e) {
-            Log.i("jsonex", "inside view avatar" + e.getMessage());
-        }
+        int imageResource = Constants.mThumbIds[_profile_pic];
+        mediumAvatar.setImageResource(imageResource);
+
+
     }
 
     @Override
@@ -76,23 +73,26 @@ public class view_avatar extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    String user_x, user_y;
-    Button edit_avatar_button;
-    ImageView medium_avatar;
-    boolean are_same_user;
+    String id, searcheUserId, token;
+    Button editAvatarButton;
+    ImageView mediumAvatar;
+    boolean areSameUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_avatar);
 
-        user_x = getIntent().getExtras().getString("user_x");
-        user_y = getIntent().getExtras().getString("user_y");
-        edit_avatar_button = (Button) findViewById(R.id.edit_avatar);
-        medium_avatar = (ImageView) findViewById(R.id.medium_avatar);
+        id = getIntent().getExtras().getString("id");
+        searcheUserId = getIntent().getExtras().getString("searched_id");
+        token = getIntent().getExtras().getString("token");
 
-        are_same_user = user_x.equals(user_y);
-        showEditAction(are_same_user);
+
+        editAvatarButton = (Button) findViewById(R.id.edit_avatar);
+        mediumAvatar = (ImageView) findViewById(R.id.medium_avatar);
+
+        areSameUser = id.equals(searcheUserId);
+        showEditAction(areSameUser);
 
         makeRequest();
 
@@ -100,16 +100,21 @@ public class view_avatar extends wrapper {
 
     private void showEditAction(boolean are_same_user) {
         if(are_same_user) {
-            edit_avatar_button.setOnClickListener(new View.OnClickListener() {
+            editAvatarButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(view_avatar.this, choose_avatar.class)
-                            .putExtra("token", user_x));
+                    startActivity(new Intent(view_avatar.this,
+                            choose_avatar.class)
+                            .putExtra("token", token)
+                            .putExtra("id", id)
+                            .putExtra("searched_id", searcheUserId)
+                    );
+
                 }
             });
         }
         else {
-            edit_avatar_button.setVisibility(GONE);
+            editAvatarButton.setVisibility(GONE);
         }
     }
 

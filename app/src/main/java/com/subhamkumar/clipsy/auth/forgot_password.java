@@ -2,10 +2,12 @@ package com.subhamkumar.clipsy.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -22,13 +24,20 @@ public class forgot_password extends wrapper {
 
     @Override
     public Map<String, String> _getHeaders() {
-        return null;
+        Map<String, String> headers = new HashMap<>();
+        return headers;
     }
     @Override
     public Map makeParams() {
         Map<String, String> params = new HashMap();
-        params.put("email", email_to_send.getText().toString().trim());
+        params.put("email", getEmail());
         return params;
+    }
+
+    @NonNull
+    private String getEmail() {
+        String email = email_to_send.getText().toString().trim();
+        return email;
     }
 
     @Override
@@ -68,13 +77,19 @@ public class forgot_password extends wrapper {
     TextView email_label, status;
 
     public void init() {
-        email_to_send = (EditText) findViewById(R.id.forgot_password_email);
-        email_label = (TextView) findViewById(R.id.forgot_password_email_label);
-        status = (EditText) findViewById(R.id.forgot_password_status);
+        email_to_send = findViewById(R.id.forgot_password_email);
+        email_label = findViewById(R.id.forgot_password_email_label);
+        status =  findViewById(R.id.forgot_password_status);
     }
 
     public void send_verify_token(View V) {
-        makeRequest();
+        if(getEmail().length() > 0) {
+            status.setText("");
+            makeRequest();
+        }
+        else{
+            ((TextView) findViewById(R.id.forgot_password_email_label)).setText("Please fill email");
+        }
     }
 
     @Override

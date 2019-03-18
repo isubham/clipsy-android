@@ -64,12 +64,19 @@ public class profiles_list extends wrapper {
 
     @NonNull
     private String getUrlByIncomingFlag() {
-        return String.format(
+
+        String searchedId = getSeacrchedId();
+
+        boolean isFollowingButtonClicked  =
                 bundle.getString(getString(R.string.bundle_param_caller_button_to_profile_list))
-                .equals(getString(R.string.bundle_param_caller_button_following))
+                        .equals(getString(R.string.bundle_param_caller_button_following));
+
+        String profileListUrl =  String.format( isFollowingButtonClicked
                 ? getString(R.string.request_user_user_following) :
                 getString(R.string.request_user_user_follower),
-                getIntent().getStringExtra(getString(R.string.params_search_id)));
+                searchedId);
+
+        return profileListUrl;
     }
 
     private void profileListClickToProfilePage() {
@@ -132,6 +139,11 @@ public class profiles_list extends wrapper {
     profile_adapter profile_adapter;
     List<Profile> profileList;
     Bundle bundle;
+
+    private String getSeacrchedId() {
+        String searchedId = getIntent().getStringExtra(getString(R.string.params_search_id));
+        return searchedId;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

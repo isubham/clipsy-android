@@ -20,6 +20,7 @@ public class fragment_complete_profile extends Fragment {
 
     LinearLayout _profile, _clips;
     View V;
+    Bundle user_detail;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class fragment_complete_profile extends Fragment {
 
 
         if(getActivity().getIntent().getExtras() != null) {
-            Bundle user_detail = getActivity().getIntent().getExtras();
+            user_detail = getActivity().getIntent().getExtras();
             fragment_profile.setArguments(user_detail);
             fragment_clips.setArguments(user_detail);
         }

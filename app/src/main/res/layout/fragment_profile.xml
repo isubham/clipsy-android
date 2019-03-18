@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Profile name"
+        android:text="@string/profile_name"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="12sp"
-        android:text="Profile email"
+        android:text="@string/profile_email"
         android:textColor="@color/blue_600" />
 
     <Button
@@ -41,7 +41,7 @@
         android:layout_gravity="center"
         android:backgroundTint="@color/indigo_500"
         android:minHeight="14dp"
-        android:text="Follow"
+        android:text="@string/follow"
         android:textAllCaps="false"
         android:textColor="@color/indigo_50" />
 
@@ -59,7 +59,7 @@
             android:backgroundTint="@color/grey_50"
             android:gravity="center"
             android:minHeight="14dp"
-            android:text="Clips"
+            android:text="@string/clips"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textStyle="bold" />
@@ -72,7 +72,7 @@
             android:backgroundTint="@color/grey_300"
             android:gravity="center"
             android:minHeight="14dp"
-            android:text="Followers"
+            android:text="@string/followers"
             android:textAllCaps="false"
             android:textColor="@color/black" />
 
@@ -84,7 +84,7 @@
             android:backgroundTint="@color/grey_300"
             android:gravity="center"
             android:minHeight="14dp"
-            android:text="Following"
+            android:text="@string/following"
             android:textAllCaps="false"
             android:textColor="@color/black" />
 

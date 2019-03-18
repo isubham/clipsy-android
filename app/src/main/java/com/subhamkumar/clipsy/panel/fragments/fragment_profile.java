@@ -35,7 +35,7 @@ public class fragment_profile extends fragment_wrapper {
 
     String profile_pic = "0";
     ImageView _choose_avatar_icon;
-    String type, id, searched_id, user_name, user_email, rx_title, rx_action;
+    String id, searched_id;
     TextView _name, _email;
     Button relationshipButton, fragment_profile_followers, fragment_profile_following;
     View V;
@@ -120,18 +120,21 @@ public class fragment_profile extends fragment_wrapper {
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), view_avatar.class)
                         .putExtra("id", id)
-                        .putExtra("searched_id", user_viewed));
+                        .putExtra("searched_id", user_viewed)
+                        .putExtra("token", token));
             }
         });
 
     }
 
-    private String getUrlByResponseMessage(String message, String searched_id)
-    {
+    private String getUrlByResponseMessage(String message, String searched_id) {
         switch (message) {
-            case "Follow" : return String.format(getString(R.string.request_user_user_follow), searched_id);
-            case "Following" : return String.format(getString(R.string.request_user_user_unfollow), searched_id);
-            default:return String.format(getString(R.string.request_user_user_follow), searched_id);
+            case "Follow":
+                return String.format(getString(R.string.request_user_user_follow), searched_id);
+            case "Following":
+                return String.format(getString(R.string.request_user_user_unfollow), searched_id);
+            default:
+                return String.format(getString(R.string.request_user_user_follow), searched_id);
         }
     }
 
@@ -183,7 +186,7 @@ public class fragment_profile extends fragment_wrapper {
 
     private void hideRelationshipButtonIfSameUser(String user_x, String user_y) {
 
-        if (user_x.equals(user_y))  {
+        if (user_x.equals(user_y)) {
             relationshipButton.setVisibility(View.GONE);
         }
 
@@ -193,14 +196,10 @@ public class fragment_profile extends fragment_wrapper {
         _email.setText(profile.email);
         _name.setText(profile.name);
         int _profile_pic;
-        try{
+        try {
             _profile_pic = Integer.parseInt(profile.profile_pic);
-        }
-        catch (NumberFormatException e) {
-
-        }
-        finally {
-            _profile_pic = 1;
+        } catch (NumberFormatException e) {
+            _profile_pic = 0;
         }
         int imageResource = Constants.mThumbIds[_profile_pic];
         _choose_avatar_icon.setImageResource(imageResource);
@@ -220,19 +219,24 @@ public class fragment_profile extends fragment_wrapper {
     private void setVariablesFromBundle() {
         id = getArguments().getString(getString(R.string.params_id));
         token = getArguments().getString(getString(R.string.params_token));
-
-        searched_id = id;
-        // when coming from search page.
-        setSearchIdIfComingFromFragmentSearch();
+        searched_id = setSearchIdIfComingFromFragmentSearchOrCompleteProfileOrProfileList(id);
     }
 
-    private void setSearchIdIfComingFromFragmentSearch() {
+    private String setSearchIdIfComingFromFragmentSearchOrCompleteProfileOrProfileList(String id) {
+        String searchedId = id;
         if (getArguments().containsKey(getString(R.string.bundle_param_caller_activity_to_fragment_clips))) {
-            if(getArguments().getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips))
+            if (getArguments().getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips))
                     .equals(getString(R.string.bundle_param_caller_activity_fragment_search))) {
-                searched_id = getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
+                return getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
             }
         }
+        if (getArguments().containsKey(getString(R.string.bundle_param_profile_result_searched_user_id))) {
+            return getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
+        }
+        if(getArguments().containsKey(getString(R.string.bundle_param_caller_activity_to_fragment_clips))){
+            return getArguments().getString(getString(R.string.params_id));
+        }
+        return searchedId;
     }
 
     @Override

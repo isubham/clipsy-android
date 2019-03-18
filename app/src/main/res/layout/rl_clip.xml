@@ -56,25 +56,15 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:background="@color/grey_100"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            ></LinearLayout>
+
 
         <!-- row 3 => clip_content -->
         <WebView
             android:id="@+id/rl_clip_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
              />
 
-         <LinearLayout
-            android:background="@color/grey_100"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            ></LinearLayout>
 
         <TextView
                 android:id="@+id/rl_clip_time"

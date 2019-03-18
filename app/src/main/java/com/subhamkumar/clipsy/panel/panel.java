@@ -96,20 +96,22 @@ public class panel extends AppCompatActivity {
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        fragment_search fragment_search = new fragment_search();
-        fragment_search.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_search, "Search");
-
-        fragment_complete_profile fragment_complete_profile = new fragment_complete_profile();
-        fragment_complete_profile.setArguments(user_details);
-        // viewPagerAdapter.addFragment(fragment_complete_profile, "Profile");
-
         user_details.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
                 getString(R.string.bundle_param_caller_activity_panel));
 
         fragment_clips fragment_clips = new fragment_clips();
         fragment_clips.setArguments(user_details);
         viewPagerAdapter.addFragment(fragment_clips, "Clips");
+
+        fragment_search fragment_search = new fragment_search();
+        fragment_search.setArguments(user_details);
+        viewPagerAdapter.addFragment(fragment_search, "Search");
+
+        fragment_complete_profile fragment_complete_profile = new fragment_complete_profile();
+        fragment_complete_profile.setArguments(user_details);
+        viewPagerAdapter.addFragment(fragment_complete_profile, "Profile");
+
+
 
 
         viewPager.setAdapter(viewPagerAdapter);
@@ -118,7 +120,12 @@ public class panel extends AppCompatActivity {
     Bundle user_details;
 
     public void toCreateClip() {
-        startActivity(new Intent(panel.this, editor.class).putExtra("token", token));
+        startActivity(new Intent(panel.this, editor.class)
+                .putExtra("token", token)
+                .putExtra("action", "save")
+
+
+        );
     }
 
     String token; // for createClip
@@ -135,6 +142,5 @@ public class panel extends AppCompatActivity {
         }
 
         initializeVaribles();
-        setupViewPager(viewPager);
     }
 }

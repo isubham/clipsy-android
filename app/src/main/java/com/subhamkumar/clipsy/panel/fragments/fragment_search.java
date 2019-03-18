@@ -134,15 +134,6 @@ public class fragment_search extends fragment_wrapper {
 
         String searchedUserId = ((TextView) view.findViewById(R.id.rl_profile_id)).getText().toString().trim();
 
-        // if c_user_id and token are same
-
-        /* TODO will it be added or not.
-        if(token.equals(c_user_id)) {
-        TabHost host = (TabHost) getActivity().findViewById(android.R.id.tabhost);
-        host.setCurrentTab(3);
-        }
-        */
-
         userDetails.putString(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId);
         userDetails.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
                 getString(R.string.bundle_param_caller_activity_fragment_search));
