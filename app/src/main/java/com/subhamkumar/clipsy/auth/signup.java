@@ -24,7 +24,7 @@ import java.util.Map;
 public class signup extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
-        return null;
+        return new HashMap<String, String>();
     }
 
     @Override

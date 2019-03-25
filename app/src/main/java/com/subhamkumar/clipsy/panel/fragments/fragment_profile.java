@@ -74,7 +74,7 @@ public class fragment_profile extends fragment_wrapper {
         Gson gson = new Gson();
         ProfileMatrixApiResponse profileMatrixApiResponse = gson.fromJson(response, ProfileMatrixApiResponse.class);
         setProfileElements(profileMatrixApiResponse.data.profile);
-        relationshipButton.setText(profileMatrixApiResponse.message);
+        relationshipButton.setText(profileMatrixApiResponse.message.equals("Following") ? "Unfollow" : profileMatrixApiResponse.message);
         setRelationshipAction(profileMatrixApiResponse.message, searched_id);
     }
 

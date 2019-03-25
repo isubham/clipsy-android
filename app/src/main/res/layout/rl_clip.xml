@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    >
+    app:cardCornerRadius="0sp"
+    app:cardElevation="0dp">
 
     <LinearLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp">
 
         <!-- row 1 => user pic | name | ago-->
 
@@ -18,29 +21,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            >
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
 
             <ImageView
                 android:id="@+id/rl_clip_profile_pic"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:contentDescription="@string/todo"
                 android:src="@drawable/boy003" />
 
             <TextView
                 android:id="@+id/rl_clip_author"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="0.8"
-                android:text="hell world"
+                android:text="@string/hell_world"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/rl_clip_menu"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/menudot" />
             <!-- ids -->
             <TextView
                 android:id="@+id/rl_clip_id"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="author id"
+                android:text="@string/author_id"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -48,30 +59,45 @@
                 android:id="@+id/rl_clip_author_id"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="author id"
+                android:text="@string/author_id"
+                android:textStyle="bold"
+                android:visibility="gone" />
+            <!-- end of ids -->
+            <TextView
+                android:id="@+id/rl_clip_viewer_id"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/author_id"
                 android:textStyle="bold"
                 android:visibility="gone" />
             <!-- end of ids -->
 
-
         </LinearLayout>
-
 
 
         <!-- row 3 => clip_content -->
         <WebView
             android:id="@+id/rl_clip_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-             />
+            android:layout_height="wrap_content" />
 
 
         <TextView
-                android:id="@+id/rl_clip_time"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_weight="0.1"
-                android:text="20 march 2018" />
+            android:id="@+id/rl_clip_time"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/_20_march_2018"
+            android:textColor="#939393"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey_50" />
 
     </LinearLayout>
+
 </android.support.v7.widget.CardView>

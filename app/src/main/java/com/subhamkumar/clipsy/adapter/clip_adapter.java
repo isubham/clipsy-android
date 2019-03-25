@@ -1,7 +1,9 @@
 package com.subhamkumar.clipsy.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -10,6 +12,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,24 +20,30 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Clip;
+import com.subhamkumar.clipsy.panel.editor;
 import com.subhamkumar.clipsy.utils.CustomTabs;
 
 import java.util.List;
 
-public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewholder> {
+abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewholder> {
+
+
+    public abstract void addViewClickListeners(View V) ;
 
     public static class Clip_viewholder extends RecyclerView.ViewHolder {
         public TextView id,
 
         author_name,
                 author_id,
+        viewer_id,
+        clip_time;
 
-                clip_time;
         ImageView profile_pic;
         WebView
                 clip_content;
@@ -44,6 +53,8 @@ public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewhol
 
             id = (TextView) V.findViewById(R.id.rl_clip_id);
             author_id = (TextView) V.findViewById(R.id.rl_clip_author_id);
+            viewer_id = (TextView) V.findViewById(R.id.rl_clip_viewer_id);
+
             author_name = (TextView) V.findViewById(R.id.rl_clip_author);
             clip_time = (TextView) V.findViewById(R.id.rl_clip_time);
             clip_content = (WebView) V.findViewById(R.id.rl_clip_content);
@@ -70,11 +81,14 @@ public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewhol
                 .inflate(R.layout.rl_clip, viewGroup, false);
         Clip_viewholder clip_viewholder = new Clip_viewholder(V);
         context = viewGroup.getContext();
+
+        addViewClickListeners(V);
+
         return clip_viewholder;
     }
 
-    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span)
-    {
+
+    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span) {
         int start = strBuilder.getSpanStart(span);
         int end = strBuilder.getSpanEnd(span);
         int flags = strBuilder.getSpanFlags(span);
@@ -89,12 +103,11 @@ public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewhol
         strBuilder.removeSpan(span);
     }
 
-    protected void setTextViewHTML(TextView text, String html)
-    {
+    protected void setTextViewHTML(TextView text, String html) {
         CharSequence sequence = Html.fromHtml(html);
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
         URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
-        for(URLSpan span : urls) {
+        for (URLSpan span : urls) {
             makeLinkClickable(strBuilder, span);
         }
         text.setText(strBuilder);
@@ -104,17 +117,21 @@ public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewhol
     @Override
     public void onBindViewHolder(@NonNull Clip_viewholder clip_viewholder, int i) {
 
-        clip_viewholder.id.setText(                 clips.get(i).profile.id);
-        clip_viewholder.author_name.setText(        clips.get(i).profile.name);
-        clip_viewholder.author_id.setText(          clips.get(i).clip_id);
-        clip_viewholder.clip_content.loadData(clips.get(i).clip_content, "text/html", "UTF-8");
-        clip_viewholder.clip_time.setText(          clips.get(i).clip_time);
+        clip_viewholder.id.setText(clips.get(i).profile.id);
+        clip_viewholder.author_name.setText(clips.get(i).profile.name);
+        clip_viewholder.author_id.setText(clips.get(i).clip_id);
+        clip_viewholder.viewer_id.setText(clips.get(i).viewer_id);
 
-        try{
+        clip_viewholder.clip_content.loadData(clips.get(i).clip_content, "text/html", "UTF-8");
+
+        clip_viewholder.clip_time.setText(clips.get(i).clip_time);
+
+
+        try {
             int _profile_pic = Integer.parseInt(clips.get(i).profile.profile_pic);
             int imageResource = Constants.mThumbIds[_profile_pic];
             clip_viewholder.profile_pic.setImageResource(imageResource);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             int _profile_pic = 0;
             int imageResource = Constants.mThumbIds[_profile_pic];
         }

@@ -2,15 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="4dp"
+    android:background="@color/white"
     tools:context=".panel.fragments.fragment_search">
     <!-- TODO: Update blank fragment layout -->
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/live_search"
-        android:hint="name, email"
+        android:hint="@string/name_or_email"
         />
 
     <android.support.v7.widget.RecyclerView

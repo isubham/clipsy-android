@@ -24,8 +24,7 @@ public class forgot_password extends wrapper {
 
     @Override
     public Map<String, String> _getHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        return headers;
+        return new HashMap<String, String>();
     }
     @Override
     public Map makeParams() {
@@ -85,6 +84,7 @@ public class forgot_password extends wrapper {
     public void send_verify_token(View V) {
         if(getEmail().length() > 0) {
             status.setText("");
+            email_label.setText("");
             makeRequest();
         }
         else{

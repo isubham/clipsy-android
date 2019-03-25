@@ -10,100 +10,120 @@
 
     <!-- status -->
     <TextView
-        android:layout_gravity="center_horizontal"
         android:id="@+id/signup_error_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/red_400"
-        />
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/red_400" />
 
 
     <!--name-->
-    <EditText
-        android:id="@+id/signup_name"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="name" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/signup_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/name"
+            android:inputType="textPersonName" />
+    </android.support.design.widget.TextInputLayout>
+
 
     <TextView
         android:id="@+id/signup_name_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         android:textColor="@color/red_500"
-         />
+        android:textColor="@color/red_500" />
 
 
     <!--email-->
-    <EditText
-        android:id="@+id/signup_email"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="email" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/signup_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:id="@+id/signup_email_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         android:textColor="@color/red_500"
-         />
+        android:textColor="@color/red_500" />
 
 
     <!--password-->
-    <EditText
-        android:id="@+id/signup_password"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="password" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/signup_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:id="@+id/signup_password_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         android:textColor="@color/red_500"
-         />
+        android:textColor="@color/red_500" />
 
-<!--
-    &lt;!&ndash;type&ndash;&gt;
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!--
+        &lt;!&ndash;type&ndash;&gt;
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <RadioButton
+            <RadioButton
 
-            android:id="@+id/__public"
+                android:id="@+id/__public"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="selectType"
+                android:text="Public" />
+
+            <RadioButton
+                android:id="@+id/__private"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="selectType"
+                android:text="Private" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/signup_type_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="selectType"
-            android:text="Public" />
-
-        <RadioButton
-            android:id="@+id/__private"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="selectType"
-            android:text="Private" />
-
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/signup_type_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         android:textColor="@color/red_500"
-         />-->
+             android:textColor="@color/red_500"
+             />-->
 
 
     <!--buttons-->
     <Button
+        style="@style/primaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="createAccount"
-        android:text="Signup" />
+        android:text="@string/signup" />
 
     <Button
+        style="@style/secondaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="toLogin"
-        android:text="Login" />
+        android:text="@string/login" />
 
 </LinearLayout>

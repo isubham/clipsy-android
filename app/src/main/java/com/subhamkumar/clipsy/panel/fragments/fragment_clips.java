@@ -1,6 +1,8 @@
 package com.subhamkumar.clipsy.panel.fragments;
 
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -20,6 +23,10 @@ import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.clip_adapter;
 import com.subhamkumar.clipsy.models.ClipApiResonse;
 import com.subhamkumar.clipsy.models.Clip;
+import com.subhamkumar.clipsy.models.Constants;
+import com.subhamkumar.clipsy.panel.editor;
+import com.subhamkumar.clipsy.panel.profile_result;
+import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
 
 
 import java.util.ArrayList;
@@ -67,11 +74,74 @@ public class fragment_clips extends fragment_wrapper {
     public void handle_response(String response) {
 
         Gson gson = new Gson();
-        ClipApiResonse  clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
+        ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
         clipList.clear();
+
+        for (Clip clip :
+                clipList) {
+
+            clip.viewer_id = id;
+
+        }
+
         clipList.addAll(clipApiResonse.data);
         clip_adapter.notifyDataSetChanged();
 
+    }
+
+    private void addClickListener(View V) {
+
+        V.findViewById(R.id.rl_clip_content).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                gotoClipsUpdate(V);
+
+            }
+        });
+
+        V.findViewById(R.id.rl_clip_author).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                gotoProfileResult(V);
+            }
+        });
+
+        V.findViewById(R.id.rl_clip_profile_pic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                gotoProfileResult(V);
+            }
+        });
+
+
+
+    }
+
+    private void gotoClipsUpdate(View V) {
+        String author_id = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
+        String viewer_id = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
+
+        if (author_id.equals(viewer_id)) {
+
+            startActivity(new Intent(getActivity(), editor.class)
+                    .putExtra("token", token).putExtra("action" , "update"));
+
+        }
+    }
+
+    private void gotoProfileResult(View V) {
+        String searchedUserId = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
+
+        startActivity(new Intent(getActivity(), profile_result.class)
+                .putExtra("token", token).putExtra("action" , "update")
+                .putExtra(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId)
+                .putExtra(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
+                        getString(R.string.bundle_param_caller_activity_fragment_profile_list_to_profile_result))
+                .putExtra(getString(R.string.params_token), token)
+                .putExtra(getString(R.string.params_id), id));
     }
 
     @Override
@@ -91,7 +161,13 @@ public class fragment_clips extends fragment_wrapper {
         linearLayoutManager = new LinearLayoutManager(getActivity());
         clipList = new ArrayList<>();
 
-        clip_adapter = new clip_adapter(clipList);
+        clip_adapter = new clip_adapter(clipList) {
+            @Override
+            public void addViewClickListeners(View V) {
+                addClickListener(V);
+            }
+        };
+
         rv_clip.setLayoutManager(linearLayoutManager);
         rv_clip.setAdapter(clip_adapter);
 
@@ -122,6 +198,8 @@ public class fragment_clips extends fragment_wrapper {
         return String.format(getString(R.string.request_clip_reads));
 
     }
+
+
 
     Bundle bundle;
     String from;
@@ -155,32 +233,5 @@ public class fragment_clips extends fragment_wrapper {
         init(V);
         super.onResume();
     }
-/*
-         rv_clip.addOnItemTouchListener(
-               new RecyclerItemClickListener(getActivity(),
-                       new RecyclerItemClickListener.OnItemClickListener() {
-                           @Override
-                           public void onItemClick(View view, int position) {
 
-                               if (no_of_intent == 0) {
-
-                                   Intent to_profile_result = new Intent(getActivity(), profile_result.class);
-
-                                   String c_user_id = ((TextView) view.findViewById(R.id.rl_clip_author_id)).getText().toString().trim();
-                                   // if c_user_id and token are same
-
-
-                                   to_profile_result
-                                           .putExtra("c_user_id", c_user_id)
-                                           .putExtra(Constants.FIELD_USER_ID, token);
-                                   startActivity(to_profile_result);
-                               }
-
-                               // no_of_intent++;
-
-                           }
-
-                       }));
-
-            */
 }

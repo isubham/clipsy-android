@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -15,10 +13,6 @@ import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.ApiResponse;
 import com.subhamkumar.clipsy.utils.wrapper;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +20,7 @@ public class change_password extends wrapper {
 
     @Override
     public Map<String, String> _getHeaders() {
-        return null;
+        return new HashMap<String, String>();
     }
     @Override
     public int setHttpMethod() {
@@ -41,7 +35,8 @@ public class change_password extends wrapper {
         Map param = new HashMap<String, String>();
         param.put("email", getEmailFromBundle());
         param.put("password", password);
-        param.put("token", token);
+        param.put("verify_token", token);
+        Log.i("changePassParam", param.toString());
         return param;
     }
 
@@ -61,6 +56,7 @@ public class change_password extends wrapper {
 
     }
 
+
     @Override
     public void makeVolleyRequest(StringRequest stringRequest) {
         Volley.newRequestQueue(this).add(stringRequest);
@@ -73,16 +69,14 @@ public class change_password extends wrapper {
 
 
     private void init() {
-        passwordLabel = (TextView) findViewById(R.id.change_password_new_password_label);
-        confirmPasswordLabel = (TextView) findViewById(R.id.change_password_confirm_new_password_label);
-        tokenLabel = (TextView) findViewById(R.id.change_password_token_label);
-        statusLabel = (TextView) findViewById(R.id.change_password_status);
+        passwordLabel = findViewById(R.id.change_password_new_password_label);
+        confirmPasswordLabel = findViewById(R.id.change_password_confirm_new_password_label);
+        tokenLabel = findViewById(R.id.change_password_token_label);
+        statusLabel = findViewById(R.id.change_password_status);
 
-
-
-        confirmPasswordEditText = (EditText) findViewById(R.id.change_password_confirm_new_password_label);
-        passwordEditText    = (EditText) findViewById(R.id.change_password_new_password);
-        tokenEditText    = (EditText) findViewById(R.id.change_password_token_label);
+        confirmPasswordEditText = findViewById(R.id.change_password_confirm_new_password);
+        passwordEditText    = findViewById(R.id.change_password_new_password);
+        tokenEditText    = findViewById(R.id.change_password_token);
     }
 
 
@@ -90,6 +84,7 @@ public class change_password extends wrapper {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_password);
+        init();
     }
 
     private String getEmailFromBundle() {
@@ -106,9 +101,9 @@ public class change_password extends wrapper {
 
     private boolean validateFields() {
         boolean isPassEmpty  = showLabelIfEmptyField("Password cannot by empty.", passwordLabel, passwordEditText);
-        boolean isConfirmPassEmpty = showLabelIfEmptyField("Email cannot by empty.", confirmPasswordLabel, confirmPasswordEditText);
-        boolean isTokenEmpty = showLabelIfEmptyField("Name cannot by empty.", tokenLabel, tokenEditText);
-        return isConfirmPassEmpty  && isPassEmpty && isPassEmpty;
+        boolean isConfirmPassEmpty = showLabelIfEmptyField("Confirm password cannot by empty.", confirmPasswordLabel, confirmPasswordEditText);
+        boolean isTokenEmpty = showLabelIfEmptyField("Token cannot by empty.", tokenLabel, tokenEditText);
+        return isConfirmPassEmpty  && isPassEmpty && isTokenEmpty;
     }
 
 
@@ -129,6 +124,7 @@ public class change_password extends wrapper {
                 password = text(R.id.change_password_new_password);
                 token = text(R.id.change_password_token);
                 makeRequest();
+                statusLabel.setText("");
             }else{
                 confirmPasswordLabel.setText("Password Don't Match");
             }

@@ -157,7 +157,6 @@ public class editor extends AppCompatActivity {
     private RTextEditorView editor;
 
     private void initialHtml(String html) {
-        editor.setHtml(html);
     }
 
     @Override
@@ -165,8 +164,6 @@ public class editor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editor);
         init();
-
-
 
         // Insert Link
         RTextEditorButton insertLinkButton = findViewById(R.id.insert_link);
@@ -192,7 +189,7 @@ public class editor extends AppCompatActivity {
         RTextEditorToolbar editorToolbar = findViewById(R.id.editor_toolbar);
         editorToolbar.setEditorView(editor);
         // Set initial clip_content
-        initialHtml("<p>Once upon a time ...</p>");
+        // initialHtml("<p>Once upon a time ...</p>");
 
         // TODO ? save every edit.
         editor.setOnTextChangeListener(new RTextEditorView.OnTextChangeListener() {

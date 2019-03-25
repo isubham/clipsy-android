@@ -28,9 +28,7 @@ import java.util.Map;
 public class signin extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
-        Map headers = new HashMap<String, String>();
-        headers.put(getString(R.string.header_authentication), "");
-        return headers;
+        return new HashMap<String, String>();
     }
 
     @Override

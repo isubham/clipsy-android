@@ -69,13 +69,11 @@ public class panel extends AppCompatActivity {
 
         public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            if(!title.equals("")) {
+                mFragmentTitleList.add(title);
+            }
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
     }
 
     // end of adapter classs
@@ -87,7 +85,10 @@ public class panel extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.user_panel_tabs);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setElevation(6);
+        tabLayout.setElevation(0);
+        tabLayout.getTabAt(0).setIcon(R.drawable.newsfeed);
+        tabLayout.getTabAt(1).setIcon(R.drawable.search);
+        tabLayout.getTabAt(2).setIcon(R.drawable.user);
 
     }
 
@@ -101,16 +102,15 @@ public class panel extends AppCompatActivity {
 
         fragment_clips fragment_clips = new fragment_clips();
         fragment_clips.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_clips, "Clips");
+        viewPagerAdapter.addFragment(fragment_clips, "");
 
         fragment_search fragment_search = new fragment_search();
         fragment_search.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_search, "Search");
+        viewPagerAdapter.addFragment(fragment_search, "");
 
         fragment_complete_profile fragment_complete_profile = new fragment_complete_profile();
         fragment_complete_profile.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_complete_profile, "Profile");
-
+        viewPagerAdapter.addFragment(fragment_complete_profile, "");
 
 
 

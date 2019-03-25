@@ -22,7 +22,7 @@ import java.util.Map;
 public class email_verification extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
-        return null;
+        return new HashMap<String, String>();
     }
 
     @Override
@@ -85,6 +85,15 @@ public class email_verification extends wrapper {
         }
     }
 
+    private boolean showLabelIfEmptyField(String message, TextView label, EditText editText) {
+        if(editText.getText().toString().trim().equals("")) {
+            label.setText(message);
+            return false;
+        }
+        label.setText("");
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +103,11 @@ public class email_verification extends wrapper {
         button_to_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                makeRequest();
+
+                TextView statusTextView = findViewById(R.id.verify_token_status);
+                if (!showLabelIfEmptyField("Token cannot be empty", statusTextView, verify_token) ) {
+                    makeRequest();
+                }
             }
         });
 
