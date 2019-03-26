@@ -117,9 +117,9 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
     @Override
     public void onBindViewHolder(@NonNull Clip_viewholder clip_viewholder, int i) {
 
-        clip_viewholder.id.setText(clips.get(i).profile.id);
+        clip_viewholder.id.setText(clips.get(i).clip_id);
         clip_viewholder.author_name.setText(clips.get(i).profile.name);
-        clip_viewholder.author_id.setText(clips.get(i).clip_id);
+        clip_viewholder.author_id.setText(clips.get(i).profile.id);
         clip_viewholder.viewer_id.setText(clips.get(i).viewer_id);
 
         clip_viewholder.clip_content.loadData(clips.get(i).clip_content, "text/html", "UTF-8");

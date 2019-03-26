@@ -68,11 +68,11 @@ public class editor extends AppCompatActivity {
                 Gson gson = new Gson();
                 ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
 
-                if(clipApiResonse.success.equals("1")) {
+                if (clipApiResonse.success.equals("1")) {
                     currentclip = clipApiResonse.data.get(0);
                     Toast.makeText(editor.this, clipApiResonse.message, Toast.LENGTH_SHORT).show();
-                }
-                else{
+                    closeEditor();
+                } else {
                     // TODO handle no changes or empty or error
                 }
 
@@ -107,16 +107,17 @@ public class editor extends AppCompatActivity {
                 Gson gson = new Gson();
                 ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
 
-                if(clipApiResonse.success.equals("1")) {
+                if (clipApiResonse.success.equals("1")) {
                     currentclip = clipApiResonse.data.get(0);
                     Toast.makeText(editor.this, clipApiResonse.message, Toast.LENGTH_SHORT).show();
-                }
-                else{
+                    closeEditor();
+                } else {
                     // TODO handle no changes or empty or error
                 }
 
             }
-             @Override
+
+            @Override
             public int setHttpMethod() {
                 return Request.Method.POST;
             }
@@ -135,16 +136,22 @@ public class editor extends AppCompatActivity {
         update_clip.makeRequest();
     }
 
+
+    private void closeEditor() {
+        this.finish();
+    }
     private String getToken() {
         return getIntent().getExtras().getString("token");
     }
 
+    private String getClipId() {
+        return getIntent().getExtras().getString("clip_id");
+    }
 
     private void applyChangesToClip() {
-        if(currentclip.clip_id.equals(Constants.response_invalid_clip_id)) {
+        if (currentclip.clip_id.equals(Constants.response_invalid_clip_id)) {
             saveClip();
-        }
-        else{
+        } else {
             updateClip(currentclip.clip_id);
         }
     }
@@ -178,6 +185,7 @@ public class editor extends AppCompatActivity {
     }
 
     Bundle bundle;
+
     private void init() {
 
         setInvalidClipOrValidClip();
@@ -207,8 +215,46 @@ public class editor extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
 
-        if(bundle.containsKey("clip")) {
-            currentclip = new Clip(bundle);
+        if (bundle.containsKey("clip")) {
+
+            wrapper getClip = new wrapper() {
+                @Override
+                public Map makeParams() {
+                    return new HashMap<String, String>();
+                }
+
+                @Override
+                public void handleResponse(String response) {
+                    ClipApiResonse apiResonse = new Gson().fromJson(response, ClipApiResonse.class);
+                    currentclip = apiResonse.data.get(0);
+                    editor.setHtml(currentclip.clip_content);
+                }
+
+                @Override
+                public void makeVolleyRequest(StringRequest stringRequest) {
+                    Volley.newRequestQueue(editor.this).add(stringRequest);
+                }
+
+                @Override
+                public int setHttpMethod() {
+                    return Request.Method.GET;
+                }
+
+                @Override
+                public String setHttpUrl() {
+                    String url = String.format(Constants.request_clip_read, getClipId());
+                    return url;
+                }
+
+                @Override
+                public Map<String, String> _getHeaders() {
+                    Map params = new HashMap<String, String>();
+                    params.put(Constants.header_authentication, getToken());
+                    return params;
+                }
+            };
+
+            getClip.makeRequest();
         }
     }
 

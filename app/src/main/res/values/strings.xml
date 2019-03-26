@@ -37,6 +37,8 @@
     <string name="request_clip_create">http://api.pitavya.com/clipsy/create_clip</string>
     <string name="request_clip_read">http://api.pitavya.com/clipsy/read_clip/%1$s</string>
     <string name="request_clip_update">http://api.pitavya.com/clipsy/update_clip/%1$s</string>
+    <string name="request_clip_delete">http://api.pitavya.com/clipsy/update_clip/%1$s</string>
+
 
     <string name="request_clip_reads">http://api.pitavya.com/clipsy/read_clips</string>
     <string name="request_clip_reads_user">http://api.pitavya.com/clipsy/read_clips/%1$s</string>
@@ -94,6 +96,9 @@
     <string name="bundle_param_caller_activity_to_fragment_clips">where_to_fragment_clips</string>
 
     <string name="bundle_param_caller_activity_fragment_profile_list_to_profile_result">profile_list_to_complete_profile</string>
+    <string name="bundle_param_caller_fragment_clip_profile_to_profile_result">bundle_param_caller_fragment_clip_profile_to_profile_result</string>
+
+
     <string name="bundle_param_caller_button_to_profile_list">profile_list</string>
 
     <string name="bundle_param_caller_button_followers">follower</string>

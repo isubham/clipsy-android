@@ -26,51 +26,31 @@
 
             <ImageView
                 android:id="@+id/rl_clip_profile_pic"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:contentDescription="@string/todo"
                 android:src="@drawable/boy003" />
 
             <TextView
                 android:id="@+id/rl_clip_author"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
                 android:layout_marginStart="8dp"
-                android:layout_weight="0.8"
                 android:text="@string/hell_world"
                 android:textStyle="bold" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
             <ImageView
                 android:id="@+id/rl_clip_menu"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:contentDescription="@string/todo"
-                android:src="@drawable/menudot" />
-            <!-- ids -->
-            <TextView
-                android:id="@+id/rl_clip_id"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="@string/author_id"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/rl_clip_author_id"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="@string/author_id"
-                android:textStyle="bold"
-                android:visibility="gone" />
-            <!-- end of ids -->
-            <TextView
-                android:id="@+id/rl_clip_viewer_id"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="@string/author_id"
-                android:textStyle="bold"
-                android:visibility="gone" />
-            <!-- end of ids -->
+                android:src="@drawable/baseline_more_horiz_black_48" />
 
         </LinearLayout>
 
@@ -97,6 +77,31 @@
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:background="@color/grey_50" />
+        <!-- ids -->
+        <TextView
+            android:id="@+id/rl_clip_id"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="@string/author_id"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/rl_clip_author_id"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="@string/author_id"
+            android:textStyle="bold"
+            android:visibility="gone" />
+        <!-- end of ids -->
+        <TextView
+            android:id="@+id/rl_clip_viewer_id"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="@string/author_id"
+            android:textStyle="bold"
+            android:visibility="gone" />
+        <!-- end of ids -->
 
     </LinearLayout>
 
