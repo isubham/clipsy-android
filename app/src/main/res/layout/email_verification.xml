@@ -19,7 +19,6 @@
             android:id="@+id/verify_token"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
             android:hint="@string/token"
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>

@@ -1,8 +1,6 @@
 package com.subhamkumar.clipsy.panel;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,6 +16,7 @@ import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.utils.wrapper;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class choose_avatar extends wrapper {
     @Override
@@ -76,17 +75,20 @@ public class choose_avatar extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    String id, token, searchedId, profile_pic;
+    private String id;
+    private String token;
+    private String searchedId;
+    private String profile_pic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_avatar);
 
-        token = getIntent().getExtras().getString("token");
+        token = Objects.requireNonNull(getIntent().getExtras()).getString("token");
         id = getIntent().getExtras().getString("id");
         searchedId = getIntent().getExtras().getString("searched_id");
 
-        GridView gridview = (GridView) findViewById(R.id.choose_avatar_gridview);
+        GridView gridview = findViewById(R.id.choose_avatar_gridview);
         gridview.setAdapter(new image_adapter(this));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

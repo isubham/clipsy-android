@@ -18,6 +18,7 @@ import com.subhamkumar.clipsy.utils.wrapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class email_verification extends wrapper {
     @Override
@@ -64,23 +65,23 @@ public class email_verification extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    String email;
-    EditText verify_token;
-    Button button_to_email;
+    private String email;
+    private EditText verify_token;
+    private Button button_to_email;
 
     private void init() {
-        verify_token = (EditText) findViewById(R.id.verify_token);
-        button_to_email = (Button) findViewById(R.id.send_verify_token);
+        verify_token = findViewById(R.id.verify_token);
+        button_to_email = findViewById(R.id.send_verify_token);
     }
 
-    String callback;
-    Bundle bundle;
+    private String callback;
+    private Bundle bundle;
 
     private void setCallbackFromBundle() {
         bundle = getIntent().getExtras();
         email = "";
         if (bundle != null) {
-            email = getIntent().getExtras().getString("email");
+            email = Objects.requireNonNull(getIntent().getExtras()).getString("email");
             callback = getIntent().getExtras().getString(getString(R.string.bundle_param_caller_activity_to_email_verification));
         }
     }

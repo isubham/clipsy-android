@@ -2,7 +2,6 @@ package com.subhamkumar.clipsy.panel;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,15 +12,12 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
-import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.utils.wrapper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static android.view.View.GONE;
 
@@ -73,23 +69,25 @@ public class view_avatar extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    String id, searcheUserId, token;
-    Button editAvatarButton;
-    ImageView mediumAvatar;
-    boolean areSameUser;
+    private String id;
+    private String searcheUserId;
+    private String token;
+    private Button editAvatarButton;
+    private ImageView mediumAvatar;
+    private boolean areSameUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_avatar);
 
-        id = getIntent().getExtras().getString("id");
+        id = Objects.requireNonNull(getIntent().getExtras()).getString("id");
         searcheUserId = getIntent().getExtras().getString("searched_id");
         token = getIntent().getExtras().getString("token");
 
 
-        editAvatarButton = (Button) findViewById(R.id.edit_avatar);
-        mediumAvatar = (ImageView) findViewById(R.id.medium_avatar);
+        editAvatarButton = findViewById(R.id.edit_avatar);
+        mediumAvatar = findViewById(R.id.medium_avatar);
 
         areSameUser = id.equals(searcheUserId);
         showEditAction(areSameUser);

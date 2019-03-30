@@ -1,5 +1,7 @@
 package com.subhamkumar.clipsy.panel;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -7,10 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.auth.signin;
@@ -20,6 +24,7 @@ import com.subhamkumar.clipsy.panel.fragments.fragment_search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class panel extends AppCompatActivity {
 
@@ -43,7 +48,7 @@ public class panel extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void toSignOut() {
+    private void toSignOut() {
         startActivity(new Intent(panel.this, signin.class).putExtra("sign_out", "1"));
         this.finish();
     }
@@ -53,7 +58,7 @@ public class panel extends AppCompatActivity {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
+        ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
@@ -67,7 +72,7 @@ public class panel extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             if(!title.equals("")) {
                 mFragmentTitleList.add(title);
@@ -77,18 +82,18 @@ public class panel extends AppCompatActivity {
     }
 
     // end of adapter classs
-    ViewPager viewPager;
-    TabLayout tabLayout;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     private void initializeVaribles() {
-        viewPager = (ViewPager) findViewById(R.id.user_panel_viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.user_panel_tabs);
+        viewPager = findViewById(R.id.user_panel_viewpager);
+        tabLayout = findViewById(R.id.user_panel_tabs);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setElevation(0);
-        tabLayout.getTabAt(0).setIcon(R.drawable.newsfeed);
-        tabLayout.getTabAt(1).setIcon(R.drawable.search);
-        tabLayout.getTabAt(2).setIcon(R.drawable.user);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.newsfeed);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.search);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.user);
 
     }
 
@@ -117,9 +122,9 @@ public class panel extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
     }
 
-    Bundle user_details;
+    private Bundle user_details;
 
-    public void toCreateClip() {
+    private void toCreateClip() {
         startActivity(new Intent(panel.this, editor.class)
                 .putExtra("token", token)
                 .putExtra("action", "save")
@@ -128,13 +133,27 @@ public class panel extends AppCompatActivity {
         );
     }
 
-    String token; // for createClip
+    private String token; // for createClip
+
+    @Override
+    public void onBackPressed() {
+
+        final Dialog dialog = new Dialog(panel.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_backbutton_click);
+
+        dialog.findViewById(R.id.dialog_backbutton_close).setOnClickListener(v -> finish());
+        dialog.findViewById(R.id.dialog_backbutton_cancel).setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.panel);
-        getSupportActionBar().setElevation(0);
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
         if (getIntent().getExtras() != null) {
             user_details = getIntent().getExtras();

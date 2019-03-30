@@ -15,6 +15,8 @@ import android.view.WindowManager;
 
 import com.subhamkumar.clipsy.R;
 
+import java.util.Objects;
+
 public class InsertTableDialogFragment extends AppCompatDialogFragment {
 
     private OnInsertClickListener listener;
@@ -50,14 +52,14 @@ public class InsertTableDialogFragment extends AppCompatDialogFragment {
         final TextInputEditText columnCountEditText = view.findViewById(R.id.column_count);
         final TextInputEditText rowCountEditText = view.findViewById(R.id.row_count);
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         dialog.setTitle(R.string.title_insert_table);
         dialog.setView(view);
         dialog.setPositiveButton(R.string.insert, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String colCount = columnCountEditText.getText().toString().trim();
-                String rowCount = rowCountEditText.getText().toString().trim();
+                String colCount = Objects.requireNonNull(columnCountEditText.getText()).toString().trim();
+                String rowCount = Objects.requireNonNull(rowCountEditText.getText()).toString().trim();
 
                 if (listener != null) {
                     listener.onInsertClick(Integer.valueOf(colCount), Integer.valueOf(rowCount));

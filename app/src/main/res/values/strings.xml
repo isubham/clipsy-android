@@ -132,15 +132,12 @@
     <string name="params_token">token</string>
     <string name="params_id">id</string>
 
-
     <string name="params_value_public">2</string>
-
-
 
     <string name="params_verify_token">verify_token</string>
     <string name="following">Following</string>
     <string name="followers">Followers</string>
-    <string name="clips">Clips</string>
+    <string name="clips">CLIPS</string>
     <string name="follow">Follow</string>
     <string name="profile_email">Profile email</string>
     <string name="profile_name">Profile name</string>
@@ -163,6 +160,25 @@
     <string name="confirm_new_password">confirm new password</string>
     <string name="name_or_email">name or email</string>
     <string name="start_typing">Start Typing</string>
+    <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete ?</string>
+    <string name="message_unsaved_clip">You have unsaved changes in Clip.</string>
+
+    <string name="are_you_sure_you_want_to_exit">Ready to leave?</string>
+    <string name="delete">Delete</string>
+    <string name="Yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="No">No</string>
+
+
+    <string name="edit">Edit</string>
+    <string name="close">Close</string>
+    <string name="write">Write</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="save">Save</string>
+    <string name="title">title</string>
+    <string name="edit_avatar">Edit Avatar</string>
+    <string name="view_profile">View Profile</string>
+
 
 
 </resources>

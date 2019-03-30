@@ -7,29 +7,17 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/dialog_same_user_menu_edit"
+        android:id="@+id/dialog_other_user_show_profile"
         android:layout_width="match_parent"
         android:fontFamily="sans-serif-medium"
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:textSize="16sp"
         android:gravity="center_horizontal"
-        android:text="@string/edit" />
-
-    <TextView
-        android:id="@+id/dialog_same_user_menu_delete"
-        android:fontFamily="sans-serif-medium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:textSize="16sp"
-        android:gravity="center_horizontal"
-        android:text="@string/delete"
-        android:textColor="@color/red_500" />
-
+        android:text="@string/view_profile" />
     <TextView
         android:fontFamily="sans-serif-medium"
-        android:id="@+id/dialog_same_user_menu_close"
+        android:id="@+id/dialog_other_user_menu_close"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"

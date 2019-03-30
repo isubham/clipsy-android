@@ -18,18 +18,20 @@ import java.util.List;
 public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profile_viewholder> {
 
     public static class Profile_viewholder extends RecyclerView.ViewHolder {
-        public TextView id, name, email; ImageView profile_pic;
+        final TextView id;
+        final TextView name;
+        final TextView email; final ImageView profile_pic;
 
         Profile_viewholder(View V) {
             super(V);
-            id = (TextView) V.findViewById(R.id.rl_profile_id);
-            email = (TextView) V.findViewById(R.id.rl_profile_email);
-            name = (TextView) V.findViewById(R.id.rl_profile_name);
-            profile_pic = (ImageView) V.findViewById(R.id.rl_profile_profile_pic);
+            id = V.findViewById(R.id.rl_profile_id);
+            email = V.findViewById(R.id.rl_profile_email);
+            name = V.findViewById(R.id.rl_profile_name);
+            profile_pic = V.findViewById(R.id.rl_profile_profile_pic);
         }
     }
 
-    public List<Profile> profiles;
+    private final List<Profile> profiles;
 
     public profile_adapter(List<Profile> profiles) {
         this.profiles = profiles;

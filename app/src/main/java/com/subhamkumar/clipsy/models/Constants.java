@@ -3,7 +3,7 @@ package com.subhamkumar.clipsy.models;
 import com.subhamkumar.clipsy.R;
 
 public  class Constants {
-public  static Integer[] mThumbIds = {
+public  static final Integer[] mThumbIds = {
             R.drawable.boy003,
             R.drawable.boy007,
             R.drawable.boy016,
@@ -78,15 +78,15 @@ public  static Integer[] mThumbIds = {
     public static String PUBLIC = "1";
     public static String PRIVATE = "2";
 
-    public static String request_clip_create = "http://api.pitavya.com/clipsy/create_clip";
-    public static String header_authentication = "Authentication";
+    public static final String request_clip_create = "http://api.pitavya.com/clipsy/create_clip";
+    public static final String header_authentication = "Authentication";
 
-   public static String response_invalid_clip_id = "-1";
-    public static String request_clip_update = "http://api.pitavya.com/clipsy/update_clip/%1$s";
-    public static String request_user_get_user = "http://api.pitavya.com/clipsy/get/%1$s";
+   public static final String response_invalid_clip_id = "-1";
+    public static final String request_clip_update = "http://api.pitavya.com/clipsy/update_clip/%1$s";
+    public static final String request_user_get_user = "http://api.pitavya.com/clipsy/get/%1$s";
     public static String request_user_update_avatar = "http://api.pitavya.com/clipsy/update_avatar/%1$s";
-    public static String request_clip_read = "http://api.pitavya.com/clipsy/read_clip/%1$s";
-    public static String request_clip_delete = "http://api.pitavya.com/clipsy/delete_clip/%1$s";
+    public static final String request_clip_read = "http://api.pitavya.com/clipsy/read_clip/%1$s";
+    public static final String request_clip_delete = "http://api.pitavya.com/clipsy/delete_clip/%1$s";
 
 
 }

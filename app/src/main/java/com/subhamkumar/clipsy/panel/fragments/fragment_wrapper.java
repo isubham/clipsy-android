@@ -20,18 +20,18 @@ public abstract class fragment_wrapper extends Fragment {
     }
 
 
-    public abstract Map makeParams();
+    protected abstract Map makeParams();
 
-    public abstract void handle_response(String response);
+    protected abstract void handle_response(String response);
 
-    public abstract void make_volley_request(StringRequest stringRequest);
+    protected abstract void make_volley_request(StringRequest stringRequest);
 
-    public abstract int setHttpMethod();
-    public abstract String setHttpUrl();
-    public abstract Map<String, String> _getHeaders();
+    protected abstract int setHttpMethod();
+    protected abstract String setHttpUrl();
+    protected abstract Map<String, String> _getHeaders();
 
 
-    public void handle_error_response(VolleyError error) {
+    void handle_error_response(VolleyError error) {
         Log.e("v_handle_error_res", error.getMessage());
     }
 
@@ -39,7 +39,7 @@ public abstract class fragment_wrapper extends Fragment {
         Log.e("v_json_excep", e.getMessage());
     }
 
-    public void make_request() {
+    void make_request() {
 
         String url = setHttpUrl();
 
@@ -50,7 +50,7 @@ public abstract class fragment_wrapper extends Fragment {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.e("Resource volley_wrapper", response.toString());
+                        Log.e("Resource volley_wrapper", response);
                         handle_response(response);
 
                     }

@@ -55,10 +55,14 @@
 
             <Button
                 android:id="@+id/rx"
-                style="@style/primaryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
+                android:elevation="1dp"
                 android:minHeight="14dp"
                 android:text="@string/follow"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@color/grey_50" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,24 +77,36 @@
                     android:layout_weight="0.1"
                     android:backgroundTint="@color/grey_50"
                     android:gravity="center"
-                    android:minHeight="14dp"
+                    android:minHeight="12dp"
                     android:text="@string/clips"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
-                <Button
+                <TextView
                     android:id="@+id/fragment_profile_followers"
-                    style="@style/secondaryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:layout_weight="0.1"
-                    android:minHeight="14dp"
+                    android:minHeight="12dp"
+                    android:background="@color/grey_50"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center_horizontal"
+                    android:padding="8dp"
                     android:text="@string/followers" />
 
-                <Button
+                <TextView
                     android:id="@+id/fragment_profile_following"
-                    style="@style/secondaryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="12dp"
+                    android:layout_margin="4dp"
                     android:layout_weight="0.1"
-                    android:minHeight="14dp"
+                    android:background="@color/grey_50"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center_horizontal"
+                    android:padding="8dp"
                     android:text="@string/following" />
 
             </LinearLayout>
@@ -187,5 +203,5 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="8dp"
-        android:background="@color/grey_50" />
+        android:background="@color/grey_300" />
 </LinearLayout>

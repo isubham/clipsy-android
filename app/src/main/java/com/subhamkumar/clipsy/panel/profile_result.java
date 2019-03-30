@@ -9,21 +9,23 @@ import android.widget.LinearLayout;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.panel.fragments.fragment_complete_profile;
 
+import java.util.Objects;
+
 public class profile_result extends AppCompatActivity {
 
     // profile of user => linerarlayout ( fragment_complete_profile )
     // TODO @input => viewed_id, viewer_id
 
-    LinearLayout profile_result;
+    private LinearLayout profile_result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_result);
 
-        profile_result = (LinearLayout) findViewById(R.id.profile_result);
+        profile_result = findViewById(R.id.profile_result);
 
-        getSupportActionBar().setElevation(0);
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

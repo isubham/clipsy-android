@@ -62,10 +62,17 @@ public class change_password extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    String confirmPassword, password, token;
-    Bundle bundle;
-    TextView confirmPasswordLabel, passwordLabel, tokenLabel, statusLabel;
-    EditText confirmPasswordEditText, passwordEditText, tokenEditText;
+    String confirmPassword;
+    private String password;
+    private String token;
+    private Bundle bundle;
+    private TextView confirmPasswordLabel;
+    private TextView passwordLabel;
+    private TextView tokenLabel;
+    private TextView statusLabel;
+    private EditText confirmPasswordEditText;
+    private EditText passwordEditText;
+    private EditText tokenEditText;
 
 
     private void init() {
@@ -95,7 +102,7 @@ public class change_password extends wrapper {
         return "";
     }
 
-    public String text(int et) {
+    private String text(int et) {
         return ((EditText) findViewById(et)).getText().toString().trim();
     }
 

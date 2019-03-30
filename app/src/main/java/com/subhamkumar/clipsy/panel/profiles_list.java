@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,14 +20,11 @@ import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
 import com.subhamkumar.clipsy.utils.wrapper;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class profiles_list extends wrapper {
 
@@ -68,7 +64,7 @@ public class profiles_list extends wrapper {
         String searchedId = getSeacrchedId();
 
         boolean isFollowingButtonClicked  =
-                bundle.getString(getString(R.string.bundle_param_caller_button_to_profile_list))
+                Objects.requireNonNull(bundle.getString(getString(R.string.bundle_param_caller_button_to_profile_list)))
                         .equals(getString(R.string.bundle_param_caller_button_following));
 
         String profileListUrl =  String.format( isFollowingButtonClicked
@@ -124,8 +120,8 @@ public class profiles_list extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    public void init() {
-        rv_profile = (RecyclerView) findViewById(R.id.profiles_list_recycleview);
+    private void init() {
+        rv_profile = findViewById(R.id.profiles_list_recycleview);
         linearLayoutManager = new LinearLayoutManager(this);
         profileList = new ArrayList<>();
 
@@ -134,11 +130,11 @@ public class profiles_list extends wrapper {
         rv_profile.setLayoutManager(linearLayoutManager);
     }
 
-    RecyclerView rv_profile;
-    LinearLayoutManager linearLayoutManager;
-    profile_adapter profile_adapter;
-    List<Profile> profileList;
-    Bundle bundle;
+    private RecyclerView rv_profile;
+    private LinearLayoutManager linearLayoutManager;
+    private profile_adapter profile_adapter;
+    private List<Profile> profileList;
+    private Bundle bundle;
 
     private String getSeacrchedId() {
         String searchedId = getIntent().getStringExtra(getString(R.string.params_search_id));

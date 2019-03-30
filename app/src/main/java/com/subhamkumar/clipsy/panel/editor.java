@@ -1,5 +1,6 @@
 package com.subhamkumar.clipsy.panel;
 
+import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,10 +28,11 @@ import com.subhamkumar.clipsy.utils.wrapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class editor extends AppCompatActivity {
 
-    public void saveClip() {
+    private void saveClip() {
 
         wrapper saveClip = new wrapper() {
 
@@ -82,7 +85,7 @@ public class editor extends AppCompatActivity {
         saveClip.makeRequest();
     }
 
-    Clip currentclip;
+    private Clip currentclip;
 
     private void updateClip(final String clipId) {
         wrapper update_clip = new wrapper() {
@@ -140,19 +143,61 @@ public class editor extends AppCompatActivity {
     private void closeEditor() {
         this.finish();
     }
+
     private String getToken() {
-        return getIntent().getExtras().getString("token");
+        return Objects.requireNonNull(getIntent().getExtras()).getString("token");
     }
 
     private String getClipId() {
-        return getIntent().getExtras().getString("clip_id");
+        return Objects.requireNonNull(getIntent().getExtras()).getString("clip_id");
     }
 
+
     private void applyChangesToClip() {
-        if (currentclip.clip_id.equals(Constants.response_invalid_clip_id)) {
-            saveClip();
+        if (isDirty()) {
+
+            if (currentclip.clip_id.equals(Constants.response_invalid_clip_id)) {
+                saveClip();
+            } else {
+                updateClip(currentclip.clip_id);
+            }
+
         } else {
-            updateClip(currentclip.clip_id);
+            Toast.makeText(this, "Nothing to save.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isDirty() {
+        return !isEditorEmpty() || isEditorUpdated();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        unSavedDialogCheck();
+    }
+
+    private void unSavedDialogCheck() {
+        if (isDirty()) {
+
+            final Dialog dialog = new Dialog(editor.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_unsaved_clip_confirmation);
+
+            dialog.findViewById(R.id.dialog_unsaved_clip_menu_save).setOnClickListener(v -> {
+                dialog.dismiss();
+                saveClip();
+            });
+            dialog.findViewById(R.id.dialog_unsaved_clip_menu_close).setOnClickListener(v -> {
+                dialog.dismiss();
+                finish();
+            });
+
+            dialog.show();
+
+        }
+        else{
+            finish();
         }
     }
 
@@ -170,6 +215,9 @@ public class editor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editor);
+
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+
         init();
 
         // Insert Link
@@ -184,7 +232,15 @@ public class editor extends AppCompatActivity {
         });
     }
 
-    Bundle bundle;
+    private Bundle bundle;
+
+    private boolean isEditorEmpty() {
+        return editor.getHtml().equals("<p><br></p>");
+    }
+
+    private boolean isEditorUpdated() {
+        return editor.getHtml().equals(fetchedClip);
+    }
 
     private void init() {
 
@@ -200,22 +256,21 @@ public class editor extends AppCompatActivity {
         // initialHtml("<p>Once upon a time ...</p>");
 
         // TODO ? save every edit.
-        editor.setOnTextChangeListener(new RTextEditorView.OnTextChangeListener() {
-            @Override
-            public void onTextChanged(String content) {
-                Log.d(TAG, "onTextChanged: " + content);
-                //  ? applyChangesToClip();
-            }
+        editor.setOnTextChangeListener(content -> {
+            Log.d(TAG, "onTextChanged: " + content);
+            //  ? applyChangesToClip();
         });
+
     }
 
+    String fetchedClip;
     private void setInvalidClipOrValidClip() {
         currentclip = new Clip();
         currentclip.clip_id = Constants.response_invalid_clip_id;
 
         bundle = getIntent().getExtras();
 
-        if (bundle.containsKey("clip")) {
+        if (Objects.requireNonNull(bundle).containsKey("clip")) {
 
             wrapper getClip = new wrapper() {
                 @Override
@@ -228,6 +283,7 @@ public class editor extends AppCompatActivity {
                     ClipApiResonse apiResonse = new Gson().fromJson(response, ClipApiResonse.class);
                     currentclip = apiResonse.data.get(0);
                     editor.setHtml(currentclip.clip_content);
+                    fetchedClip = currentclip.clip_content;
                 }
 
                 @Override
@@ -258,7 +314,6 @@ public class editor extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -280,7 +335,14 @@ public class editor extends AppCompatActivity {
                 applyChangesToClip();
                 break;
             case R.id.create_menu_close:
-                editor.this.finish();
+            {
+                if (!isDirty()) {
+                    editor.this.finish();
+                }
+                else{
+                    unSavedDialogCheck();
+                }
+            }
                 break;
         }
         return true;

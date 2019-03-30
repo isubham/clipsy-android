@@ -1,6 +1,5 @@
 package com.subhamkumar.clipsy.utils;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,7 @@ import com.subhamkumar.clipsy.R;
 
 public class BundleBetweenActivities extends Fragment {
 
-    Bundle message;
+    private final Bundle message;
 
     public BundleBetweenActivities() {
         message = new Bundle();

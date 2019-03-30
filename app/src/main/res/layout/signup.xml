@@ -26,7 +26,6 @@
             android:id="@+id/signup_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
             android:hint="@string/name"
             android:inputType="textPersonName" />
     </android.support.design.widget.TextInputLayout>
@@ -48,7 +47,6 @@
             android:id="@+id/signup_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
             android:hint="@string/email"
             android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
@@ -69,7 +67,6 @@
             android:id="@+id/signup_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
             android:hint="@string/password"
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>

@@ -24,6 +24,7 @@ import com.subhamkumar.clipsy.utils.wrapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class signin extends wrapper {
     @Override
@@ -47,21 +48,6 @@ public class signin extends wrapper {
         return url;
     }
 
-    public String getDeviceIMEI() {
-        String deviceUniqueIdentifier = null;
-        try {
-            TelephonyManager tm = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-            if (null != tm) {
-                deviceUniqueIdentifier = tm.getDeviceId();
-            }
-            if (null == deviceUniqueIdentifier || 0 == deviceUniqueIdentifier.length()) {
-                deviceUniqueIdentifier = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-            }
-        } catch (SecurityException e) {
-            Toast.makeText(this, "Allow IMEI to Continue", Toast.LENGTH_SHORT).show();
-        }
-        return deviceUniqueIdentifier;
-    }
 
     @Override
     public Map makeParams() {
@@ -97,13 +83,14 @@ public class signin extends wrapper {
 
 
 
-    String email;
-    Bundle bundle;
+    private String email;
+    private Bundle bundle;
 
-    SharedPreferences localStore;
-    static String myFile = "theAwesomeDataInMain", myKey = "52521";
+    private SharedPreferences localStore;
+    private static final String myFile = "theAwesomeDataInMain";
+    static String myKey = "52521";
 
-    public void saveLoginDetails(String token, String userId) {
+    private void saveLoginDetails(String token, String userId) {
         localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
         localStore.edit()
                 .putString("token", token)
@@ -112,7 +99,7 @@ public class signin extends wrapper {
 
     }
 
-    public void checkLoginDetails() {
+    private void checkLoginDetails() {
         localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
         if (localStore.contains("token")) {
             Log.i("check_login", "contains email");
@@ -130,21 +117,23 @@ public class signin extends wrapper {
         }
     }
 
-    public void deleteLoginDetails() {
+    private void deleteLoginDetails() {
         localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
         localStore.edit().clear().commit();
     }
 
     String sign_out;
-    TextView label_signin_email, label_signin_pass;
-    EditText signin_email, signin_pass;
+    private TextView label_signin_email;
+    private TextView label_signin_pass;
+    private EditText signin_email;
+    private EditText signin_pass;
 
     private void initializeViews() {
-        label_signin_email = (TextView) findViewById(R.id.signin_email_label);
-        label_signin_pass = (TextView) findViewById(R.id.signin_pass_label);
+        label_signin_email = findViewById(R.id.signin_email_label);
+        label_signin_pass = findViewById(R.id.signin_pass_label);
 
-        signin_email = (EditText) findViewById(R.id.signin_email);
-        signin_pass  = (EditText) findViewById(R.id.signin_pass);
+        signin_email = findViewById(R.id.signin_email);
+        signin_pass  = findViewById(R.id.signin_pass);
     }
 
 
@@ -193,7 +182,7 @@ public class signin extends wrapper {
 
         email = "";
         if (bundle!= null) {
-            email = getIntent().getExtras().getString("email");
+            email = Objects.requireNonNull(getIntent().getExtras()).getString("email");
             ((EditText) findViewById(R.id.signin_email)).setText(email);
             if(bundle.containsKey("sign_out"))
                 deleteLoginDetails();

@@ -2,8 +2,6 @@ package com.subhamkumar.clipsy.models;
 
 import android.os.Bundle;
 
-import java.util.ArrayList;
-
 public class Clip {
 
     public Profile profile;

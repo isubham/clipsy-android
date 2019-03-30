@@ -6,7 +6,7 @@
     <item
         android:id="@+id/create_menu_write"
         android:orderInCategory="400"
-        android:title="Save"
+        android:title="@string/save"
         android:visible="true"
         app:showAsAction="always"
         android:icon="@drawable/outline_save_black"
@@ -14,7 +14,7 @@
     <item
         android:id="@+id/create_menu_close"
         android:orderInCategory="500"
-        android:title="Save"
+        android:title="@string/save"
         android:visible="true"
         app:showAsAction="always"
         android:icon="@drawable/outline_close_black"

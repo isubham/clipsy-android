@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#7B87CE</color>
+    <color name="colorPrimary">#78B4CF</color>
 
 
     <!--FOR TABHOST-->
@@ -19,7 +19,7 @@
     <color name="blue_A700">#2962FF</color>
 
     <color name="grey_50">#FAFAFA</color>
-    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_300">#EEEEEE</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>

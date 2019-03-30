@@ -1,5 +1,6 @@
 package com.subhamkumar.clipsy.panel.fragments;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,8 @@ import android.widget.LinearLayout;
 
 import com.subhamkumar.clipsy.R;
 
+import java.util.Objects;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,20 +21,21 @@ import com.subhamkumar.clipsy.R;
 public class fragment_complete_profile extends Fragment {
 
 
-    LinearLayout _profile, _clips;
-    View V;
-    Bundle user_detail;
+    private LinearLayout _profile;
+    private LinearLayout _clips;
+    private View V;
+    private Bundle user_detail;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         V = inflater.inflate(R.layout.fragment_complete_profile, container, false);
 
         // inflat fragment_clips and fragment_profile
-        _profile = (LinearLayout) V.findViewById(R.id.profile_complete_linearLayout);
-        _clips = (LinearLayout) V.findViewById(R.id.clips_complete_linearLayout);
+        _profile = V.findViewById(R.id.profile_complete_linearLayout);
+        _clips = V.findViewById(R.id.clips_complete_linearLayout);
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         fragment_profile fragment_profile = new fragment_profile();

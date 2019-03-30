@@ -7,7 +7,7 @@ public class Profile {
 
     }
 
-    public Profile(String id, String email, String name, String profile_pic) {
+    private Profile(String id, String email, String name, String profile_pic) {
         this.id = id;
         this.email = email;
         this.name = name;

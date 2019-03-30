@@ -12,7 +12,7 @@ import static com.subhamkumar.clipsy.models.Constants.mThumbIds;
 
 
 public class image_adapter  extends BaseAdapter {
-    private Context mContext;
+    private final Context mContext;
 
     public image_adapter(Context c) {
         mContext = c;

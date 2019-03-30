@@ -16,7 +16,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Avatar"
+        android:text="@string/edit_avatar"
         android:id="@+id/edit_avatar"
         />
 

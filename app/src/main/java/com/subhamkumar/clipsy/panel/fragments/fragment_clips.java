@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class fragment_clips extends fragment_wrapper {
@@ -50,7 +51,7 @@ public class fragment_clips extends fragment_wrapper {
 
     @Override
     public String setHttpUrl() {
-        String from = getArguments().getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips));
+        String from = Objects.requireNonNull(getArguments()).getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips));
         return getUrl(from);
     }
 
@@ -87,32 +88,31 @@ public class fragment_clips extends fragment_wrapper {
 
     }
 
+    private void addClipFullyScrolledLisentener() {
+        /*
+        rv_clip.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                LinearLayoutManager layoutManager=LinearLayoutManager.class.cast(recyclerView.getLayoutManager());
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisible = layoutManager.findLastVisibleItemPosition();
+
+                boolean endHasBeenReached = lastVisible + 1 >= totalItemCount;
+                if (totalItemCount > 0 && endHasBeenReached) {
+                    //you have reached to the bottom of your recycler view
+                    Toast.makeText(context, "fetch new clips", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        */
+    }
+
     private void addClickListener(View V) {
 
 
-        V.findViewById(R.id.rl_clip_author).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                gotoProfileResult(V);
-            }
-        });
-
-        V.findViewById(R.id.rl_clip_profile_pic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                gotoProfileResult(V);
-            }
-        });
-
-        V.findViewById(R.id.rl_clip_menu).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showDialog(V);
-            }
-        });
+        V.findViewById(R.id.rl_clip_author).setOnClickListener(v -> gotoProfileResult(V));
+        V.findViewById(R.id.rl_clip_profile_pic).setOnClickListener(v -> gotoProfileResult(V));
+        V.findViewById(R.id.rl_clip_menu).setOnClickListener(v -> showDialog(V));
 
 
     }
@@ -125,8 +125,24 @@ public class fragment_clips extends fragment_wrapper {
         if (author_id.equals(viewer_id)) {
             showSameUserDialog(author_id, clip_id);
         } else {
-            Toast.makeText(getActivity(), "different user", Toast.LENGTH_SHORT).show();
+            showDifferentUserDialog(author_id);
         }
+
+    }
+
+    private void showDifferentUserDialog(String authorId) {
+
+        final Dialog dialog = new Dialog(context);
+        hidetitleOFDialog(dialog);
+        dialog.setContentView(R.layout.dialog_other_user_clip_menu_click);
+
+        dialog.findViewById(R.id.dialog_other_user_show_profile).setOnClickListener(v -> {
+            gotoProfileResult(authorId);
+            dialog.dismiss();
+        });
+        dialog.findViewById(R.id.dialog_other_user_menu_close).setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
 
     }
 
@@ -139,7 +155,7 @@ public class fragment_clips extends fragment_wrapper {
     }
 
 
-    public static String selected_clip_id;
+    private static String selected_clip_id;
 
     private void showSameUserDialog(String authorId, String clipId) {
         final Dialog dialog = new Dialog(context);
@@ -192,7 +208,7 @@ public class fragment_clips extends fragment_wrapper {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
-    public void deleteClip(String clipId) {
+    private void deleteClip(String clipId) {
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
@@ -226,7 +242,7 @@ public class fragment_clips extends fragment_wrapper {
 
     }
 
-    static Context context;
+    private Context context;
 
     private void gotoClip(View V, String action, String authorId, String clipId) {
 
@@ -239,6 +255,10 @@ public class fragment_clips extends fragment_wrapper {
     private void gotoProfileResult(View V) {
         String searchedUserId = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
 
+        gotoProfileResult(searchedUserId);
+    }
+
+    private void gotoProfileResult(String searchedUserId) {
         Bundle toProfileResult = new Bundle();
         toProfileResult.putString(getString(R.string.params_token), token);
         toProfileResult.putString(getString(R.string.params_id), id);
@@ -255,15 +275,15 @@ public class fragment_clips extends fragment_wrapper {
         Volley.newRequestQueue(context).add(stringRequest);
     }
 
-    RecyclerView rv_clip;
-    LinearLayoutManager linearLayoutManager;
-    com.subhamkumar.clipsy.adapter.clip_adapter clip_adapter;
-    List<Clip> clipList;
+    private RecyclerView rv_clip;
+    private LinearLayoutManager linearLayoutManager;
+    private com.subhamkumar.clipsy.adapter.clip_adapter clip_adapter;
+    private List<Clip> clipList;
 
 
     private void init(View V) {
         // no_of_intent = 0;
-        rv_clip = (RecyclerView) V.findViewById(R.id.clip_fragment_recycleview);
+        rv_clip = V.findViewById(R.id.clip_fragment_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         clipList = new ArrayList<>();
 
@@ -281,39 +301,42 @@ public class fragment_clips extends fragment_wrapper {
 
         updateClips();
 
+        addClipFullyScrolledLisentener();
+
     }
 
     private void updateClips() {
         make_request();
     }
 
-    public static String token;
-    String id, searched_id;
+    private static String token;
+    private String id;
+    private String searched_id;
     String _fx;
-    View V;
+    private View V;
 
-    public String getUrl(String from) {
+    private String getUrl(String from) {
         String fromPanel = getString(R.string.bundle_param_caller_activity_panel);
         String fromSearch = getString(R.string.bundle_param_caller_activity_fragment_search);
         String fromProfileResult = getString(R.string.bundle_param_caller_activity_fragment_profile_list_to_profile_result);
 
         if (from != null) {
             if (from.equals(fromPanel)) {
-                return String.format(getString(R.string.request_clip_following));
+                return getString(R.string.request_clip_following);
             }
             if (from.equals(fromSearch) || from.equals(fromProfileResult)) {
-                searched_id = getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
+                searched_id = Objects.requireNonNull(getArguments()).getString(getString(R.string.bundle_param_profile_result_searched_user_id));
                 return String.format(getString(R.string.request_clip_reads_user), searched_id);
             }
         }
 
-        return String.format(getString(R.string.request_clip_reads));
+        return getString(R.string.request_clip_reads);
 
     }
 
 
-    Bundle bundle;
-    String from;
+    private Bundle bundle;
+    private String from;
 
     @Nullable
     @Override
@@ -334,7 +357,7 @@ public class fragment_clips extends fragment_wrapper {
 
 
         V = inflater.inflate(R.layout.fragment_clips, container, false);
-        context = container.getContext();
+        context = Objects.requireNonNull(container).getContext();
         init(V);
         return V;
     }

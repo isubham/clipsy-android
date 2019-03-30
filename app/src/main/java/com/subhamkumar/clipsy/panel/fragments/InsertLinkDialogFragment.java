@@ -15,6 +15,8 @@ import android.view.WindowManager;
 
 import com.subhamkumar.clipsy.R;
 
+import java.util.Objects;
+
 public class InsertLinkDialogFragment extends AppCompatDialogFragment {
 
     private OnInsertClickListener listener;
@@ -50,14 +52,14 @@ public class InsertLinkDialogFragment extends AppCompatDialogFragment {
         final TextInputEditText textToDisplayEditText = view.findViewById(R.id.text_to_display);
         final TextInputEditText linkToEditText = view.findViewById(R.id.link_to);
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         dialog.setTitle(R.string.title_insert_link);
         dialog.setView(view);
         dialog.setPositiveButton(R.string.insert, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String title = textToDisplayEditText.getText().toString().trim();
-                String url = linkToEditText.getText().toString().trim();
+                String title = Objects.requireNonNull(textToDisplayEditText.getText()).toString().trim();
+                String url = Objects.requireNonNull(linkToEditText.getText()).toString().trim();
 
                 if (listener != null) {
                     listener.onInsertClick(title, url);

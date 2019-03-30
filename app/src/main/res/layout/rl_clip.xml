@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
-            android:background="@color/grey_50" />
+            android:background="@color/grey_300" />
         <!-- ids -->
         <TextView
             android:id="@+id/rl_clip_id"

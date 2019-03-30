@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
@@ -72,10 +71,11 @@ public class forgot_password extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    EditText email_to_send;
-    TextView email_label, status;
+    private EditText email_to_send;
+    private TextView email_label;
+    private TextView status;
 
-    public void init() {
+    private void init() {
         email_to_send = findViewById(R.id.forgot_password_email);
         email_label = findViewById(R.id.forgot_password_email_label);
         status =  findViewById(R.id.forgot_password_status);

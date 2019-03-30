@@ -10,19 +10,18 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class wrapper extends AppCompatActivity {
 
-    public abstract Map makeParams();
-    public abstract void handleResponse(String response);
-    public abstract void makeVolleyRequest(StringRequest stringRequest);
-    public abstract int setHttpMethod();
-    public abstract String setHttpUrl();
-    public abstract Map<String, String> _getHeaders();
+    protected abstract Map makeParams();
+    protected abstract void handleResponse(String response);
+    protected abstract void makeVolleyRequest(StringRequest stringRequest);
+    protected abstract int setHttpMethod();
+    protected abstract String setHttpUrl();
+    protected abstract Map<String, String> _getHeaders();
 
-    public void handleErrorResponse(VolleyError error) {
+    protected void handleErrorResponse(VolleyError error) {
         Log.e("v_handle_error_res", error.getMessage());
     }
 

@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <!-- row 1 => user pic | name | ago-->
 
@@ -26,7 +27,7 @@
                 android:id="@+id/rl_profile_profile_pic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/todo"
                 android:src="@drawable/boy003" />
         </LinearLayout>
 
@@ -41,9 +42,9 @@
             <TextView
                 android:id="@+id/rl_profile_name"
                 android:layout_width="wrap_content"
-                android:layout_height="16sp"
+                android:layout_height="0dp"
                 android:layout_weight="0.8"
-                android:text="hell world"
+                android:text="@string/hell_world"
                 android:textStyle="bold" />
 
             <!-- ids -->
@@ -51,7 +52,7 @@
                 android:id="@+id/rl_profile_id"
                 android:layout_width="wrap_content"
                 android:layout_height="16sp"
-                android:text="author id"
+                android:text="@string/author_id"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -60,8 +61,15 @@
                 android:id="@+id/rl_profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="title"
-                android:textSize="12dp" />
+                android:text="@string/title"
+                android:textSize="12sp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey_300" />
 
         </LinearLayout>
 

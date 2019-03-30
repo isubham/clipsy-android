@@ -1,9 +1,6 @@
 package com.subhamkumar.clipsy.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -12,7 +9,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +16,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Clip;
-import com.subhamkumar.clipsy.panel.editor;
 import com.subhamkumar.clipsy.utils.CustomTabs;
 
 import java.util.List;
@@ -34,41 +28,41 @@ import java.util.List;
 abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewholder> {
 
 
-    public abstract void addViewClickListeners(View V) ;
+    protected abstract void addViewClickListeners(View V) ;
 
     public static class Clip_viewholder extends RecyclerView.ViewHolder {
-        public TextView id,
+        final TextView id;
 
-        author_name,
-                author_id,
-        viewer_id,
-        clip_time;
+        final TextView author_name;
+        final TextView author_id;
+        final TextView viewer_id;
+        final TextView clip_time;
 
-        ImageView profile_pic;
-        WebView
+        final ImageView profile_pic;
+        final WebView
                 clip_content;
 
         Clip_viewholder(View V) {
             super(V);
 
-            id = (TextView) V.findViewById(R.id.rl_clip_id);
-            author_id = (TextView) V.findViewById(R.id.rl_clip_author_id);
-            viewer_id = (TextView) V.findViewById(R.id.rl_clip_viewer_id);
+            id = V.findViewById(R.id.rl_clip_id);
+            author_id = V.findViewById(R.id.rl_clip_author_id);
+            viewer_id = V.findViewById(R.id.rl_clip_viewer_id);
 
-            author_name = (TextView) V.findViewById(R.id.rl_clip_author);
-            clip_time = (TextView) V.findViewById(R.id.rl_clip_time);
-            clip_content = (WebView) V.findViewById(R.id.rl_clip_content);
+            author_name = V.findViewById(R.id.rl_clip_author);
+            clip_time = V.findViewById(R.id.rl_clip_time);
+            clip_content = V.findViewById(R.id.rl_clip_content);
 
             WebSettings webSettings = clip_content.getSettings();
             webSettings.setTextSize(WebSettings.TextSize.SMALLER);
 
-            profile_pic = (ImageView) V.findViewById(R.id.rl_clip_profile_pic);
+            profile_pic = V.findViewById(R.id.rl_clip_profile_pic);
 
         }
     }
 
-    public List<Clip> clips;
-    Context context;
+    private final List<Clip> clips;
+    private Context context;
 
     public clip_adapter(List<Clip> clips) {
         this.clips = clips;
@@ -88,12 +82,12 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
     }
 
 
-    protected void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span) {
+    private void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span) {
         int start = strBuilder.getSpanStart(span);
         int end = strBuilder.getSpanEnd(span);
         int flags = strBuilder.getSpanFlags(span);
         ClickableSpan clickable = new ClickableSpan() {
-            public void onClick(View view) {
+            public void onClick(@NonNull View view) {
                 // Do something with span.getURL() to handle the link click...
                 Log.i("link", span.getURL());
                 CustomTabs.openTab(context, span.getURL());

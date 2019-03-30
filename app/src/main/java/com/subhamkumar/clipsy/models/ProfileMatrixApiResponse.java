@@ -1,7 +1,5 @@
 package com.subhamkumar.clipsy.models;
 
-import android.provider.ContactsContract;
-
 import java.util.List;
 
 public class ProfileMatrixApiResponse {
@@ -13,7 +11,7 @@ public class ProfileMatrixApiResponse {
         public List<relationshipActions> actions;
     }
 
-    public class relationshipActions {
+    private class relationshipActions {
             public String action;
     }
 }

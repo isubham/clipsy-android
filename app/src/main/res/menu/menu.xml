@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:myapp="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/tools">
+    >
 
     <item
         android:id="@+id/write_clip"
-        android:title="Write"
+        android:title="@string/write"
         android:visible="true"
         myapp:showAsAction="always"
         android:icon="@drawable/outline_create_black"
         />
      <item
         android:id="@+id/sign_out"
-        android:title="Sign Out"
+        android:title="@string/sign_out"
         android:visible="true"
         myapp:showAsAction="never"
         android:icon="@drawable/logout"

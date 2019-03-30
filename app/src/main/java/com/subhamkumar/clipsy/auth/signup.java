@@ -118,18 +118,22 @@ public class signup extends wrapper {
     }
 
     private void getViews() {
-        emailLabel = (TextView) findViewById(R.id.signup_email_label);
-        passLabel = (TextView) findViewById(R.id.signup_password_label);
-        nameLabel = (TextView) findViewById(R.id.signup_name_label);
+        emailLabel = findViewById(R.id.signup_email_label);
+        passLabel = findViewById(R.id.signup_password_label);
+        nameLabel = findViewById(R.id.signup_name_label);
 
-        email= (EditText) findViewById(R.id.signup_email);
-        pass = (EditText) findViewById(R.id.signup_password);
-        name = (EditText) findViewById(R.id.signup_name);
+        email= findViewById(R.id.signup_email);
+        pass = findViewById(R.id.signup_password);
+        name = findViewById(R.id.signup_name);
 
     }
 
-    TextView emailLabel, passLabel, nameLabel;
-    EditText email, pass, name;
+    private TextView emailLabel;
+    private TextView passLabel;
+    private TextView nameLabel;
+    private EditText email;
+    private EditText pass;
+    private EditText name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

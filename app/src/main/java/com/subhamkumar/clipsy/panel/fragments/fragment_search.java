@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class fragment_search extends fragment_wrapper {
@@ -73,19 +74,19 @@ public class fragment_search extends fragment_wrapper {
 
     @Override
     public void make_volley_request(StringRequest stringRequest) {
-        Volley.newRequestQueue(getActivity()).add(stringRequest);
+        Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(stringRequest);
     }
 
 
-    RecyclerView rv_profile;
-    LinearLayoutManager linearLayoutManager;
-    profile_adapter profile_adapter;
-    List<Profile> profileList;
+    private RecyclerView rv_profile;
+    private LinearLayoutManager linearLayoutManager;
+    private profile_adapter profile_adapter;
+    private List<Profile> profileList;
 
-    EditText live_search;
+    private EditText live_search;
 
     private void init(View V) {
-        rv_profile = (RecyclerView) V.findViewById(R.id.profile_fragment_recycleview);
+        rv_profile = V.findViewById(R.id.profile_fragment_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         profileList = new ArrayList<Profile>();
         profile_adapter = new profile_adapter(profileList);
@@ -142,8 +143,8 @@ public class fragment_search extends fragment_wrapper {
         startActivity(to_profile_result);
     }
 
-    String query;
-    public void fillSearchResult(CharSequence charSequence){
+    private String query;
+    private void fillSearchResult(CharSequence charSequence){
          query = charSequence.toString();
          if(query.length() > 2) {
              make_request();
@@ -155,21 +156,21 @@ public class fragment_search extends fragment_wrapper {
 
     }
 
-    Bundle userDetails;
-    String token;
+    private Bundle userDetails;
+    private String token;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         userDetails = getArguments();
-        token = userDetails.getString(Constants.TOKEN);
+        token = Objects.requireNonNull(userDetails).getString(Constants.TOKEN);
 
         View V = inflater.inflate(R.layout.fragment_search, container, false);
         init(V);
 
         // to show keyboard
         live_search.requestFocus();
-        InputMethodManager mgr = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager mgr = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.showSoftInput(live_search, InputMethodManager.SHOW_IMPLICIT);
 
         return V;
