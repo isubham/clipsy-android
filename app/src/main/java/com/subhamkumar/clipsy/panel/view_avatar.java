@@ -1,18 +1,23 @@
 package com.subhamkumar.clipsy.panel;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.auth.signup;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
+import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 
 import java.util.HashMap;
@@ -27,6 +32,27 @@ public class view_avatar extends wrapper {
         Map params = new HashMap<String, String>();
         params.put(getString(R.string.header_authentication), token);
         return params;
+    }
+
+    @Override
+    protected void handleErrorResponse(VolleyError error) {
+        showNetworkUnavailableDialog();
+    }
+        private void showNetworkUnavailableDialog() {
+        final Dialog dialog = new Dialog(view_avatar.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+            dialog.dismiss();
+            makeRequest();
+        });
+
+        dialog.show();
     }
 
     @Override
@@ -45,6 +71,8 @@ public class view_avatar extends wrapper {
         return params;
     }
 
+    private Dialog networkLoadingDialog;
+
     @Override
     public void handleResponse(String response) {
 
@@ -61,6 +89,7 @@ public class view_avatar extends wrapper {
         int imageResource = Constants.mThumbIds[_profile_pic];
         mediumAvatar.setImageResource(imageResource);
 
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "view_avatar hide");
 
     }
 
@@ -81,6 +110,9 @@ public class view_avatar extends wrapper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_avatar);
 
+        networkLoadingDialog = new Dialog(view_avatar.this, R.style.CustomDialogTheme);
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+
         id = Objects.requireNonNull(getIntent().getExtras()).getString("id");
         searcheUserId = getIntent().getExtras().getString("searched_id");
         token = getIntent().getExtras().getString("token");
@@ -92,6 +124,7 @@ public class view_avatar extends wrapper {
         areSameUser = id.equals(searcheUserId);
         showEditAction(areSameUser);
 
+        Tools.showNetworkLoadingDialog(networkLoadingDialog, "view_avatar show");
         makeRequest();
 
     }

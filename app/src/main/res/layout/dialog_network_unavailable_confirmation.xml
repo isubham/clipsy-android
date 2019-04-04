@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dialog_backbutton_menu"
+    android:id="@+id/dialog_unsaved_clip_menu"
     android:layout_width="300dp"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -8,13 +8,13 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/dialog_backutton_message"
+        android:id="@+id/dialog_unsaved_clip_menu_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_horizontal"
         android:padding="8dp"
-        android:text="@string/are_you_sure_you_want_to_exit" />
+        android:text="@string/message_nonet" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/dialog_backbutton_close"
+            android:id="@+id/dialog_nonet_continue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
@@ -31,10 +31,10 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center_horizontal"
             android:padding="8dp"
-            android:text="@string/Yes" />
+            android:text="@string/tryAgain" />
 
         <TextView
-            android:id="@+id/dialog_backbutton_cancel"
+            android:id="@+id/dialog_nonet_exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
@@ -43,7 +43,8 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center_horizontal"
             android:padding="8dp"
-            android:text="@string/No" />
+            android:text="@string/close"
+             />
 
     </LinearLayout>
 

@@ -1,22 +1,52 @@
 package com.subhamkumar.clipsy.auth;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.ApiResponse;
+import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class change_password extends wrapper {
+
+    @Override
+    protected void handleErrorResponse(VolleyError error) {
+
+        showNetworkUnavailableDialog();
+
+    }
+
+    private void showNetworkUnavailableDialog() {
+
+        final Dialog dialog = new Dialog(change_password.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+            dialog.dismiss();
+            changePassword();
+        });
+
+        dialog.show();
+    }
 
     @Override
     public Map<String, String> _getHeaders() {
@@ -53,6 +83,7 @@ public class change_password extends wrapper {
         else {
             statusLabel.setText(apiResponse.message);
         }
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "change_password hide");
 
     }
 
@@ -73,6 +104,8 @@ public class change_password extends wrapper {
     private EditText confirmPasswordEditText;
     private EditText passwordEditText;
     private EditText tokenEditText;
+    private Dialog networkLoadingDialog;
+
 
 
     private void init() {
@@ -84,6 +117,7 @@ public class change_password extends wrapper {
         confirmPasswordEditText = findViewById(R.id.change_password_confirm_new_password);
         passwordEditText    = findViewById(R.id.change_password_new_password);
         tokenEditText    = findViewById(R.id.change_password_token);
+        networkLoadingDialog = new Dialog(change_password.this, R.style.CustomDialogTheme);
     }
 
 
@@ -91,6 +125,9 @@ public class change_password extends wrapper {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_password);
+
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+
         init();
     }
 
@@ -126,8 +163,13 @@ public class change_password extends wrapper {
 
     public void update_password(View V) {
 
+        changePassword();
+    }
+
+    private void changePassword() {
         if(validateFields()) {
             if (text(R.id.change_password_new_password).equals(text(R.id.change_password_confirm_new_password))) {
+                Tools.showNetworkLoadingDialog(networkLoadingDialog, "change_password show");
                 password = text(R.id.change_password_new_password);
                 token = text(R.id.change_password_token);
                 makeRequest();

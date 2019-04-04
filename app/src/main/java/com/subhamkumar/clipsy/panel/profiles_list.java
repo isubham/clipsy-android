@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -30,6 +31,11 @@ public class profiles_list extends wrapper {
 
     // (following and followers) => showing a list of users
 
+
+    @Override
+    protected void handleErrorResponse(VolleyError error) {
+
+    }
 
     @Override
     public Map<String, String> _getHeaders() {
@@ -145,6 +151,8 @@ public class profiles_list extends wrapper {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_list);
+
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
         bundle = getIntent().getExtras();
 

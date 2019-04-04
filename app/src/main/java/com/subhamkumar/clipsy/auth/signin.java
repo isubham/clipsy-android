@@ -1,5 +1,6 @@
 package com.subhamkumar.clipsy.auth;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,18 +9,22 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.SignInApiResponse;
 import com.subhamkumar.clipsy.panel.panel;
+import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 
 import java.util.HashMap;
@@ -31,6 +36,32 @@ public class signin extends wrapper {
     public Map<String, String> _getHeaders() {
         return new HashMap<String, String>();
     }
+
+    @Override
+    protected void handleErrorResponse(VolleyError error) {
+
+        showNetworkUnavailableDialog();
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "signin hide");
+    }
+
+    private void showNetworkUnavailableDialog() {
+        final Dialog dialog = new Dialog(signin.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+            dialog.dismiss();
+            signIn();
+        });
+
+        dialog.show();
+    }
+
+    private Dialog networkLoadingDialog;
+
 
     @Override
     public void makeVolleyRequest(StringRequest stringRequest) {
@@ -79,6 +110,7 @@ public class signin extends wrapper {
             this.finish();
         }
 
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "sigin hide");
     }
 
 
@@ -134,13 +166,24 @@ public class signin extends wrapper {
 
         signin_email = findViewById(R.id.signin_email);
         signin_pass  = findViewById(R.id.signin_pass);
+
+        networkLoadingDialog = new Dialog(signin.this, R.style.CustomDialogTheme);
     }
 
 
     public void startSignin(View V) {
+        signIn();
+    }
+
+    private void signIn() {
         if(validateFields()){
-            makeRequest();
+            startSigninRequest();
         }
+    }
+
+    private void startSigninRequest() {
+        Tools.showNetworkLoadingDialog(networkLoadingDialog, "sign show");
+        makeRequest();
     }
 
 
@@ -172,6 +215,9 @@ public class signin extends wrapper {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.signin);
+
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+
         initializeViews();
         DeleteLoginDetailsIfSignOutIsInBundleOrCheckLoginDetails();
 

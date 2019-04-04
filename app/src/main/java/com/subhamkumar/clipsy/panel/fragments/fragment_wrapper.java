@@ -21,19 +21,12 @@ public abstract class fragment_wrapper extends Fragment {
 
 
     protected abstract Map makeParams();
-
-    protected abstract void handle_response(String response);
-
-    protected abstract void make_volley_request(StringRequest stringRequest);
-
+    protected abstract void handleResponse(String response);
+    protected abstract void makeVolleyRequest(StringRequest stringRequest);
     protected abstract int setHttpMethod();
     protected abstract String setHttpUrl();
     protected abstract Map<String, String> _getHeaders();
-
-
-    void handle_error_response(VolleyError error) {
-        Log.e("v_handle_error_res", error.getMessage());
-    }
+    protected abstract void handle_error_response(VolleyError error);
 
     public void handle_jsonexception_error(JSONException e) {
         Log.e("v_json_excep", e.getMessage());
@@ -46,23 +39,14 @@ public abstract class fragment_wrapper extends Fragment {
         StringRequest stringRequest = new StringRequest(
                 setHttpMethod(),
                 url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                response -> {
 
-                        Log.e("Resource volley_wrapper", response);
-                        handle_response(response);
-
-                    }
+                    Log.e("Resource volley_wrapper", response);
+                    handleResponse(response);
 
                 },
 
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        handle_error_response(error);
-                    }
-                }
+                error -> handle_error_response(error)
         ) {
 
             @Override
@@ -79,7 +63,7 @@ public abstract class fragment_wrapper extends Fragment {
             }
         };
 
-        make_volley_request(stringRequest);
+        makeVolleyRequest(stringRequest);
 
 
     }

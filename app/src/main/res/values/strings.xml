@@ -162,6 +162,8 @@
     <string name="start_typing">Start Typing</string>
     <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete ?</string>
     <string name="message_unsaved_clip">You have unsaved changes in Clip.</string>
+    <string name="message_nonet">Network unavailable.</string>
+
 
     <string name="are_you_sure_you_want_to_exit">Ready to leave?</string>
     <string name="delete">Delete</string>
@@ -172,9 +174,15 @@
 
     <string name="edit">Edit</string>
     <string name="close">Close</string>
+    <string name="closeApp">Close App</string>
     <string name="write">Write</string>
     <string name="sign_out">Sign Out</string>
     <string name="save">Save</string>
+    <string name="Continue">Continue</string>
+    <string name="tryAgain">Try Again</string>
+
+
+
     <string name="title">title</string>
     <string name="edit_avatar">Edit Avatar</string>
     <string name="view_profile">View Profile</string>

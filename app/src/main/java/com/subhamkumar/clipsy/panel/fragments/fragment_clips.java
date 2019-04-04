@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -27,8 +28,10 @@ import com.subhamkumar.clipsy.models.ApiResponse;
 import com.subhamkumar.clipsy.models.ClipApiResonse;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.models.Constants;
+import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.panel.editor;
 import com.subhamkumar.clipsy.panel.profile_result;
+import com.subhamkumar.clipsy.utils.Tools;
 
 
 import java.util.ArrayList;
@@ -39,6 +42,33 @@ import java.util.Objects;
 
 
 public class fragment_clips extends fragment_wrapper {
+
+    private Dialog networkLoadingDialog;
+    @Override
+    protected void handle_error_response(VolleyError error) {
+
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "clips hide");
+        showNetworkUnavailableDialog();
+
+    }
+
+    private void showNetworkUnavailableDialog() {
+        final Dialog networkUnavailableDialog = new Dialog(context);
+        networkUnavailableDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        networkUnavailableDialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+        networkUnavailableDialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+            networkUnavailableDialog.dismiss();
+        });
+
+        networkUnavailableDialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+            networkUnavailableDialog.dismiss();
+            updateClips();
+        });
+
+        networkUnavailableDialog.show();
+    }
+
     @Override
     public int setHttpMethod() {
         return Request.Method.GET;
@@ -74,8 +104,7 @@ public class fragment_clips extends fragment_wrapper {
 
     // int no_of_intent;
     @Override
-    public void handle_response(String response) {
-
+    public void handleResponse(String response) {
         Gson gson = new Gson();
         ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
         clipList.clear();
@@ -86,9 +115,11 @@ public class fragment_clips extends fragment_wrapper {
         clipList.addAll(clipApiResonse.data);
         clip_adapter.notifyDataSetChanged();
 
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "clips hide");
     }
 
     private void addClipFullyScrolledLisentener() {
+        // TODO add 20 elements at first and then fetch when needed
         /*
         rv_clip.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -112,12 +143,12 @@ public class fragment_clips extends fragment_wrapper {
 
         V.findViewById(R.id.rl_clip_author).setOnClickListener(v -> gotoProfileResult(V));
         V.findViewById(R.id.rl_clip_profile_pic).setOnClickListener(v -> gotoProfileResult(V));
-        V.findViewById(R.id.rl_clip_menu).setOnClickListener(v -> showDialog(V));
+        V.findViewById(R.id.rl_clip_menu).setOnClickListener(v -> clipMenuClickedDialog(V));
 
 
     }
 
-    private void showDialog(View V) {
+    private void clipMenuClickedDialog(View V) {
         String author_id = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
         String viewer_id = ((TextView) V.findViewById(R.id.rl_clip_viewer_id)).getText().toString();
         String clip_id = ((TextView) V.findViewById(R.id.rl_clip_id)).getText().toString();
@@ -132,17 +163,17 @@ public class fragment_clips extends fragment_wrapper {
 
     private void showDifferentUserDialog(String authorId) {
 
-        final Dialog dialog = new Dialog(context);
-        hidetitleOFDialog(dialog);
-        dialog.setContentView(R.layout.dialog_other_user_clip_menu_click);
+        final Dialog other_user_menu_click_dialog = new Dialog(context);
+        hidetitleofdialog(other_user_menu_click_dialog);
+        other_user_menu_click_dialog.setContentView(R.layout.dialog_other_user_clip_menu_click);
 
-        dialog.findViewById(R.id.dialog_other_user_show_profile).setOnClickListener(v -> {
+        other_user_menu_click_dialog.findViewById(R.id.dialog_other_user_show_profile).setOnClickListener(v -> {
             gotoProfileResult(authorId);
-            dialog.dismiss();
+            other_user_menu_click_dialog.dismiss();
         });
-        dialog.findViewById(R.id.dialog_other_user_menu_close).setOnClickListener(v -> dialog.dismiss());
+        other_user_menu_click_dialog.findViewById(R.id.dialog_other_user_menu_close).setOnClickListener(v -> other_user_menu_click_dialog.dismiss());
 
-        dialog.show();
+        other_user_menu_click_dialog.show();
 
     }
 
@@ -159,7 +190,7 @@ public class fragment_clips extends fragment_wrapper {
 
     private void showSameUserDialog(String authorId, String clipId) {
         final Dialog dialog = new Dialog(context);
-        hidetitleOFDialog(dialog);
+        hidetitleofdialog(dialog);
         dialog.setContentView(R.layout.dialog_same_user_clip_menu_click);
 
         TextView editAction = dialog.findViewById(R.id.dialog_same_user_menu_edit);
@@ -184,40 +215,40 @@ public class fragment_clips extends fragment_wrapper {
 
     private void showConfirmationToDelete(View V, String action, String authorId, String clipId) {
 
-        final Dialog dialog = new Dialog(context);
-        hidetitleOFDialog(dialog);
-        dialog.setContentView(R.layout.dialog_delete_clip_confirmation);
-        TextView deleteAction = dialog.findViewById(R.id.dialog_delete_clip_menu_delete);
-        TextView closeAction = dialog.findViewById(R.id.dialog_delete_clip_menu_close);
+        final Dialog delete_clip_confirmation = new Dialog(context);
+        hidetitleofdialog(delete_clip_confirmation);
+        delete_clip_confirmation.setContentView(R.layout.dialog_delete_clip_confirmation);
+        TextView deleteAction = delete_clip_confirmation.findViewById(R.id.dialog_delete_clip_menu_delete);
+        TextView closeAction = delete_clip_confirmation.findViewById(R.id.dialog_delete_clip_menu_close);
 
         deleteAction.setOnClickListener(v -> {
             deleteClip(getSelectedClipId());
-
-            dialog.dismiss();
+            updateClips();
+            delete_clip_confirmation.dismiss();
         });
 
         closeAction.setOnClickListener(v -> {
-            dialog.dismiss();
+            delete_clip_confirmation.dismiss();
         });
 
-        dialog.show();
+        delete_clip_confirmation.show();
 
     }
 
-    private void hidetitleOFDialog(Dialog dialog) {
+    private void hidetitleofdialog(Dialog dialog) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
     private void deleteClip(String clipId) {
 
-        StringRequest stringRequest = new StringRequest(
+        StringRequest deleteClipRequest = new StringRequest(
                 Request.Method.POST,
                 String.format(Constants.request_clip_delete, clipId),
                 response -> {
 
+                    Tools.hideNetworkLoadingDialog(networkLoadingDialog, "clips hide");
                     ApiResponse deleteApiResponse = new Gson().fromJson(response, ApiResponse.class);
                     Toast.makeText(context, deleteApiResponse.message, Toast.LENGTH_SHORT).show();
-                    updateClips();
 
                 },
 
@@ -238,8 +269,12 @@ public class fragment_clips extends fragment_wrapper {
         };
 
 
-        Volley.newRequestQueue(context).add(stringRequest);
+        makeDeleteRequest(deleteClipRequest);
+    }
 
+    private void makeDeleteRequest(StringRequest deleteClipRequest) {
+        Volley.newRequestQueue(context).add(deleteClipRequest );
+        Tools.showNetworkLoadingDialog(networkLoadingDialog, "clip delete show");
     }
 
     private Context context;
@@ -271,7 +306,7 @@ public class fragment_clips extends fragment_wrapper {
     }
 
     @Override
-    public void make_volley_request(StringRequest stringRequest) {
+    public void makeVolleyRequest(StringRequest stringRequest) {
         Volley.newRequestQueue(context).add(stringRequest);
     }
 
@@ -279,15 +314,18 @@ public class fragment_clips extends fragment_wrapper {
     private LinearLayoutManager linearLayoutManager;
     private com.subhamkumar.clipsy.adapter.clip_adapter clip_adapter;
     private List<Clip> clipList;
+    ViewGroup fragment_clip;
 
 
     private void init(View V) {
         // no_of_intent = 0;
+        fragment_clip = (ViewGroup) V;
         rv_clip = V.findViewById(R.id.clip_fragment_recycleview);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         clipList = new ArrayList<>();
 
         context = getActivity();
+        networkLoadingDialog = new Dialog(context, R.style.CustomDialogTheme);
 
         clip_adapter = new clip_adapter(clipList) {
             @Override
@@ -299,13 +337,23 @@ public class fragment_clips extends fragment_wrapper {
         rv_clip.setLayoutManager(linearLayoutManager);
         rv_clip.setAdapter(clip_adapter);
 
-        updateClips();
+        addDummyClips();
 
-        addClipFullyScrolledLisentener();
+        if (getUserVisibleHint()) {
+            updateClips();
+            addClipFullyScrolledLisentener();
+        }
 
     }
 
+    private void addDummyClips() {
+        for (int i=0; i < 4; i++) {
+            clipList.add(new Clip(new Profile("", "", "", ""), "", "", ""));
+        }
+    }
+
     private void updateClips() {
+        Tools.showNetworkLoadingDialog(networkLoadingDialog, "show clip update ");
         make_request();
     }
 
@@ -363,9 +411,12 @@ public class fragment_clips extends fragment_wrapper {
     }
 
     @Override
-    public void onResume() {
-        init(V);
-        super.onResume();
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isResumed()) { // fragment is visible and have created
+            updateClips();
+            addClipFullyScrolledLisentener();
+        }
     }
 
 }

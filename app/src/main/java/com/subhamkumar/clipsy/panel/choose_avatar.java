@@ -1,18 +1,22 @@
 package com.subhamkumar.clipsy.panel;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.image_adapter;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
+import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +30,29 @@ public class choose_avatar extends wrapper {
         return params;
     }
 
+    @Override
+    protected void handleErrorResponse(VolleyError error) {
+
+        showNetworkUnavailableDialog();
+
+    }
+
+    private void showNetworkUnavailableDialog() {
+        final Dialog dialog = new Dialog(choose_avatar.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+            dialog.dismiss();
+            makeRequest();
+        });
+
+        dialog.show();
+    }
 
     private String get_profile_pic()
     {
@@ -56,6 +83,7 @@ public class choose_avatar extends wrapper {
         return params;
     }
 
+    private Dialog networkLoadingDialog;
     @Override
     public void handleResponse(String response) {
 
@@ -67,6 +95,7 @@ public class choose_avatar extends wrapper {
             choose_avatar.this.finish();
         }
 
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "choose avatar hide");
 
     }
 
@@ -83,6 +112,10 @@ public class choose_avatar extends wrapper {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_avatar);
+        networkLoadingDialog = new Dialog(choose_avatar.this, R.style.CustomDialogTheme);
+
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+
 
         token = Objects.requireNonNull(getIntent().getExtras()).getString("token");
         id = getIntent().getExtras().getString("id");
@@ -96,6 +129,7 @@ public class choose_avatar extends wrapper {
                                     int position, long id) {
                 profile_pic  = "" + position;
                 makeRequest();
+                Tools.showNetworkLoadingDialog(networkLoadingDialog, "chooose avatar show");
             }
         });
     }

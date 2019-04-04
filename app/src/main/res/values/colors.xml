@@ -23,6 +23,8 @@
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="transparentWhite">#88FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 
     <!-- Colors for the app -->
 

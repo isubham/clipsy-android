@@ -1,5 +1,6 @@
 package com.subhamkumar.clipsy.panel.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -28,6 +31,7 @@ import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.panel.profile_result;
 import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
+import com.subhamkumar.clipsy.utils.Tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +44,27 @@ public class fragment_search extends fragment_wrapper {
     @Override
     public int setHttpMethod() {
         return Request.Method.GET;
+    }
+
+    @Override
+    protected void handle_error_response(VolleyError error) {
+
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+            dialog.dismiss();
+            fetchSearchResult();
+        });
+
+        dialog.show();
+
     }
 
     @Override
@@ -61,11 +86,10 @@ public class fragment_search extends fragment_wrapper {
     }
 
     @Override
-    public void handle_response(String response) {
+    public void handleResponse(String response) {
         Log.i("search_response", response);
 
         Gson gson = new Gson();
-
         ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
         profileList.clear();
         profileList.addAll(profileApiResponse.data);
@@ -73,7 +97,7 @@ public class fragment_search extends fragment_wrapper {
     }
 
     @Override
-    public void make_volley_request(StringRequest stringRequest) {
+    public void makeVolleyRequest(StringRequest stringRequest) {
         Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(stringRequest);
     }
 
@@ -110,25 +134,10 @@ public class fragment_search extends fragment_wrapper {
 
         rv_profile.addOnItemTouchListener(
                new RecyclerItemClickListener(getActivity(),
-                       new RecyclerItemClickListener.OnItemClickListener() {
-                           @Override
-                           public void onItemClick(View view, int position) {
-
-                               gotToProfileResult(view);
-
-                           }
-                       })
+                       (view, position) -> gotToProfileResult(view))
         );
     }
 
-    private void fillDummyAndCheck() {
-        List<Profile> dummyProfileList = new ArrayList<Profile>();
-        for(int i = 0; i < 10; i++) {
-            dummyProfileList.add(Profile.dummyProfile());
-        }
-        profileList.addAll(dummyProfileList);
-        profile_adapter.notifyDataSetChanged();
-    }
 
     private void gotToProfileResult(View view) {
         Intent to_profile_result = new Intent(getActivity(), profile_result.class);
@@ -147,7 +156,7 @@ public class fragment_search extends fragment_wrapper {
     private void fillSearchResult(CharSequence charSequence){
          query = charSequence.toString();
          if(query.length() > 2) {
-             make_request();
+             fetchSearchResult();
          }
          else {
              profileList.clear();
@@ -156,23 +165,57 @@ public class fragment_search extends fragment_wrapper {
 
     }
 
+    private void fetchSearchResult() {
+        make_request();
+    }
+
+    private Context context;
     private Bundle userDetails;
     private String token;
+    private View fragment_search;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         userDetails = getArguments();
         token = Objects.requireNonNull(userDetails).getString(Constants.TOKEN);
+        context = getActivity();
 
-        View V = inflater.inflate(R.layout.fragment_search, container, false);
-        init(V);
+        fragment_search = inflater.inflate(R.layout.fragment_search, container, false);
+        init(fragment_search);
+        showKeyboarWhenSearchFragmentLoads();
 
+        return fragment_search;
+    }
+
+    private void showKeyboarWhenSearchFragmentLoads() {
         // to show keyboard
         live_search.requestFocus();
         InputMethodManager mgr = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.showSoftInput(live_search, InputMethodManager.SHOW_IMPLICIT);
-
-        return V;
     }
+
+
+    @Override
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed())
+        {
+            //Only manually call onResume if fragment is already visible
+            //Otherwise allow natural fragment lifecycle to call onResume
+            onResume();
+        }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (!getUserVisibleHint())
+        {
+            return;
+        }
+    }
+
 }

@@ -1,19 +1,23 @@
 package com.subhamkumar.clipsy.auth;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.ApiResponse;
+import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 
 import java.util.HashMap;
@@ -24,6 +28,30 @@ public class email_verification extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
         return new HashMap<String, String>();
+    }
+
+    @Override
+    protected void handleErrorResponse(VolleyError error) {
+
+        showNetworkUnavailableDialog();
+
+    }
+
+    private void showNetworkUnavailableDialog() {
+        final Dialog dialog = new Dialog(email_verification.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+            sendEmailVerification();
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
     @Override
@@ -57,7 +85,7 @@ public class email_verification extends wrapper {
         else if(apiResponse.success.equals(getString(R.string.status_email_verification_email_unverified))){
             ((TextView) findViewById(R.id.email_verification_status_message)).setText(apiResponse.message);
         }
-
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "email verification hide");
     }
 
     @Override
@@ -72,10 +100,15 @@ public class email_verification extends wrapper {
     private void init() {
         verify_token = findViewById(R.id.verify_token);
         button_to_email = findViewById(R.id.send_verify_token);
+        networkLoadingDialog = new Dialog(email_verification.this, R.style.CustomDialogTheme);
+
+
     }
 
     private String callback;
     private Bundle bundle;
+    private Dialog networkLoadingDialog;
+
 
     private void setCallbackFromBundle() {
         bundle = getIntent().getExtras();
@@ -89,28 +122,37 @@ public class email_verification extends wrapper {
     private boolean showLabelIfEmptyField(String message, TextView label, EditText editText) {
         if(editText.getText().toString().trim().equals("")) {
             label.setText(message);
-            return false;
+            return true;
         }
+
         label.setText("");
-        return true;
+        return false;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.email_verification);
+
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+
         setCallbackFromBundle();
         init();
         button_to_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                TextView statusTextView = findViewById(R.id.verify_token_status);
-                if (!showLabelIfEmptyField("Token cannot be empty", statusTextView, verify_token) ) {
-                    makeRequest();
-                }
+                sendEmailVerification();
             }
         });
 
+    }
+
+    private void sendEmailVerification() {
+        Tools.showNetworkLoadingDialog(networkLoadingDialog, "email verification show");
+        TextView statusTextView = findViewById(R.id.verify_token_status);
+        if (!showLabelIfEmptyField("Token cannot be empty", statusTextView, verify_token) ) {
+            makeRequest();
+        }
     }
 }

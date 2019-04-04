@@ -75,4 +75,11 @@
         android:onClick="gotoSignup"
         android:text="@string/signup" />
 
+    <ProgressBar
+        android:id="@+id/signinLoading"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

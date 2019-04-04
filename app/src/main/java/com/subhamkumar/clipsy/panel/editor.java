@@ -1,6 +1,7 @@
 package com.subhamkumar.clipsy.panel;
 
 import android.app.Dialog;
+import android.net.nsd.NsdManager;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -19,11 +21,13 @@ import com.jkcarino.rtexteditorview.RTextEditorButton;
 import com.jkcarino.rtexteditorview.RTextEditorToolbar;
 import com.jkcarino.rtexteditorview.RTextEditorView;
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.auth.change_password;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.models.ClipApiResonse;
 import com.subhamkumar.clipsy.panel.fragments.InsertLinkDialogFragment;
 import com.subhamkumar.clipsy.panel.fragments.InsertTableDialogFragment;
 import com.subhamkumar.clipsy.models.Constants;
+import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 
 import java.util.HashMap;
@@ -41,6 +45,11 @@ public class editor extends AppCompatActivity {
                 Map params = new HashMap<String, String>();
                 params.put(Constants.header_authentication, getToken());
                 return params;
+            }
+
+            @Override
+            protected void handleErrorResponse(VolleyError error) {
+                showNetworkUnavailableDialog();
             }
 
             // save clip
@@ -79,6 +88,7 @@ public class editor extends AppCompatActivity {
                     // TODO handle no changes or empty or error
                 }
 
+                Tools.hideNetworkLoadingDialog(networkLoadingDialog, "editor hide");
 
             }
         };
@@ -87,8 +97,31 @@ public class editor extends AppCompatActivity {
 
     private Clip currentclip;
 
+    private void showNetworkUnavailableDialog() {
+        final Dialog dialog = new Dialog(editor.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+            dialog.dismiss();
+            applyChangesToClip();
+        });
+
+        dialog.show();
+
+    }
+
     private void updateClip(final String clipId) {
         wrapper update_clip = new wrapper() {
+            @Override
+            protected void handleErrorResponse(VolleyError error) {
+
+                showNetworkUnavailableDialog();
+            }
 
             @Override
             public Map<String, String> _getHeaders() {
@@ -118,6 +151,7 @@ public class editor extends AppCompatActivity {
                     // TODO handle no changes or empty or error
                 }
 
+                Tools.hideNetworkLoadingDialog(networkLoadingDialog, "editor hide");
             }
 
             @Override
@@ -155,6 +189,8 @@ public class editor extends AppCompatActivity {
 
     private void applyChangesToClip() {
         if (isDirty()) {
+
+            Tools.showNetworkLoadingDialog(networkLoadingDialog, "editor show");
 
             if (currentclip.clip_id.equals(Constants.response_invalid_clip_id)) {
                 saveClip();
@@ -195,8 +231,7 @@ public class editor extends AppCompatActivity {
 
             dialog.show();
 
-        }
-        else{
+        } else {
             finish();
         }
     }
@@ -211,12 +246,14 @@ public class editor extends AppCompatActivity {
     private void initialHtml(String html) {
     }
 
+    private Dialog networkLoadingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editor);
 
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+        networkLoadingDialog = new Dialog(editor.this, R.style.CustomDialogTheme);
 
         init();
 
@@ -264,6 +301,7 @@ public class editor extends AppCompatActivity {
     }
 
     String fetchedClip;
+
     private void setInvalidClipOrValidClip() {
         currentclip = new Clip();
         currentclip.clip_id = Constants.response_invalid_clip_id;
@@ -276,6 +314,11 @@ public class editor extends AppCompatActivity {
                 @Override
                 public Map makeParams() {
                     return new HashMap<String, String>();
+                }
+
+                @Override
+                protected void handleErrorResponse(VolleyError error) {
+                    showNetworkUnavailableDialog();
                 }
 
                 @Override
@@ -334,16 +377,14 @@ public class editor extends AppCompatActivity {
             case R.id.create_menu_write:
                 applyChangesToClip();
                 break;
-            case R.id.create_menu_close:
-            {
+            case R.id.create_menu_close: {
                 if (!isDirty()) {
                     editor.this.finish();
-                }
-                else{
+                } else {
                     unSavedDialogCheck();
                 }
             }
-                break;
+            break;
         }
         return true;
 

@@ -21,9 +21,8 @@ public abstract class wrapper extends AppCompatActivity {
     protected abstract String setHttpUrl();
     protected abstract Map<String, String> _getHeaders();
 
-    protected void handleErrorResponse(VolleyError error) {
-        Log.e("v_handle_error_res", error.getMessage());
-    }
+    protected abstract void handleErrorResponse(VolleyError error);
+
 
     public void handleJsonexceptionError(JSONException e) {
         Log.e("v_json_excep", e.getMessage());
@@ -34,23 +33,14 @@ public abstract class wrapper extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(
                 setHttpMethod(),
                 setHttpUrl(),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                response -> {
 
-                        Log.e("base", response.toString());
-                        handleResponse(response);
-
-                    }
+                    Log.e("base", response.toString());
+                    handleResponse(response);
 
                 },
 
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        handleErrorResponse(error);
-                    }
-                }
+                error -> handleErrorResponse(error)
         ) {
 
             @Override

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -32,6 +33,7 @@ import com.subhamkumar.clipsy.models.ProfileMatrixApiResponse;
 import com.subhamkumar.clipsy.panel.profile_result;
 import com.subhamkumar.clipsy.panel.view_avatar;
 import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
+import com.subhamkumar.clipsy.utils.Tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +59,49 @@ public class fragment_profile extends fragment_wrapper {
     private String token;
 
     @Override
+    protected void handle_error_response(VolleyError error) {
+
+        final Dialog noNetworkDialog = new Dialog(context);
+        noNetworkDialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+        noNetworkDialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+            noNetworkDialog.dismiss();
+        });
+
+        noNetworkDialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+            noNetworkDialog.dismiss();
+            networkRetryRequest();
+        });
+
+        noNetworkDialog.show();
+
+    }
+
+    private NETWORKRETRY networkretry;
+
+    private enum NETWORKRETRY {
+        FOLLOWERS, FOLLOWING, PROFILE, RELATIONSHIPBUTTON;
+    }
+
+    private void networkRetryRequest() {
+        Log.i("n/w retry", networkretry.name().toString());
+        switch (networkretry) {
+            case FOLLOWERS:
+                getConnectedUsers();
+                break;
+            case FOLLOWING:
+                getConnectedUsers();
+                break;
+            case PROFILE:
+                fetchProfileMatrix();
+                break;
+            case RELATIONSHIPBUTTON:
+                performRelationShipAction();
+                break;
+        }
+    }
+
+    @Override
     public int setHttpMethod() {
         return Request.Method.GET;
     }
@@ -75,14 +120,16 @@ public class fragment_profile extends fragment_wrapper {
 
     @Override
     public Map makeParams() {
+        networkretry = NETWORKRETRY.PROFILE;
         HashMap<String, String> stringStringHashMap = new HashMap<>();
         return stringStringHashMap;
     }
 
     @Override
-    public void handle_response(String response) {
+    public void handleResponse(String response) {
 
         refreshViewsAndRelationShipButton(response);
+        Tools.hideNetworkLoadingDialog(networkRetryDialog, "profile hide");
 
     }
 
@@ -103,11 +150,11 @@ public class fragment_profile extends fragment_wrapper {
         setProfileElements(profileMatrixApiResponse.data.profile);
         setViewedProfileName(profileMatrixApiResponse.data.profile.name);
         relationshipButton.setText(profileMatrixApiResponse.message.equals("Following") ? "Unfollow" : profileMatrixApiResponse.message);
-        setRelationshipAction(profileMatrixApiResponse.message, searched_id);
+        addRelationShipClickAction(profileMatrixApiResponse.message, searched_id);
     }
 
     @Override
-    public void make_volley_request(StringRequest stringRequest) {
+    public void makeVolleyRequest(StringRequest stringRequest) {
         Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(stringRequest);
     }
 
@@ -116,7 +163,7 @@ public class fragment_profile extends fragment_wrapper {
 
     private void addProfileClickActions(final String user_viewed) {
         fragment_profile_followers.setOnClickListener(view -> showPeopleDialog(user_viewed, id, token, "followers"));
-        fragment_profile_following.setOnClickListener(view ->  showPeopleDialog(user_viewed, id, token, "following"));
+        fragment_profile_following.setOnClickListener(view -> showPeopleDialog(user_viewed, id, token, "following"));
         _choose_avatar_icon.setOnClickListener(view -> toProfileImage(user_viewed));
     }
 
@@ -129,22 +176,23 @@ public class fragment_profile extends fragment_wrapper {
 
     private void showPeopleDialog(String viewedId, String viewerId, String token, String typOfPeople) {
 
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_connected_people);
-        initForDialog(dialog);
+        final Dialog showPeopleDialog = new Dialog(context);
+        showPeopleDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(showPeopleDialog.getWindow()).setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
 
-        ImageView closeButton = dialog.findViewById(R.id.connectedPeopleCloseButton);
-        closeButton.setOnClickListener(v -> dialog.dismiss());
+        showPeopleDialog.setContentView(R.layout.dialog_connected_people);
+        initializeShowPeopleDialogVariables(showPeopleDialog);
 
-        TextView typeOfConnectedPeople = dialog.findViewById(R.id.typeOfConnectedPeople);
-        typeOfConnectedPeople.setText( getViewedProfileName().concat(" ▶ ".concat(typOfPeople)) );
+        ImageView closeButton = showPeopleDialog.findViewById(R.id.connectedPeopleCloseButton);
+        closeButton.setOnClickListener(v -> showPeopleDialog.dismiss());
 
-        getProfiles(dialog, typOfPeople, viewerId);
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
+        TextView typeOfConnectedPeople = showPeopleDialog.findViewById(R.id.typeOfConnectedPeople);
+        typeOfConnectedPeople.setText(getViewedProfileName().concat(" > ".concat(typOfPeople)));
+
+        getProfiles(showPeopleDialog, typOfPeople, viewerId);
     }
 
-    private void initForDialog(Dialog dialog) {
+    private void initializeShowPeopleDialogVariables(Dialog dialog) {
         rv_profile = dialog.findViewById(R.id.connected_people);
         linearLayoutManager = new LinearLayoutManager(context);
         profileList = new ArrayList<>();
@@ -154,16 +202,17 @@ public class fragment_profile extends fragment_wrapper {
         rv_profile.setLayoutManager(linearLayoutManager);
     }
 
+    private StringRequest getConnectedUsers;
+
     private void getProfiles(Dialog dialog, String typeOfPeople, String viewerId) {
 
-
-        String profileListUrl =  String.format( typeOfPeople.equals("following")
-                ? getString(R.string.request_user_user_following) :
-                getString(R.string.request_user_user_follower),
+        String profileListUrl = String.format(typeOfPeople.equals("following")
+                        ? getString(R.string.request_user_user_following) :
+                        getString(R.string.request_user_user_follower),
                 viewerId);
 
 
-        StringRequest stringRequest = new StringRequest(
+        getConnectedUsers = new StringRequest(
                 Request.Method.GET,
                 profileListUrl,
                 response -> {
@@ -171,14 +220,19 @@ public class fragment_profile extends fragment_wrapper {
                     Gson gson = new Gson();
                     ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
                     profileList.clear();
-                    for (int i=0; i < 100; i++) profileList.addAll(profileApiResponse.data);
+                    for (int i = 0; i < 100; i++) profileList.addAll(profileApiResponse.data);
                     profile_adapter.notifyDataSetChanged();
                     profileListClickToProfilePage();
 
                     dialog.show();
+
+                    Tools.hideNetworkLoadingDialog(networkRetryDialog, "profile hide");
                 },
 
-                error -> handle_error_response(error)
+                error -> {
+                    networkretry = typeOfPeople.equals("following") ? NETWORKRETRY.FOLLOWING : NETWORKRETRY.FOLLOWERS;
+                    handle_error_response(error);
+                }
         ) {
 
             @Override
@@ -195,15 +249,20 @@ public class fragment_profile extends fragment_wrapper {
         };
 
 
-        Volley.newRequestQueue(context).add(stringRequest);
+        getConnectedUsers();
 
+    }
+
+    private void getConnectedUsers() {
+        Volley.newRequestQueue(context).add(getConnectedUsers);
+        Tools.showNetworkLoadingDialog(networkRetryDialog, "profile getConnected users show");
     }
 
     private void profileListClickToProfilePage() {
 
         rv_profile.addOnItemTouchListener(
-               new RecyclerItemClickListener(context,
-                       (view, position) -> gotToProfileResult(view))
+                new RecyclerItemClickListener(context,
+                        (view, position) -> gotToProfileResult(view))
         );
     }
 
@@ -213,10 +272,10 @@ public class fragment_profile extends fragment_wrapper {
         String searchedUserId = ((TextView) view.findViewById(R.id.rl_profile_id)).getText().toString().trim();
 
         to_profile_result.putExtra(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId)
-                         .putExtra(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
-                                    getString(R.string.bundle_param_caller_activity_fragment_profile_list_to_profile_result))
-                         .putExtra(getString(R.string.params_token), getTokenFromBundle())
-                         .putExtra(getString(R.string.params_id), getIdFromToken());
+                .putExtra(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
+                        getString(R.string.bundle_param_caller_activity_fragment_profile_list_to_profile_result))
+                .putExtra(getString(R.string.params_token), getTokenFromBundle())
+                .putExtra(getString(R.string.params_id), getIdFromToken());
 
 
         startActivity(to_profile_result);
@@ -271,39 +330,46 @@ public class fragment_profile extends fragment_wrapper {
         }
     }
 
-    private void setRelationshipAction(final String message, final String searched_id) {
+    StringRequest relationShipStringRequest;
 
-        relationshipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    private void addRelationShipClickAction(final String message, final String searched_id) {
 
-                StringRequest stringRequest = new StringRequest(
-                        Request.Method.POST,
-                        getUrlByResponseMessage(message, searched_id),
-                        response -> refreshViewsAndRelationShipButton(response),
+        relationshipButton.setOnClickListener(v -> {
 
-                        error -> {
-
-                        }
-                ) {
-
-                    @Override
-                    protected Map<String, String> getParams() {
-                        return null;
+            relationShipStringRequest = new StringRequest(
+                    Request.Method.POST,
+                    getUrlByResponseMessage(message, searched_id),
+                    response -> {
+                        refreshViewsAndRelationShipButton(response);
+                        Tools.hideNetworkLoadingDialog(networkRetryDialog, "hide relationship click");
+                    },
+                    error -> {
+                        networkretry = NETWORKRETRY.RELATIONSHIPBUTTON;
+                        handle_error_response(error);
                     }
+            ) {
 
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map headers = new HashMap<String, String>();
-                        headers.put(getString(R.string.header_authentication), token);
-                        return headers;
-                    }
-                };
+                @Override
+                protected Map<String, String> getParams() {
+                    return null;
+                }
 
-                Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(stringRequest);
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map headers = new HashMap<String, String>();
+                    headers.put(getString(R.string.header_authentication), token);
+                    return headers;
+                }
+            };
 
-            }
+            performRelationShipAction();
+
         });
+    }
+
+    private void performRelationShipAction() {
+        Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(relationShipStringRequest);
+        Tools.showNetworkLoadingDialog(networkRetryDialog, "profile show");
     }
 
     private void hideRelationshipButtonIfSameUser(String user_x, String user_y) {
@@ -355,33 +421,52 @@ public class fragment_profile extends fragment_wrapper {
         if (getArguments().containsKey(getString(R.string.bundle_param_profile_result_searched_user_id))) {
             return getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
         }
-        if(getArguments().containsKey(getString(R.string.bundle_param_caller_activity_to_fragment_clips))){
+        if (getArguments().containsKey(getString(R.string.bundle_param_caller_activity_to_fragment_clips))) {
             return getArguments().getString(getString(R.string.params_id));
         }
         return searchedId;
     }
 
+    ViewGroup fragment_profile;
+    Dialog networkRetryDialog;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         bundle = getArguments();
+        networkRetryDialog = new Dialog(context, R.style.CustomDialogTheme);
 
         V = inflater.inflate(R.layout.fragment_profile, container, false);
+        fragment_profile = (ViewGroup) V;
         findViewByIds();
+
         try {
             setVariablesFromBundle();
             hideRelationshipButtonIfSameUser(id, searched_id);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             Log.e("0097", e.getMessage());
         }
-        make_request();
-        addProfileClickActions(searched_id);
+        if (getUserVisibleHint()) {
+            fetchProfileMatrix();
+            addProfileClickActions(searched_id);
+        }
         return V;
     }
 
-    @Override
-    public void onResume() {
+    private void fetchProfileMatrix() {
+        Tools.showNetworkLoadingDialog(networkRetryDialog, "profile show");
         make_request();
-        super.onResume();
     }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isResumed()) { // fragment is visible and have created
+            fetchProfileMatrix();
+            addProfileClickActions(searched_id);
+        }
+    }
+
+
 }
