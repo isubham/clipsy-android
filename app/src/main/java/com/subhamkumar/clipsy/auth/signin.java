@@ -167,7 +167,7 @@ public class signin extends wrapper {
         signin_email = findViewById(R.id.signin_email);
         signin_pass  = findViewById(R.id.signin_pass);
 
-        networkLoadingDialog = new Dialog(signin.this, R.style.CustomDialogTheme);
+        networkLoadingDialog = new Dialog(signin.this, R.style.TranslucentDialogTheme);
     }
 
 

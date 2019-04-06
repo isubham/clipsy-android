@@ -100,7 +100,7 @@ public class email_verification extends wrapper {
     private void init() {
         verify_token = findViewById(R.id.verify_token);
         button_to_email = findViewById(R.id.send_verify_token);
-        networkLoadingDialog = new Dialog(email_verification.this, R.style.CustomDialogTheme);
+        networkLoadingDialog = new Dialog(email_verification.this, R.style.TranslucentDialogTheme);
 
 
     }

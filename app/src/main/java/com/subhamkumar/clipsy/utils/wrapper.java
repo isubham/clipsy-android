@@ -7,6 +7,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.subhamkumar.clipsy.R;
 
 import org.json.JSONException;
 
@@ -22,6 +23,7 @@ public abstract class wrapper extends AppCompatActivity {
     protected abstract Map<String, String> _getHeaders();
 
     protected abstract void handleErrorResponse(VolleyError error);
+
 
 
     public void handleJsonexceptionError(JSONException e) {

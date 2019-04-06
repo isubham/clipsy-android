@@ -63,6 +63,7 @@ public class signup extends wrapper {
         showNetworkUnavailableDialog();
     }
 
+
     private void showNetworkUnavailableDialog() {
         final Dialog dialog = new Dialog(signup.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -168,7 +169,7 @@ public class signup extends wrapper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
 
-        networkLoadingDialog = new Dialog(signup.this, R.style.CustomDialogTheme);
+        networkLoadingDialog = new Dialog(signup.this, R.style.TranslucentDialogTheme);
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
         getViews();

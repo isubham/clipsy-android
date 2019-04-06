@@ -110,7 +110,7 @@ public class view_avatar extends wrapper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_avatar);
 
-        networkLoadingDialog = new Dialog(view_avatar.this, R.style.CustomDialogTheme);
+        networkLoadingDialog = new Dialog(view_avatar.this, R.style.TranslucentDialogTheme);
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
         id = Objects.requireNonNull(getIntent().getExtras()).getString("id");

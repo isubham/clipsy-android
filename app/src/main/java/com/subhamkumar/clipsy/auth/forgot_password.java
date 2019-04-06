@@ -109,7 +109,7 @@ public class forgot_password extends wrapper {
         email_to_send = findViewById(R.id.forgot_password_email);
         email_label = findViewById(R.id.forgot_password_email_label);
         status =  findViewById(R.id.forgot_password_status);
-        networkLoadingDialog = new Dialog(forgot_password.this, R.style.CustomDialogTheme);
+        networkLoadingDialog = new Dialog(forgot_password.this, R.style.TranslucentDialogTheme);
     }
 
     public void sendVerifyToken(View V) {

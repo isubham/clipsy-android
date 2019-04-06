@@ -253,7 +253,7 @@ public class editor extends AppCompatActivity {
         setContentView(R.layout.editor);
 
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
-        networkLoadingDialog = new Dialog(editor.this, R.style.CustomDialogTheme);
+        networkLoadingDialog = new Dialog(editor.this, R.style.TranslucentDialogTheme);
 
         init();
 

@@ -112,7 +112,7 @@ public class choose_avatar extends wrapper {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_avatar);
-        networkLoadingDialog = new Dialog(choose_avatar.this, R.style.CustomDialogTheme);
+        networkLoadingDialog = new Dialog(choose_avatar.this, R.style.TranslucentDialogTheme);
 
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 

@@ -117,7 +117,7 @@ public class change_password extends wrapper {
         confirmPasswordEditText = findViewById(R.id.change_password_confirm_new_password);
         passwordEditText    = findViewById(R.id.change_password_new_password);
         tokenEditText    = findViewById(R.id.change_password_token);
-        networkLoadingDialog = new Dialog(change_password.this, R.style.CustomDialogTheme);
+        networkLoadingDialog = new Dialog(change_password.this, R.style.TranslucentDialogTheme);
     }
 
 
