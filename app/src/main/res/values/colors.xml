@@ -26,6 +26,8 @@
     <color name="transparentWhite">#88FFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
 
+    <color name="background">#dddddd</color>
+
     <!-- Colors for the app -->
 
     <!--Light Background Dark Text-->

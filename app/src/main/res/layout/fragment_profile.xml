@@ -1,213 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="8dp">
+    tools:context=".panel.fragments.fragment_profile">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/rl_profile_loading_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="true"
-        android:orientation="horizontal"
-        tools:context=".panel.fragments.fragment_profile">
+        android:layout_height="wrap_content">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <com.elyeproj.loaderviewlibrary.LoaderImageView
-                android:id="@+id/choose_avatar_icon"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="start"
-                android:contentDescription="@string/todo"
-                app:use_gradient="true"
-                 />
-
-        </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="vertical">
 
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
-                android:id="@+id/fragment_profile_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:width_weight="0.8"
-                app:height_weight="0.8"
-                app:use_gradient="true"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+            <include layout="@layout/data_placeholder_fragment_profile" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <com.elyeproj.loaderviewlibrary.LoaderTextView
-                android:id="@+id/fragment_profile_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:width_weight="0.8"
-                app:height_weight="0.8"
-                app:use_gradient="true"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/rx"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_profile_contet_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingTop="8dp"
+        android:visibility="visible"
+        >
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="true"
+            android:orientation="horizontal">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimary"
-                android:elevation="1dp"
-                android:minHeight="14dp"
-                android:text="@string/follow"
-                android:textAllCaps="false"
-                android:textColor="@color/grey_50" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/choose_avatar_icon"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:contentDescription="@string/todo" />
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="1dp">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/fragment_profile_clips"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/fragment_profile_name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.1"
-                    android:backgroundTint="@color/grey_50"
-                    android:gravity="center"
-                    android:minHeight="12dp"
-                    android:text="@string/clips"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/fragment_profile_followers"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/fragment_profile_email"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:layout_weight="0.1"
-                    android:minHeight="12dp"
-                    android:background="@color/grey_50"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center_horizontal"
-                    android:padding="8dp"
-                    android:text="@string/followers" />
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/fragment_profile_following"
+                <Button
+                    android:id="@+id/rx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="12dp"
-                    android:layout_margin="4dp"
-                    android:layout_weight="0.1"
-                    android:background="@color/grey_50"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center_horizontal"
-                    android:padding="8dp"
-                    android:text="@string/following" />
+                    android:backgroundTint="@color/colorPrimary"
+                    android:elevation="1dp"
+                    android:minHeight="14dp"
+                    android:text="@string/follow"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey_50" />
+
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout><!--
-<GridLayout
-    android:columnCount="9"
-    android:rowCount="4"
-    android:padding="8dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
 
-    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/choose_avatar_icon"
-        android:layout_row="0"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_column="0"
-        android:layout_rowSpan="3"
-        android:layout_columnSpan="1"
-        android:src="@drawable/boy003"
-        android:contentDescription="@string/todo" />
 
-    <TextView
-        android:id="@+id/fragment_profile_name"
-        android:layout_column="1"
-        android:layout_row="0"
-        android:gravity="center"
-        android:layout_gravity="fill_horizontal"
-        android:text="@string/profile_name"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+            >
 
-    <TextView
-        android:id="@+id/fragment_profile_email"
-        android:layout_column="1"
-        android:layout_row="1"
-        android:textSize="8sp"
-        android:layout_gravity="fill_horizontal"
-        android:text="@string/profile_email"
-        android:textColor="@color/blue_600" />
+            <TextView
+                android:id="@+id/fragment_profile_clips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:gravity="center"
+                android:text="@string/clips"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
-    <Button
-        android:layout_column="1"
-        android:layout_row="2"
-        android:id="@+id/rx"
-        android:backgroundTint="@color/indigo_500"
-        android:minHeight="14dp"
-        android:text="@string/follow"
-        android:textAllCaps="false"
-        android:textColor="@color/indigo_50" />
+            <TextView
+                android:id="@+id/fragment_profile_followers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_horizontal"
+                android:minHeight="12dp"
+                android:text="@string/followers" />
 
+            <TextView
+                android:id="@+id/fragment_profile_following"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_horizontal"
+                android:text="@string/following" />
+
+        </LinearLayout>
 
         <TextView
-            android:layout_column="0"
-            android:layout_row="3"
-            android:layout_gravity="center"
-            android:id="@+id/fragment_profile_clips"
-            android:backgroundTint="@color/grey_50"
-            android:minHeight="14dp"
-            android:text="@string/clips"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/grey_300" />
+    </LinearLayout>
 
-        <Button
-            android:layout_column="1"
-            android:layout_row="3"
-            android:layout_gravity="center"
-            android:id="@+id/fragment_profile_followers"
-            android:backgroundTint="@color/grey_300"
-            android:gravity="center"
-            android:minHeight="14dp"
-            android:text="@string/followers"
-            android:textAllCaps="false"
-            android:textColor="@color/black" />
-
-        <Button
-            android:layout_column="2"
-            android:layout_row="3"
-            android:layout_gravity="center"
-            android:id="@+id/fragment_profile_following"
-            android:backgroundTint="@color/grey_300"
-            android:minHeight="14dp"
-            android:text="@string/following"
-            android:textAllCaps="false"
-            android:textColor="@color/black" />
-    </GridLayout>
-    -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/grey_300" />
 </LinearLayout>

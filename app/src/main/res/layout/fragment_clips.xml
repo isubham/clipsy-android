@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragmentClip"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".panel.fragments.fragment_clips">
-    <!-- TODO: Update blank fragment layout -->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/rl_clip_loading_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/data_placeholder_clip" />
+            <include layout="@layout/data_placeholder_clip" />
+            <include layout="@layout/data_placeholder_clip" />
+            <include layout="@layout/data_placeholder_clip" />
+            <include layout="@layout/data_placeholder_clip" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/clip_fragment_recycleview"
         android:layout_width="match_parent"
@@ -14,4 +29,4 @@
 
     </android.support.v7.widget.RecyclerView>
 
-</RelativeLayout>
+</LinearLayout>

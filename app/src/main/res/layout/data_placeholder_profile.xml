@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="4dp"
+        android:paddingTop="4dp"
         android:orientation="horizontal"
         android:baselineAligned="false">
 
@@ -23,7 +23,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/rl_profile_profile_pic"
+                android:background="@color/background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/todo"
@@ -35,21 +35,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
             android:layout_marginStart="2dp"
+            android:padding="2dp"
             android:layout_gravity="center"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/rl_profile_name"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:minWidth="40dp"
-                android:minHeight="12dp"
+                android:background="@color/background"
+                android:layout_width="140dp"
+                android:layout_height="20dp"
                 android:layout_weight="0.8"
                 android:textStyle="bold" />
 
             <!-- ids -->
             <TextView
-                android:id="@+id/rl_profile_id"
                 android:layout_width="wrap_content"
                 android:layout_height="16sp"
                 android:minWidth="30dp"
@@ -59,11 +57,10 @@
 
             <!-- row 2 => title -->
             <TextView
-                android:id="@+id/rl_profile_email"
-                android:layout_width="match_parent"
+                android:background="@color/background"
+                android:layout_marginTop="8dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:minWidth="49dp"
-                android:minHeight="12dp"
                 android:textSize="12sp" />
 
 

@@ -26,19 +26,17 @@
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp">
 
-                <ImageView
-                    android:id="@+id/rl_clip_profile_pic"
+                <View
+                    android:background="@color/background"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:contentDescription="@string/todo" />
 
                 <TextView
-                    android:id="@+id/rl_clip_author"
-                    android:layout_width="wrap_content"
+                    android:background="@color/background"
+                    android:layout_width="100dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="8dp"
-                    android:minWidth="40dp"
-                    android:minHeight="24dp"
                     android:textStyle="bold" />
 
                 <View
@@ -46,28 +44,30 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-                <ImageView
-                    android:id="@+id/rl_clip_menu"
+                <View
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:background="@color/background"
                     android:contentDescription="@string/todo"
-                    android:src="@drawable/baseline_more_horiz_black_48" />
+                    />
 
             </LinearLayout>
 
 
             <!-- row 3 => clip_content -->
-            <WebView
-                android:id="@+id/rl_clip_content"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="200dp"
+                android:background="@color/background"
+                />
 
 
             <TextView
-                android:id="@+id/rl_clip_time"
-                android:layout_width="wrap_content"
+                android:background="@color/background"
+                android:layout_width="100sp"
                 android:layout_height="0dp"
                 android:layout_weight="0.1"
+                android:layout_marginTop="4dp"
                 android:fontFamily="sans-serif-condensed"
                 android:minWidth="30dp"
                 android:textColor="#939393"
@@ -79,31 +79,6 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/grey_300" />
-            <!-- ids -->
-            <TextView
-                android:id="@+id/rl_clip_id"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="@string/author_id"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/rl_clip_author_id"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="@string/author_id"
-                android:textStyle="bold"
-                android:visibility="gone" />
-            <!-- end of ids -->
-            <TextView
-                android:id="@+id/rl_clip_viewer_id"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="@string/author_id"
-                android:textStyle="bold"
-                android:visibility="gone" />
-            <!-- end of ids -->
 
         </LinearLayout>
 

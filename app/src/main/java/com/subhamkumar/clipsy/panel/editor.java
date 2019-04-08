@@ -173,8 +173,11 @@ public class editor extends AppCompatActivity {
         update_clip.makeRequest();
     }
 
+    private int clipUpdateRequestCode = 123;
+
 
     private void closeEditor() {
+        setResult(RESULT_OK);
         this.finish();
     }
 

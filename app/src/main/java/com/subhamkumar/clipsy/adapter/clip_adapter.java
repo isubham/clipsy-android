@@ -17,7 +17,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Clip;
@@ -41,7 +41,6 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
         final ImageView profile_pic;
         final WebView
                 clip_content;
-
         Clip_viewholder(View V) {
             super(V);
 
@@ -57,7 +56,6 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
             webSettings.setTextSize(WebSettings.TextSize.SMALLER);
 
             profile_pic = V.findViewById(R.id.rl_clip_profile_pic);
-
         }
     }
 
@@ -129,7 +127,6 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
             int _profile_pic = 0;
             int imageResource = Constants.mThumbIds[_profile_pic];
         }
-
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.clip_adapter;
@@ -40,10 +41,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class fragment_clips extends fragment_wrapper {
 
     private Dialog networkLoadingDialog;
+
     @Override
     protected void handle_error_response(VolleyError error) {
 
@@ -109,13 +113,17 @@ public class fragment_clips extends fragment_wrapper {
         ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
         clipList.clear();
 
+
         for (int i = 0; i < clipApiResonse.data.size(); i++)
             clipApiResonse.data.get(i).viewer_id = id;
 
         clipList.addAll(clipApiResonse.data);
         clip_adapter.notifyDataSetChanged();
 
+
         Tools.hideNetworkLoadingDialog(networkLoadingDialog, "clips hide");
+        loadingContainer.stopShimmer();
+        loadingContainer.setVisibility(View.GONE);
     }
 
     private void addClipFullyScrolledLisentener() {
@@ -139,13 +147,25 @@ public class fragment_clips extends fragment_wrapper {
     }
 
     private void addClickListener(View V) {
-
-
         V.findViewById(R.id.rl_clip_author).setOnClickListener(v -> gotoProfileResult(V));
         V.findViewById(R.id.rl_clip_profile_pic).setOnClickListener(v -> gotoProfileResult(V));
         V.findViewById(R.id.rl_clip_menu).setOnClickListener(v -> clipMenuClickedDialog(V));
+    }
+    private void gotoProfileResult(View V) {
+        String searchedUserId = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
 
+        gotoProfileResult(searchedUserId);
+    }
+    private void gotoProfileResult(String searchedUserId) {
+        Bundle toProfileResult = new Bundle();
+        toProfileResult.putString(getString(R.string.params_token), token);
+        toProfileResult.putString(getString(R.string.params_id), id);
+        toProfileResult.putString(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId);
 
+        toProfileResult.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
+                getString(R.string.bundle_param_caller_activity_fragment_search));
+
+        startActivity(new Intent(getActivity(), profile_result.class).putExtras(toProfileResult));
     }
 
     private void clipMenuClickedDialog(View V) {
@@ -157,8 +177,8 @@ public class fragment_clips extends fragment_wrapper {
             showSameUserDialog(author_id, clip_id);
         } else {
             showDifferentUserDialog(author_id);
+            setSelectedUserId(author_id);
         }
-
     }
 
     private void showDifferentUserDialog(String authorId) {
@@ -167,8 +187,8 @@ public class fragment_clips extends fragment_wrapper {
         hidetitleofdialog(other_user_menu_click_dialog);
         other_user_menu_click_dialog.setContentView(R.layout.dialog_other_user_clip_menu_click);
 
-        other_user_menu_click_dialog.findViewById(R.id.dialog_other_user_show_profile).setOnClickListener(v -> {
-            gotoProfileResult(authorId);
+        other_user_menu_click_dialog.findViewById(R.id.dialog_other_user_show_report).setOnClickListener(v -> {
+            showReportDialog(v);
             other_user_menu_click_dialog.dismiss();
         });
         other_user_menu_click_dialog.findViewById(R.id.dialog_other_user_menu_close).setOnClickListener(v -> other_user_menu_click_dialog.dismiss());
@@ -176,6 +196,8 @@ public class fragment_clips extends fragment_wrapper {
         other_user_menu_click_dialog.show();
 
     }
+
+    private static String selected_clip_id;
 
     private void setSelectedClipId(String clip_id) {
         selected_clip_id = clip_id;
@@ -185,8 +207,15 @@ public class fragment_clips extends fragment_wrapper {
         return selected_clip_id;
     }
 
+    private static String selected_user_id;
 
-    private static String selected_clip_id;
+    private void setSelectedUserId(String user) {
+        selected_user_id = user;
+    }
+
+    private String getSelectedUserId() {
+        return selected_user_id;
+    }
 
     private void showSameUserDialog(String authorId, String clipId) {
         final Dialog dialog = new Dialog(context);
@@ -273,36 +302,113 @@ public class fragment_clips extends fragment_wrapper {
     }
 
     private void makeDeleteRequest(StringRequest deleteClipRequest) {
-        Volley.newRequestQueue(context).add(deleteClipRequest );
+        Volley.newRequestQueue(context).add(deleteClipRequest);
         Tools.showNetworkLoadingDialog(networkLoadingDialog, "clip delete show");
     }
 
+    // TODO handle loading bar.
+    private void makeSendReportRequest(StringRequest sendReportRequest) {
+        Volley.newRequestQueue(context).add(sendReportRequest);
+        Tools.showNetworkLoadingDialog(networkLoadingDialog, "report send show");
+    }
+
     private Context context;
+    private int clipUpdateRequestCode = 123;
 
     private void gotoClip(View V, String action, String authorId, String clipId) {
 
-        startActivity(new Intent(getActivity(), editor.class)
-                .putExtra("token", token).putExtra("action", action)
-                .putExtra("id", authorId).putExtra("clip_id", clipId)
-                .putExtra("clip", "clip"));
+        Bundle toClip = new Bundle();
+        toClip.putString("token", token);
+        toClip.putString("action", action);
+        toClip.putString("id", authorId);
+        toClip.putString("clip_id", clipId);
+        toClip.putString("clip", "clip");
+        Intent toClipIntent = new Intent(getActivity(), editor.class);
+        toClipIntent.putExtras(toClip);
+        startActivityForResult(toClipIntent, clipUpdateRequestCode);
     }
 
-    private void gotoProfileResult(View V) {
-        String searchedUserId = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
-
-        gotoProfileResult(searchedUserId);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == clipUpdateRequestCode && resultCode == RESULT_OK) {
+            updateClips();
+        }
     }
 
-    private void gotoProfileResult(String searchedUserId) {
-        Bundle toProfileResult = new Bundle();
-        toProfileResult.putString(getString(R.string.params_token), token);
-        toProfileResult.putString(getString(R.string.params_id), id);
-        toProfileResult.putString(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId);
+    private void showReportDialog(View V) {
+        showReportDialog(getSelectedUserId(), getSelectedClipId());
+    }
 
-        toProfileResult.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
-                getString(R.string.bundle_param_caller_activity_fragment_search));
+    private void showReportDialog(String searchedUserId, String clipId) {
 
-        startActivity(new Intent(getActivity(), profile_result.class).putExtras(toProfileResult));
+        // show dialog
+        final Dialog reportDialog = new Dialog(context);
+        hidetitleofdialog(reportDialog);
+        reportDialog.setContentView(R.layout.dialog_other_user_clip_menu_click_report);
+
+        // handle click actions
+        reportDialog.findViewById(R.id.dialog_other_user_show_report_inappropriate)
+                .setOnClickListener(v -> {
+
+                    sendReport("1", searchedUserId, token, clipId);
+                    reportDialog.dismiss();
+
+                });
+
+        reportDialog.findViewById(R.id.dialog_other_user_show_report_spam)
+                .setOnClickListener(v -> {
+
+                    sendReport("1", searchedUserId, token, clipId);
+                    reportDialog.dismiss();
+
+
+                });
+
+        reportDialog.findViewById(R.id.dialog_other_user_show_report_close)
+                .setOnClickListener(v -> {
+
+                    reportDialog.dismiss();
+
+                });
+
+        reportDialog.show();
+    }
+
+    private void sendReport(String problem, String reportedId, String token, String clipId) {
+
+        StringRequest sendReport = new StringRequest(
+                Request.Method.POST,
+                String.format(Constants.request_report_send, clipId),
+                response -> {
+
+                    Tools.hideNetworkLoadingDialog(networkLoadingDialog, "send report hide");
+                    ApiResponse sendReportApiResponse = new Gson().fromJson(response, ApiResponse.class);
+                    Toast.makeText(context, sendReportApiResponse.message, Toast.LENGTH_SHORT).show();
+
+                },
+
+                error -> handle_error_response(error)
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map params = new HashMap<String, String>();
+                params.put("clipId", clipId);
+                params.put("reportedId", reportedId);
+                params.put("problem", problem);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map headers = new HashMap<String, String>();
+                headers.put(getString(R.string.header_authentication), token);
+                return headers;
+            }
+        };
+
+
+        makeSendReportRequest(sendReport);
     }
 
     @Override
@@ -327,6 +433,9 @@ public class fragment_clips extends fragment_wrapper {
         context = getActivity();
         networkLoadingDialog = new Dialog(context, R.style.CustomDialogTheme);
 
+        loadingContainer = V.findViewById(R.id.rl_clip_loading_container);
+        loadingContainer.startShimmer();
+
         clip_adapter = new clip_adapter(clipList) {
             @Override
             public void addViewClickListeners(View V) {
@@ -346,8 +455,9 @@ public class fragment_clips extends fragment_wrapper {
 
     }
 
+
     private void addDummyClips() {
-        for (int i=0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             clipList.add(new Clip(new Profile("", "", "", ""), "", "", ""));
         }
     }
@@ -385,6 +495,8 @@ public class fragment_clips extends fragment_wrapper {
 
     private Bundle bundle;
     private String from;
+    private ShimmerFrameLayout loadingContainer;
+
 
     @Nullable
     @Override
@@ -392,6 +504,7 @@ public class fragment_clips extends fragment_wrapper {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         bundle = getArguments();
+
 
         try {
             id = bundle.getString(getString(R.string.params_id));

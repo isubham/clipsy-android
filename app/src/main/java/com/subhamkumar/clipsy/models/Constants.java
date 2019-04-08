@@ -89,4 +89,5 @@ public  static final Integer[] mThumbIds = {
     public static final String request_clip_delete = "http://api.pitavya.com/clipsy/delete_clip/%1$s";
 
 
+   public static final String request_report_send = "http://api.pitavya.com/clipsy/report/";
 }

@@ -137,7 +137,7 @@
     <string name="params_verify_token">verify_token</string>
     <string name="following">Following</string>
     <string name="followers">Followers</string>
-    <string name="clips">CLIPS</string>
+    <string name="clips">Clips</string>
     <string name="follow">Follow</string>
     <string name="profile_email">Profile email</string>
     <string name="profile_name">Profile name</string>
@@ -186,6 +186,10 @@
     <string name="title">title</string>
     <string name="edit_avatar">Edit Avatar</string>
     <string name="view_profile">View Profile</string>
+
+    <string name="report">Report</string>
+    <string name="Inappropriate">Inappropriate</string>
+    <string name="Spam">Spam</string>
 
 
 

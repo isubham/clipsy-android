@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.profile_adapter;
@@ -130,7 +131,19 @@ public class fragment_profile extends fragment_wrapper {
 
         refreshViewsAndRelationShipButton(response);
         Tools.hideNetworkLoadingDialog(networkRetryDialog, "profile hide");
+        showProfileCardAndHideLoading();
+    }
 
+    private void showProfileCardAndHideLoading() {
+        loadingContainer.stopShimmer();
+        loadingContainer.setVisibility(View.GONE);
+        V.findViewById(R.id.fragment_profile_contet_card).setVisibility(View.VISIBLE);
+    }
+
+    private void hideProfileCardAndShowLoading() {
+        V.findViewById(R.id.fragment_profile_contet_card).setVisibility(View.GONE);
+        loadingContainer.setVisibility(View.VISIBLE);
+        loadingContainer.startShimmer();
     }
 
     String viewedProfileName;
@@ -220,7 +233,7 @@ public class fragment_profile extends fragment_wrapper {
                     Gson gson = new Gson();
                     ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
                     profileList.clear();
-                    for (int i = 0; i < 100; i++) profileList.addAll(profileApiResponse.data);
+                    profileList.addAll(profileApiResponse.data);
                     profile_adapter.notifyDataSetChanged();
                     profileListClickToProfilePage();
 
@@ -401,6 +414,7 @@ public class fragment_profile extends fragment_wrapper {
         _email = V.findViewById(R.id.fragment_profile_email);
         fragment_profile_followers = V.findViewById(R.id.fragment_profile_followers);
         fragment_profile_following = V.findViewById(R.id.fragment_profile_following);
+        loadingContainer = V.findViewById(R.id.rl_profile_loading_container);
 
     }
 
@@ -429,6 +443,7 @@ public class fragment_profile extends fragment_wrapper {
 
     ViewGroup fragment_profile;
     Dialog networkRetryDialog;
+    ShimmerFrameLayout loadingContainer;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -436,9 +451,11 @@ public class fragment_profile extends fragment_wrapper {
         bundle = getArguments();
         networkRetryDialog = new Dialog(context, R.style.CustomDialogTheme);
 
+
         V = inflater.inflate(R.layout.fragment_profile, container, false);
         fragment_profile = (ViewGroup) V;
         findViewByIds();
+        hideProfileCardAndShowLoading();
 
         try {
             setVariablesFromBundle();

@@ -17,12 +17,14 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
@@ -92,6 +94,7 @@ public class fragment_search extends fragment_wrapper {
         Gson gson = new Gson();
         ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
         profileList.clear();
+        hideLoadingAndShowCntent(loadingContainer, content);
         profileList.addAll(profileApiResponse.data);
         profile_adapter.notifyDataSetChanged();
     }
@@ -111,6 +114,8 @@ public class fragment_search extends fragment_wrapper {
 
     private void init(View V) {
         rv_profile = V.findViewById(R.id.profile_fragment_recycleview);
+        content = V.findViewById(R.id.profile_fragment_recycleview);
+        loadingContainer = V.findViewById(R.id.rl_fragment_search_loading_container);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         profileList = new ArrayList<Profile>();
         profile_adapter = new profile_adapter(profileList);
@@ -161,6 +166,7 @@ public class fragment_search extends fragment_wrapper {
          else {
              profileList.clear();
              profile_adapter.notifyDataSetChanged();
+             showLoadingAndHideCntent(loadingContainer, content);
          }
 
     }
@@ -173,6 +179,21 @@ public class fragment_search extends fragment_wrapper {
     private Bundle userDetails;
     private String token;
     private View fragment_search;
+    private ShimmerFrameLayout loadingContainer;
+
+    private void showLoadingAndHideCntent(View V, View content) {
+        loadingContainer.setVisibility(View.VISIBLE);
+        loadingContainer.startShimmer();
+        content.setVisibility(View.GONE);
+    }
+
+    private void hideLoadingAndShowCntent(View V, View content) {
+        loadingContainer.setVisibility(View.GONE);
+        loadingContainer.startShimmer();
+        content.setVisibility(View.VISIBLE);
+    }
+
+    RecyclerView content;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -183,6 +204,7 @@ public class fragment_search extends fragment_wrapper {
 
         fragment_search = inflater.inflate(R.layout.fragment_search, container, false);
         init(fragment_search);
+        showLoadingAndHideCntent(loadingContainer, content);
         showKeyboarWhenSearchFragmentLoads();
 
         return fragment_search;
