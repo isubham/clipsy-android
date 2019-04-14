@@ -5,17 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -39,6 +34,8 @@ public class signin extends wrapper {
 
     @Override
     protected void handleErrorResponse(VolleyError error) {
+
+        Log.e("n/w bug", error.getMessage());
 
         showNetworkUnavailableDialog();
         Tools.hideNetworkLoadingDialog(networkLoadingDialog, "signin hide");
@@ -97,16 +94,13 @@ public class signin extends wrapper {
 
         if (signInApiResponse.success.equals(getString(R.string.status_signin_failed))) {
             ((TextView) findViewById(R.id.signin_status)).setText(signInApiResponse.message);
-        }
-
-        else {
+        } else {
 
             startActivity(new Intent(signin.this, panel.class)
-                            .putExtra("token", signInApiResponse.data.token)
-                            .putExtra("id", signInApiResponse.data.id)
+                    .putExtra("token", signInApiResponse.data.token)
+                    .putExtra("id", signInApiResponse.data.id)
             );
 
-            saveLoginDetails(signInApiResponse.data.token, signInApiResponse.data.id);
             this.finish();
         }
 
@@ -114,61 +108,8 @@ public class signin extends wrapper {
     }
 
 
-
     private String email;
     private Bundle bundle;
-
-    private SharedPreferences localStore;
-    private static final String myFile = "theAwesomeDataInMain";
-    static String myKey = "52521";
-
-    private void saveLoginDetails(String token, String userId) {
-        localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
-        localStore.edit()
-                .putString("token", token)
-                .putString("id", userId)
-                .commit();
-
-    }
-
-    private void checkLoginDetails() {
-        localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
-        if (localStore.contains("token")) {
-            Log.i("check_login", "contains email");
-            startActivity(new Intent(signin.this, panel.class)
-                    //  .putExtra("email", localStore.getString("email",""))
-                    // .putExtra("type", localStore.getString("type",""))
-                    // .putExtra("name", localStore.getString("name",""))
-                    .putExtra("token", localStore.getString("token", ""))
-                    .putExtra("id", localStore.getString("id", "")));
-
-
-            this.finish();
-        } else {
-            Log.i("check_login", "donot contains email");
-        }
-    }
-
-    private void deleteLoginDetails() {
-        localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
-        localStore.edit().clear().commit();
-    }
-
-    String sign_out;
-    private TextView label_signin_email;
-    private TextView label_signin_pass;
-    private EditText signin_email;
-    private EditText signin_pass;
-
-    private void initializeViews() {
-        label_signin_email = findViewById(R.id.signin_email_label);
-        label_signin_pass = findViewById(R.id.signin_pass_label);
-
-        signin_email = findViewById(R.id.signin_email);
-        signin_pass  = findViewById(R.id.signin_pass);
-
-        networkLoadingDialog = new Dialog(signin.this, R.style.TranslucentDialogTheme);
-    }
 
 
     public void startSignin(View V) {
@@ -176,25 +117,22 @@ public class signin extends wrapper {
     }
 
     private void signIn() {
-        if(validateFields()){
-            startSigninRequest();
+        if (validateFields()) {
+            Tools.showNetworkLoadingDialog(networkLoadingDialog, "sign show");
+            makeRequest();
         }
-    }
-
-    private void startSigninRequest() {
-        Tools.showNetworkLoadingDialog(networkLoadingDialog, "sign show");
-        makeRequest();
     }
 
 
     private boolean showLabelIfEmptyField(String message, TextView label, EditText editText) {
-        if(editText.getText().toString().trim().equals("")) {
+        if (editText.getText().toString().trim().equals("")) {
             label.setText(message);
             return false;
         }
         label.setText("");
         return true;
     }
+
     private boolean validateFields() {
         boolean isEmailEmpty = showLabelIfEmptyField("Email cannot by empty.", label_signin_email, signin_email);
         boolean isPasswordEmpty = showLabelIfEmptyField("Password cannot by empty.", label_signin_pass, signin_pass);
@@ -208,39 +146,48 @@ public class signin extends wrapper {
     public void startForgetPassword(View V) {
         startActivity(new Intent(signin.this, forgot_password.class).putExtra("email",
                 ((EditText) findViewById(R.id.signin_email)).getText().toString().trim()));
-     }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        screenshotOff();
         setContentView(R.layout.signin);
-
-        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
-
+        setTabHeightToZero();
         initializeViews();
-        DeleteLoginDetailsIfSignOutIsInBundleOrCheckLoginDetails();
-
     }
 
-    private void DeleteLoginDetailsIfSignOutIsInBundleOrCheckLoginDetails() {
-        bundle = getIntent().getExtras();
+    private TextView label_signin_email;
+    private TextView label_signin_pass;
+    private EditText signin_email;
+    private EditText signin_pass;
 
-        email = "";
-        if (bundle!= null) {
-            email = Objects.requireNonNull(getIntent().getExtras()).getString("email");
-            ((EditText) findViewById(R.id.signin_email)).setText(email);
-            if(bundle.containsKey("sign_out"))
-                deleteLoginDetails();
-            else{
-                checkLoginDetails();
-            }
-        }
+    private void initializeViews() {
+        label_signin_email = findViewById(R.id.signin_email_label);
+        label_signin_pass = findViewById(R.id.signin_pass_label);
+
+        signin_email = findViewById(R.id.signin_email);
+        signin_pass = findViewById(R.id.signin_pass);
+
+        networkLoadingDialog = new Dialog(signin.this, R.style.TranslucentDialogTheme);
     }
+    private void setTabHeightToZero() {
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+    }
+
+    private void screenshotOff() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(signin.this, home.class));
     }
 
 }

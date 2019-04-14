@@ -108,6 +108,8 @@ public class choose_avatar extends wrapper {
     private String token;
     private String searchedId;
     private String profile_pic;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,13 +126,10 @@ public class choose_avatar extends wrapper {
         GridView gridview = findViewById(R.id.choose_avatar_gridview);
         gridview.setAdapter(new image_adapter(this));
 
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                profile_pic  = "" + position;
-                makeRequest();
-                Tools.showNetworkLoadingDialog(networkLoadingDialog, "chooose avatar show");
-            }
+        gridview.setOnItemClickListener((parent, v, position, id) -> {
+            profile_pic  = "" + position;
+            makeRequest();
+            Tools.showNetworkLoadingDialog(networkLoadingDialog, "chooose avatar show");
         });
     }
 }

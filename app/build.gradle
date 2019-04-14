@@ -37,6 +37,21 @@ dependencies {
     implementation 'com.github.jkennethcarino:RTextEditorView:0.1.1'
     implementation 'com.google.code.gson:gson:2.8.2'
     // implementation 'com.github.irshulx:laser-native-editor:2.3.1'
-    implementation 'com.elyeproj.libraries:loaderviewlibrary:1.5.0'
     implementation 'com.facebook.shimmer:shimmer:0.4.0'
+
+    // to replace heavy webview
+    final def markwon_version = '3.0.0'
+
+
+    implementation "ru.noties.markwon:core:$markwon_version"
+    implementation "ru.noties.markwon:ext-strikethrough:$markwon_version"
+    implementation "ru.noties.markwon:ext-tables:$markwon_version"
+    implementation "ru.noties.markwon:ext-tasklist:$markwon_version"
+    implementation "ru.noties.markwon:html:$markwon_version"
+    implementation "ru.noties.markwon:image-gif:$markwon_version"
+    implementation "ru.noties.markwon:image-okhttp:$markwon_version"
+    implementation "ru.noties.markwon:image-svg:$markwon_version"
+    implementation "ru.noties.markwon:recycler:$markwon_version"
+    implementation "ru.noties.markwon:recycler-table:$markwon_version"
+    implementation "ru.noties.markwon:syntax-highlight:$markwon_version"
 }

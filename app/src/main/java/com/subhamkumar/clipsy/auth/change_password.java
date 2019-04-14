@@ -78,7 +78,10 @@ public class change_password extends wrapper {
         ApiResponse apiResponse = gson.fromJson(response, ApiResponse.class);
 
         if(apiResponse.success.equals(getString(R.string.status_success))) {
-            startActivity(new Intent(change_password.this, signin.class).putExtra("email", getEmailFromBundle()));
+            startActivity(new Intent(change_password.this, signin.class)
+                    .putExtra("email", getEmailFromBundle())
+                    .putExtra("sign_out", "1")
+            );
         }
         else {
             statusLabel.setText(apiResponse.message);

@@ -130,7 +130,6 @@ public class fragment_profile extends fragment_wrapper {
     public void handleResponse(String response) {
 
         refreshViewsAndRelationShipButton(response);
-        Tools.hideNetworkLoadingDialog(networkRetryDialog, "profile hide");
         showProfileCardAndHideLoading();
     }
 
@@ -202,7 +201,7 @@ public class fragment_profile extends fragment_wrapper {
         TextView typeOfConnectedPeople = showPeopleDialog.findViewById(R.id.typeOfConnectedPeople);
         typeOfConnectedPeople.setText(getViewedProfileName().concat(" > ".concat(typOfPeople)));
 
-        getProfiles(showPeopleDialog, typOfPeople, viewerId);
+        getProfiles(showPeopleDialog, typOfPeople, viewedId);
     }
 
     private void initializeShowPeopleDialogVariables(Dialog dialog) {
@@ -239,7 +238,6 @@ public class fragment_profile extends fragment_wrapper {
 
                     dialog.show();
 
-                    Tools.hideNetworkLoadingDialog(networkRetryDialog, "profile hide");
                 },
 
                 error -> {
@@ -268,7 +266,6 @@ public class fragment_profile extends fragment_wrapper {
 
     private void getConnectedUsers() {
         Volley.newRequestQueue(context).add(getConnectedUsers);
-        Tools.showNetworkLoadingDialog(networkRetryDialog, "profile getConnected users show");
     }
 
     private void profileListClickToProfilePage() {
@@ -354,7 +351,6 @@ public class fragment_profile extends fragment_wrapper {
                     getUrlByResponseMessage(message, searched_id),
                     response -> {
                         refreshViewsAndRelationShipButton(response);
-                        Tools.hideNetworkLoadingDialog(networkRetryDialog, "hide relationship click");
                     },
                     error -> {
                         networkretry = NETWORKRETRY.RELATIONSHIPBUTTON;
@@ -382,7 +378,6 @@ public class fragment_profile extends fragment_wrapper {
 
     private void performRelationShipAction() {
         Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(relationShipStringRequest);
-        Tools.showNetworkLoadingDialog(networkRetryDialog, "profile show");
     }
 
     private void hideRelationshipButtonIfSameUser(String user_x, String user_y) {
@@ -471,19 +466,15 @@ public class fragment_profile extends fragment_wrapper {
     }
 
     private void fetchProfileMatrix() {
-        Tools.showNetworkLoadingDialog(networkRetryDialog, "profile show");
         make_request();
     }
 
 
+
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isResumed()) { // fragment is visible and have created
-            fetchProfileMatrix();
-            addProfileClickActions(searched_id);
-        }
+    public void onResume() {
+        super.onResume();
+        fetchProfileMatrix();
+        addProfileClickActions(searched_id);
     }
-
-
 }

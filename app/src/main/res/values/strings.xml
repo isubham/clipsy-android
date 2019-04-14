@@ -46,8 +46,6 @@
     <string name="request_clip_following">http://api.pitavya.com/clipsy/following_clips</string>
 
 
-
-
     <string name="response_invalid_clip_id">-1</string>
 
 
@@ -112,13 +110,7 @@
     <string name="bundle_param_profile_result_searched_user_id">searched_id</string>
 
 
-
-
-
     <!--clip-->
-
-
-
 
 
     <!--params-->
@@ -147,14 +139,14 @@
     <string name="todo">TODO</string>
     <string name="login">Login</string>
     <string name="forgot_password">Forgot Password</string>
-    <string name="signup">Signup</string>
+    <string name="signup">Create Account</string>
     <string name="password">password</string>
     <string name="email">email</string>
     <string name="email_address">email address</string>
-    <string name="send_verification_code">Send Verification Code</string>
+    <string name="send_verification_code">Send verification Code</string>
     <string name="name">name</string>
     <string name="verify">Verify</string>
-    <string name="token">token</string>
+    <string name="token">Your verification code</string>
     <string name="update_password">Update Password</string>
     <string name="new_password">new password</string>
     <string name="confirm_new_password">confirm new password</string>
@@ -182,7 +174,6 @@
     <string name="tryAgain">Try Again</string>
 
 
-
     <string name="title">title</string>
     <string name="edit_avatar">Edit Avatar</string>
     <string name="view_profile">View Profile</string>
@@ -190,7 +181,6 @@
     <string name="report">Report</string>
     <string name="Inappropriate">Inappropriate</string>
     <string name="Spam">Spam</string>
-
 
 
 </resources>

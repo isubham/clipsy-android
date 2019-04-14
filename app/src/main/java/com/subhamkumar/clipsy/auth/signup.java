@@ -187,4 +187,8 @@ public class signup extends wrapper {
         _type = (V.getId()) == R.id.__private ? "1" : "2";
     }*/
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(signup.this, home.class));
+    }
 }

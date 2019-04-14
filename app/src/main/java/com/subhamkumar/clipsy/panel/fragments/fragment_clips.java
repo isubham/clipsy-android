@@ -46,12 +46,10 @@ import static android.app.Activity.RESULT_OK;
 
 public class fragment_clips extends fragment_wrapper {
 
-    private Dialog networkLoadingDialog;
 
     @Override
     protected void handle_error_response(VolleyError error) {
 
-        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "clips hide");
         showNetworkUnavailableDialog();
 
     }
@@ -109,6 +107,7 @@ public class fragment_clips extends fragment_wrapper {
     // int no_of_intent;
     @Override
     public void handleResponse(String response) {
+        Log.i("unhand response", response);
         Gson gson = new Gson();
         ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
         clipList.clear();
@@ -121,7 +120,6 @@ public class fragment_clips extends fragment_wrapper {
         clip_adapter.notifyDataSetChanged();
 
 
-        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "clips hide");
         loadingContainer.stopShimmer();
         loadingContainer.setVisibility(View.GONE);
     }
@@ -275,7 +273,6 @@ public class fragment_clips extends fragment_wrapper {
                 String.format(Constants.request_clip_delete, clipId),
                 response -> {
 
-                    Tools.hideNetworkLoadingDialog(networkLoadingDialog, "clips hide");
                     ApiResponse deleteApiResponse = new Gson().fromJson(response, ApiResponse.class);
                     Toast.makeText(context, deleteApiResponse.message, Toast.LENGTH_SHORT).show();
 
@@ -303,13 +300,11 @@ public class fragment_clips extends fragment_wrapper {
 
     private void makeDeleteRequest(StringRequest deleteClipRequest) {
         Volley.newRequestQueue(context).add(deleteClipRequest);
-        Tools.showNetworkLoadingDialog(networkLoadingDialog, "clip delete show");
     }
 
     // TODO handle loading bar.
     private void makeSendReportRequest(StringRequest sendReportRequest) {
         Volley.newRequestQueue(context).add(sendReportRequest);
-        Tools.showNetworkLoadingDialog(networkLoadingDialog, "report send show");
     }
 
     private Context context;
@@ -381,7 +376,6 @@ public class fragment_clips extends fragment_wrapper {
                 String.format(Constants.request_report_send, clipId),
                 response -> {
 
-                    Tools.hideNetworkLoadingDialog(networkLoadingDialog, "send report hide");
                     ApiResponse sendReportApiResponse = new Gson().fromJson(response, ApiResponse.class);
                     Toast.makeText(context, sendReportApiResponse.message, Toast.LENGTH_SHORT).show();
 
@@ -431,7 +425,6 @@ public class fragment_clips extends fragment_wrapper {
         clipList = new ArrayList<>();
 
         context = getActivity();
-        networkLoadingDialog = new Dialog(context, R.style.CustomDialogTheme);
 
         loadingContainer = V.findViewById(R.id.rl_clip_loading_container);
         loadingContainer.startShimmer();
@@ -446,24 +439,10 @@ public class fragment_clips extends fragment_wrapper {
         rv_clip.setLayoutManager(linearLayoutManager);
         rv_clip.setAdapter(clip_adapter);
 
-        addDummyClips();
-
-        if (getUserVisibleHint()) {
-            updateClips();
-            addClipFullyScrolledLisentener();
-        }
-
     }
 
-
-    private void addDummyClips() {
-        for (int i = 0; i < 4; i++) {
-            clipList.add(new Clip(new Profile("", "", "", ""), "", "", ""));
-        }
-    }
 
     private void updateClips() {
-        Tools.showNetworkLoadingDialog(networkLoadingDialog, "show clip update ");
         make_request();
     }
 
@@ -474,6 +453,7 @@ public class fragment_clips extends fragment_wrapper {
     private View V;
 
     private String getUrl(String from) {
+
         String fromPanel = getString(R.string.bundle_param_caller_activity_panel);
         String fromSearch = getString(R.string.bundle_param_caller_activity_fragment_search);
         String fromProfileResult = getString(R.string.bundle_param_caller_activity_fragment_profile_list_to_profile_result);
@@ -483,6 +463,11 @@ public class fragment_clips extends fragment_wrapper {
                 return getString(R.string.request_clip_following);
             }
             if (from.equals(fromSearch) || from.equals(fromProfileResult)) {
+                // if following clip is there
+                String baseActivity = getActivity().getClass().getSimpleName();
+                if (baseActivity.equals("panel")) {
+                    return getString(R.string.request_clip_following);
+                }
                 searched_id = Objects.requireNonNull(getArguments()).getString(getString(R.string.bundle_param_profile_result_searched_user_id));
                 return String.format(getString(R.string.request_clip_reads_user), searched_id);
             }
@@ -523,13 +508,11 @@ public class fragment_clips extends fragment_wrapper {
         return V;
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isResumed()) { // fragment is visible and have created
-            updateClips();
-            addClipFullyScrolledLisentener();
-        }
-    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateClips();
+        addClipFullyScrolledLisentener();
+    }
 }

@@ -27,7 +27,7 @@ public class CustomTabs {
         setSecondaryToolbarColor(context, builder);
         setCloseButtonIcon(context, builder);
         setShowTitle(builder);
-        setAnimations(context, builder);
+        // setAnimations(context, builder);
         setShareActionButton(context, builder, url);
         // addToolbarShareItem(context, builder, url);
         addShareMenuItem(builder);
@@ -62,11 +62,12 @@ public class CustomTabs {
         builder.setShowTitle(true);
     }
 
-    /* Sets animations */
+    /* Sets animations
     private static void setAnimations(Context context, CustomTabsIntent.Builder builder) {
         builder.setStartAnimations(context, R.anim.slide_in_right, R.anim.slide_in_right);
         builder.setExitAnimations(context, R.anim.slide_in_right, R.anim.slide_out_right);
     }
+    */
 
     /* Sets share action button that is displayed in the Toolbar */
     private static void setShareActionButton(Context context, CustomTabsIntent.Builder builder, String url) {

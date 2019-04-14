@@ -90,4 +90,9 @@ public  static final Integer[] mThumbIds = {
 
 
    public static final String request_report_send = "http://api.pitavya.com/clipsy/report/";
+
+   public static final String SIGNOUT = "sign_out";
+   public static final String CLOSE = "close";
+
+
 }

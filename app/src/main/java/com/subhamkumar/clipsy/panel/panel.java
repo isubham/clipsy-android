@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.Window;
 
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.auth.home;
 import com.subhamkumar.clipsy.auth.signin;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.fragments.fragment_clips;
 import com.subhamkumar.clipsy.panel.fragments.fragment_complete_profile;
 import com.subhamkumar.clipsy.panel.fragments.fragment_search;
@@ -49,7 +51,7 @@ public class panel extends AppCompatActivity {
     }
 
     private void toSignOut() {
-        startActivity(new Intent(panel.this, signin.class).putExtra("sign_out", "1"));
+        startActivity(new Intent(panel.this, home.class).putExtra(Constants.SIGNOUT, "1"));
         this.finish();
     }
 
@@ -74,7 +76,7 @@ public class panel extends AppCompatActivity {
 
         void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
-            if(!title.equals("")) {
+            if (!title.equals("")) {
                 mFragmentTitleList.add(title);
             }
         }
@@ -118,7 +120,6 @@ public class panel extends AppCompatActivity {
         viewPagerAdapter.addFragment(fragment_complete_profile, "");
 
 
-
         viewPager.setAdapter(viewPagerAdapter);
     }
 
@@ -135,6 +136,8 @@ public class panel extends AppCompatActivity {
 
     private String token; // for createClip
 
+    // for persistence
+
     @Override
     public void onBackPressed() {
 
@@ -142,12 +145,20 @@ public class panel extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_backbutton_click);
 
-        dialog.findViewById(R.id.dialog_backbutton_close).setOnClickListener(v -> finish());
+        dialog.findViewById(R.id.dialog_backbutton_close).setOnClickListener(v -> {
+            Intent toHomeForClose = new Intent(panel.this, home.class)
+                    .putExtras(user_details).putExtra(Constants.CLOSE, "1");
+            startActivity(toHomeForClose);
+            finish();
+            dialog.dismiss();
+        });
         dialog.findViewById(R.id.dialog_backbutton_cancel).setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
 
     }
+
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +169,7 @@ public class panel extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             user_details = getIntent().getExtras();
             token = user_details.getString("token");
+            id = user_details.getString("id");
         }
 
         initializeVaribles();

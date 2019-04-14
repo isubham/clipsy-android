@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
@@ -12,12 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Clip;
@@ -25,10 +22,16 @@ import com.subhamkumar.clipsy.utils.CustomTabs;
 
 import java.util.List;
 
-abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewholder> {
+import ru.noties.markwon.AbstractMarkwonPlugin;
+import ru.noties.markwon.Markwon;
+import ru.noties.markwon.MarkwonConfiguration;
+import ru.noties.markwon.core.spans.LinkSpan;
+import ru.noties.markwon.html.HtmlPlugin;
+
+abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewholder> {
 
 
-    protected abstract void addViewClickListeners(View V) ;
+    protected abstract void addViewClickListeners(View V);
 
     public static class Clip_viewholder extends RecyclerView.ViewHolder {
         final TextView id;
@@ -39,8 +42,9 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
         final TextView clip_time;
 
         final ImageView profile_pic;
-        final WebView
+        final TextView
                 clip_content;
+
         Clip_viewholder(View V) {
             super(V);
 
@@ -51,9 +55,6 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
             author_name = V.findViewById(R.id.rl_clip_author);
             clip_time = V.findViewById(R.id.rl_clip_time);
             clip_content = V.findViewById(R.id.rl_clip_content);
-
-            WebSettings webSettings = clip_content.getSettings();
-            webSettings.setTextSize(WebSettings.TextSize.SMALLER);
 
             profile_pic = V.findViewById(R.id.rl_clip_profile_pic);
         }
@@ -95,15 +96,25 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
         strBuilder.removeSpan(span);
     }
 
-    protected void setTextViewHTML(TextView text, String html) {
+    protected void setTextViewHTML(TextView textView, String html) {
         CharSequence sequence = Html.fromHtml(html);
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
         URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
         for (URLSpan span : urls) {
             makeLinkClickable(strBuilder, span);
         }
-        text.setText(strBuilder);
-        text.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setText(strBuilder);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    protected void setTextViewHTML(TextView textView, Spanned spanned) {
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(spanned);
+        URLSpan[] urls = strBuilder.getSpans(0, spanned.length(), URLSpan.class);
+        for (URLSpan span : urls) {
+            makeLinkClickable(strBuilder, span);
+        }
+        textView.setText(strBuilder);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -114,7 +125,7 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
         clip_viewholder.author_id.setText(clips.get(i).profile.id);
         clip_viewholder.viewer_id.setText(clips.get(i).viewer_id);
 
-        clip_viewholder.clip_content.loadData(clips.get(i).clip_content, "text/html", "UTF-8");
+        renderHtmlInClipContent(clip_viewholder, i);
 
         clip_viewholder.clip_time.setText(clips.get(i).clip_time);
 
@@ -127,6 +138,26 @@ abstract  public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cl
             int _profile_pic = 0;
             int imageResource = Constants.mThumbIds[_profile_pic];
         }
+    }
+
+    private void renderHtmlInClipContent(@NonNull Clip_viewholder clip_viewholder, int i) {
+        String htmlString = clips.get(i).clip_content;
+        final Markwon.Builder builder = Markwon.builder(context);
+        builder.usePlugin(HtmlPlugin.create());
+        builder.usePlugin(new AbstractMarkwonPlugin() {
+            @Override
+            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                builder.linkResolver((view, link) -> {
+                        Log.i("link", link);
+                        CustomTabs.openTab(context, link);
+                });
+            }
+        });
+
+        final Spanned markdown = builder.build().toMarkdown(htmlString);
+        clip_viewholder.clip_content.setText(markdown);
+        clip_viewholder.clip_content.setMovementMethod(LinkMovementMethod.getInstance());
+
     }
 
     @Override
