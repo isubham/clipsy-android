@@ -104,8 +104,8 @@ public class panel extends AppCompatActivity {
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        user_details.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
-                getString(R.string.bundle_param_caller_activity_panel));
+        user_details.putString(Constants.bundle_param_caller_activity_to_fragment_clips,
+                Constants.bundle_param_caller_activity_panel);
 
         fragment_clips fragment_clips = new fragment_clips();
         fragment_clips.setArguments(user_details);

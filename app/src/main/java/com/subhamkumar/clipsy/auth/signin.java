@@ -11,12 +11,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.SignInApiResponse;
 import com.subhamkumar.clipsy.panel.panel;
 import com.subhamkumar.clipsy.utils.Tools;
@@ -29,7 +31,7 @@ import java.util.Objects;
 public class signin extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
-        return new HashMap<String, String>();
+        return new HashMap<>();
     }
 
     @Override
@@ -46,9 +48,7 @@ public class signin extends wrapper {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             dialog.dismiss();
             signIn();
@@ -72,8 +72,7 @@ public class signin extends wrapper {
 
     @Override
     public String setHttpUrl() {
-        String url = getString(R.string.request_user_sign_in);
-        return url;
+        return Constants.request_user_sign_in;
     }
 
 
@@ -92,7 +91,7 @@ public class signin extends wrapper {
         Gson gson = new Gson();
         SignInApiResponse signInApiResponse = gson.fromJson(response, SignInApiResponse.class);
 
-        if (signInApiResponse.success.equals(getString(R.string.status_signin_failed))) {
+        if (signInApiResponse.success.equals(Constants.status_failed)) {
             ((TextView) findViewById(R.id.signin_status)).setText(signInApiResponse.message);
         } else {
 
@@ -171,6 +170,7 @@ public class signin extends wrapper {
 
         networkLoadingDialog = new Dialog(signin.this, R.style.TranslucentDialogTheme);
     }
+
     private void setTabHeightToZero() {
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
     }

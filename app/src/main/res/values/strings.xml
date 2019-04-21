@@ -181,6 +181,11 @@
     <string name="report">Report</string>
     <string name="Inappropriate">Inappropriate</string>
     <string name="Spam">Spam</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_an_account">Already have an account.</string>
+    <string name="log_in">Log In</string>
+    <string name="trouble_logging_in">Trouble logging in</string>
+    <string name="forgot_password">Forgot Password</string>
 
 
 </resources>

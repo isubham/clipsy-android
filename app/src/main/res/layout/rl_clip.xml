@@ -13,9 +13,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingLeft="8dp"
-            android:paddingTop="8dp"
-            android:paddingRight="8dp">
+            android:paddingLeft="@dimen/activityPadding"
+            android:paddingTop="@dimen/activityPadding"
+            android:paddingRight="@dimen/activityPadding">
 
             <!-- row 1 => user pic | name | ago-->
 
@@ -73,7 +73,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:minWidth="30dp"
                 android:textColor="#939393"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 />
 
             <TextView

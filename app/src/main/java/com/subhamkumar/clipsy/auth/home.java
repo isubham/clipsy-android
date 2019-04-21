@@ -1,5 +1,6 @@
 package com.subhamkumar.clipsy.auth;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,32 +13,39 @@ import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.panel;
 
+import java.util.Objects;
+
 public class home extends AppCompatActivity {
 
-    Bundle stateParams;
+    private SharedPreferences localStore;
+    private static final String myFile = "theAwesomeDataInMain";
+    static String myKey = "52521";
+    Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
-        stateParams = getIntent().getExtras();
+        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+
+        bundle = getIntent().getExtras();
         localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
 
-        if (stateParams != null) handleState(stateParams, localStore);
+        if (bundle != null) handleState(bundle, localStore);
 
     }
 
 
-    private void handleState(Bundle stateParams, SharedPreferences localStore) {
-        // if close is clicked from panel check if login details exist if not save login details and
-        boolean closeButtonClicked = stateParams.containsKey(Constants.CLOSE);
-        boolean signOutButtonClicked = stateParams.containsKey(Constants.SIGNOUT);
+    private void handleState(Bundle bundle, SharedPreferences localStore) {
+        boolean closeButtonClicked = bundle.containsKey(Constants.CLOSE);
+        boolean signOutButtonClicked = bundle.containsKey(Constants.SIGNOUT);
         boolean loginDetailsExist =  checkLoginDetails();
 
         if (closeButtonClicked || signOutButtonClicked) {
-            String token = stateParams.getString("token");
-            String id = stateParams.getString("id");
+            String token = bundle.getString("token");
+            String id = bundle.getString("id");
 
+            // if close is clicked from panel check if login details exist if not save login details and
             if (closeButtonClicked) {
                 saveLoginDetails(localStore, token, id);
                 this.finish();
@@ -60,10 +68,8 @@ public class home extends AppCompatActivity {
     }
 
 
-    private SharedPreferences localStore;
-    private static final String myFile = "theAwesomeDataInMain";
-    static String myKey = "52521";
 
+    @SuppressLint("ApplySharedPref")
     private void saveLoginDetails(SharedPreferences localStore, String token, String id) {
         localStore.edit()
                 .putString("token", token)
@@ -86,6 +92,7 @@ public class home extends AppCompatActivity {
     }
 
 
+    @SuppressLint("ApplySharedPref")
     private void deleteLoginDetails(SharedPreferences localStore) {
         localStore.edit().clear().commit();
     }

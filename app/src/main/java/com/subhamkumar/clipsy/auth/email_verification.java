@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.ApiResponse;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 
@@ -27,7 +28,7 @@ import java.util.Objects;
 public class email_verification extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
-        return new HashMap<String, String>();
+        return new HashMap<>();
     }
 
     @Override
@@ -42,9 +43,7 @@ public class email_verification extends wrapper {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             sendEmailVerification();
@@ -57,8 +56,8 @@ public class email_verification extends wrapper {
     @Override
     public Map makeParams() {
         Map params = new HashMap<String, String>();
-        params.put(getString(R.string.params_email), email);
-        params.put(getString(R.string.params_verify_token), verify_token.getText().toString().trim());
+        params.put(Constants.param_email, email);
+        params.put(Constants.param_verify_token, verify_token.getText().toString().trim());
         return params;
     }
 
@@ -69,7 +68,7 @@ public class email_verification extends wrapper {
 
     @Override
     public String setHttpUrl() {
-        return getString(R.string.request_user_verify_email);
+        return Constants.request_user_verify_email;
     }
 
     @Override
@@ -79,10 +78,10 @@ public class email_verification extends wrapper {
         Gson gson = new Gson();
         ApiResponse apiResponse = gson.fromJson(response, ApiResponse.class);
 
-        if (apiResponse.success.equals(getString(R.string.status_email_verification_email_verified))) {
+        if (apiResponse.success.equals(Constants.status_success)) {
             startActivity(new Intent(email_verification.this, signin.class));
         }
-        else if(apiResponse.success.equals(getString(R.string.status_email_verification_email_unverified))){
+        else if(apiResponse.success.equals(Constants.status_failed)){
             ((TextView) findViewById(R.id.email_verification_status_message)).setText(apiResponse.message);
         }
         Tools.hideNetworkLoadingDialog(networkLoadingDialog, "email verification hide");
@@ -115,7 +114,7 @@ public class email_verification extends wrapper {
         email = "";
         if (bundle != null) {
             email = Objects.requireNonNull(getIntent().getExtras()).getString("email");
-            callback = getIntent().getExtras().getString(getString(R.string.bundle_param_caller_activity_to_email_verification));
+            callback = getIntent().getExtras().getString(Constants.bundle_param_caller_activity_to_email_verification);
         }
     }
 
@@ -138,13 +137,7 @@ public class email_verification extends wrapper {
 
         setCallbackFromBundle();
         init();
-        button_to_email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                sendEmailVerification();
-            }
-        });
+        button_to_email.setOnClickListener(view -> sendEmailVerification());
 
     }
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="4dp"
+    android:padding="@dimen/activityPadding"
     tools:context=".panel.fragments.fragment_search">
     <!-- TODO: Update blank fragment layout -->
     <android.support.design.widget.TextInputLayout
@@ -15,6 +15,7 @@
 
         <EditText
             android:id="@+id/live_search"
+            style="@style/primaryEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name_or_email" />

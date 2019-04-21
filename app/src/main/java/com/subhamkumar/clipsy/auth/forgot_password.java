@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.ApiResponse;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 
@@ -36,9 +37,7 @@ public class forgot_password extends wrapper {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             dialog.dismiss();
             sendForgotPassword();
@@ -49,7 +48,7 @@ public class forgot_password extends wrapper {
 
     @Override
     public Map<String, String> _getHeaders() {
-        return new HashMap<String, String>();
+        return new HashMap<>();
     }
     @Override
     public Map makeParams() {
@@ -60,8 +59,7 @@ public class forgot_password extends wrapper {
 
     @NonNull
     private String getEmail() {
-        String email = email_to_send.getText().toString().trim();
-        return email;
+        return email_to_send.getText().toString().trim();
     }
 
     @Override
@@ -71,7 +69,7 @@ public class forgot_password extends wrapper {
 
     @Override
     public String setHttpUrl() {
-        return getString(R.string.request_user_forgot_password);
+        return Constants.request_user_forgot_password;
     }
 
     @Override
@@ -83,7 +81,7 @@ public class forgot_password extends wrapper {
 
         ApiResponse apiResponse = gson.fromJson(response, ApiResponse.class);
 
-        if (apiResponse.success.equals(getString(R.string.status_success))) {
+        if (apiResponse.success.equals(Constants.status_success)) {
             startActivity(new Intent(forgot_password.this, change_password.class)
                     .putExtra("email", email_to_send.getText().toString().trim()));
         } else {
@@ -139,4 +137,10 @@ public class forgot_password extends wrapper {
         init();
 
     }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(forgot_password.this, home.class));
+    }
+
 }

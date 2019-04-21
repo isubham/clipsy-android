@@ -9,11 +9,13 @@
     tools:context=".panel.view_avatar">
 
     <ImageView
+        android:contentDescription="TODO"
         android:id="@+id/medium_avatar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
+        style="@style/primaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/edit_avatar"

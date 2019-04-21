@@ -30,7 +30,7 @@ public class view_avatar extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
         Map params = new HashMap<String, String>();
-        params.put(getString(R.string.header_authentication), token);
+        params.put(Constants.header_authentication, token);
         return params;
     }
 
@@ -43,9 +43,7 @@ public class view_avatar extends wrapper {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             dialog.dismiss();
@@ -67,8 +65,7 @@ public class view_avatar extends wrapper {
 
     @Override
     public Map makeParams() {
-        Map<String, String> params = new HashMap<String, String>();
-        return params;
+        return new HashMap<String, String>();
     }
 
     private Dialog networkLoadingDialog;
@@ -131,18 +128,12 @@ public class view_avatar extends wrapper {
 
     private void showEditAction(boolean are_same_user) {
         if(are_same_user) {
-            editAvatarButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(view_avatar.this,
-                            choose_avatar.class)
-                            .putExtra("token", token)
-                            .putExtra("id", id)
-                            .putExtra("searched_id", searcheUserId)
-                    );
-
-                }
-            });
+            editAvatarButton.setOnClickListener(v -> startActivity(new Intent(view_avatar.this,
+                    choose_avatar.class)
+                    .putExtra("token", token)
+                    .putExtra("id", id)
+                    .putExtra("searched_id", searcheUserId)
+            ));
         }
         else {
             editAvatarButton.setVisibility(GONE);

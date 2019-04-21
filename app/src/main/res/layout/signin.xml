@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp"
+    android:padding="@dimen/activityPadding"
     tools:context=".auth.signin">
 
     <TextView
@@ -22,6 +22,7 @@
 
         <EditText
             android:id="@+id/signin_email"
+            style="@style/primaryEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
@@ -40,6 +41,7 @@
 
         <EditText
             android:id="@+id/signin_pass"
+            style="@style/primaryEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
@@ -66,21 +68,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="startForgetPassword"
-        android:text="@string/forgot_password" />
+        android:text="@string/forgot_password"
+        android:visibility="gone"
+        />
 
     <Button
-        android:visibility="gone"
         style="@style/secondaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="gotoSignup"
-        android:text="@string/signup" />
+        android:text="@string/signup"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/signinLoading"
-        android:layout_gravity="center_horizontal"
-        android:visibility="invisible"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible" />
 
 </LinearLayout>

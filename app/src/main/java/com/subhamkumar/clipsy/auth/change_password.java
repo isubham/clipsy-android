@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.ApiResponse;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 import java.util.HashMap;
@@ -36,9 +37,7 @@ public class change_password extends wrapper {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             dialog.dismiss();
@@ -50,7 +49,7 @@ public class change_password extends wrapper {
 
     @Override
     public Map<String, String> _getHeaders() {
-        return new HashMap<String, String>();
+        return new HashMap<>();
     }
     @Override
     public int setHttpMethod() {
@@ -58,7 +57,7 @@ public class change_password extends wrapper {
     }
     @Override
     public String setHttpUrl() {
-        return getString(R.string.request_user_update_password);
+        return Constants.request_user_update_password;
     }
     @Override
     public Map makeParams() {
@@ -77,7 +76,7 @@ public class change_password extends wrapper {
         Gson gson = new Gson();
         ApiResponse apiResponse = gson.fromJson(response, ApiResponse.class);
 
-        if(apiResponse.success.equals(getString(R.string.status_success))) {
+        if( apiResponse.success.equals(Constants.status_success) ) {
             startActivity(new Intent(change_password.this, signin.class)
                     .putExtra("email", getEmailFromBundle())
                     .putExtra("sign_out", "1")

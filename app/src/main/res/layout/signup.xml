@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signupView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:id="@+id/signupView"
+    android:padding="@dimen/activityPadding"
     tools:context=".auth.signup">
 
 
@@ -25,6 +25,7 @@
 
         <EditText
             android:id="@+id/signup_name"
+            style="@style/primaryEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name"
@@ -46,6 +47,7 @@
 
         <EditText
             android:id="@+id/signup_email"
+            style="@style/primaryEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
@@ -66,6 +68,7 @@
 
         <EditText
             android:id="@+id/signup_password"
+            style="@style/primaryEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
@@ -118,11 +121,11 @@
         android:text="@string/signup" />
 
     <Button
-        android:visibility="gone"
         style="@style/secondaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="toLogin"
-        android:text="@string/login" />
+        android:text="@string/login"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialog_unsaved_clip_menu"
     android:layout_width="300dp"
-    android:padding="10dp"
+    android:padding="@dimen/activityPadding"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">

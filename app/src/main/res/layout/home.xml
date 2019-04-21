@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="8dp"
+    android:padding="@dimen/activityPadding"
     android:background="@color/white"
     tools:context=".auth.home">
 
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="gotoSignUp"
-        android:text="Create Account"
+        android:text="@string/create_account"
         android:textAllCaps="false" />
 
     <TextView
@@ -32,31 +32,29 @@
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Already have an account." />
+        android:text="@string/already_have_an_account" />
     <!--sign in-->
     <Button
         style="@style/primaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="gotoSignIn"
-        android:text="Log In"
+        android:text="@string/log_in"
         android:textAllCaps="false" />
 
     <TextView
-        android:visibility="gone"
         android:gravity="center_horizontal"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Trouble logging in" />
+        android:text="@string/trouble_logging_in" />
 
     <Button
-        android:visibility="gone"
         style="@style/secondaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="gotoForgotPassword"
-        android:text="Forgot Password"
+        android:text="@string/forgot_password"
         android:textAllCaps="false" />
 </LinearLayout>

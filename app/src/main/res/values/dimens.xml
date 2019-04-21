@@ -7,7 +7,7 @@
     <dimen name="dialog_content_bottom_padding">24dp</dimen>
 
 
-    <dimen name="activityPadding">16dp</dimen>
+    <dimen name="activityPadding">8dp</dimen>
     <dimen name="placeholderImage">60dp</dimen>
     <dimen name="placeholderTextHeight">8dp</dimen>
     <dimen name="padding_10">10dp</dimen>

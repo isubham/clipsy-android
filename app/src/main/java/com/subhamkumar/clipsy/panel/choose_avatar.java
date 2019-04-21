@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.image_adapter;
+import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
@@ -26,7 +27,7 @@ public class choose_avatar extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
         Map params = new HashMap<String, String>();
-        params.put(getString(R.string.header_authentication), token);
+        params.put(Constants.header_authentication, token);
         return params;
     }
 
@@ -42,9 +43,7 @@ public class choose_avatar extends wrapper {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             dialog.dismiss();
@@ -67,7 +66,7 @@ public class choose_avatar extends wrapper {
 
     @Override
     public String setHttpUrl() {
-        return String.format(getString(R.string.request_user_update_avatar), id);
+        return String.format(Constants.request_user_update_avatar, id);
     }
 
 
@@ -78,7 +77,7 @@ public class choose_avatar extends wrapper {
 
     @Override
     public Map makeParams() {
-        Map<String, String> params = new HashMap();
+        Map params = new HashMap<String, String>();
         params.put("profile_pic",get_profile_pic());
         return params;
     }
