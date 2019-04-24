@@ -57,7 +57,7 @@
 
     <Button
 
-        style="@style/primaryButton"
+        style="@style/primaryBigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="startSignin"

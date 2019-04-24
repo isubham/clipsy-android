@@ -216,7 +216,21 @@ public class fragment_profile extends fragment_wrapper {
 
     private StringRequest getConnectedUsers;
 
+    private void hideLoadingContainer(ShimmerFrameLayout shimmerFrameLayout) {
+        shimmerFrameLayout.setVisibility(View.GONE);
+        shimmerFrameLayout.stopShimmer();
+    }
+
+    private void showLoadingContainer(ShimmerFrameLayout shimmerFrameLayout) {
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
+    }
     private void getProfiles(Dialog dialog, String typeOfPeople, String viewerId) {
+
+        ShimmerFrameLayout loadingContainer = dialog.findViewById(R.id.rl_fragment_connected_people_loading_container);
+        dialog.show();
+        showLoadingContainer(loadingContainer);
+
 
         String profileListUrl = String.format(typeOfPeople.equals("following")
                         ? getString(R.string.request_user_user_following) :
@@ -229,14 +243,14 @@ public class fragment_profile extends fragment_wrapper {
                 profileListUrl,
                 response -> {
 
+                    hideLoadingContainer(loadingContainer);
+
                     Gson gson = new Gson();
                     ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
                     profileList.clear();
                     profileList.addAll(profileApiResponse.data);
                     profile_adapter.notifyDataSetChanged();
                     profileListClickToProfilePage();
-
-                    dialog.show();
 
                 },
 

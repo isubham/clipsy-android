@@ -38,7 +38,7 @@ public class Constants {
     public static final String request_report_send = "http://api.pitavya.com/clipsy/report/";
     public static final String request_signup = "http://api.pitavya.com/clipsy/signup/";
     public static final String request_user_forgot_password = "http://api.pitavya.com/clipsy/forgot_password";
-    public static final String request_user_sign_in = "http://api.pitavya.com/clipsy/signin</string";
+    public static final String request_user_sign_in = "http://api.pitavya.com/clipsy/signin";
     public static final String request_user_verify_email = "http://api.pitavya.com/clipsy/verify_email_verification";
 
     public static final String request_user_user_following = "http://api.pitavya.com/clipsy/following/%1$s";
@@ -67,7 +67,7 @@ public class Constants {
     public static final String param_search_id = "search_id";
 
     public static final String bundle_param_caller_activity_to_email_verification = "callback";
-    public static final String bundle_param_caller_activity_to_fragment_clips = "where_to_fragment_clips</string";
+    public static final String bundle_param_caller_activity_to_fragment_clips = "where_to_fragment_clips";
     public static final String bundle_param_caller_activity_panel = "panel";
     public static final String bundle_param_caller_button_to_profile_list = "profile_list";
     public static final String bundle_param_caller_button_following = "following";
