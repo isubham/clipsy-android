@@ -95,6 +95,11 @@ public class signin extends wrapper {
             ((TextView) findViewById(R.id.signin_status)).setText(signInApiResponse.message);
         } else {
 
+            SharedPreferences localStore =
+                     getApplicationContext().getSharedPreferences(Constants.myFile , Context.MODE_PRIVATE);
+
+            saveLoginDetails(localStore, signInApiResponse.data.token, signInApiResponse.data.id);
+
             startActivity(new Intent(signin.this, panel.class)
                     .putExtra("token", signInApiResponse.data.token)
                     .putExtra("id", signInApiResponse.data.id)
@@ -110,6 +115,13 @@ public class signin extends wrapper {
     private String email;
     private Bundle bundle;
 
+    private void saveLoginDetails(SharedPreferences localStore, String token, String id) {
+        localStore.edit()
+                .putString("token", token)
+                .putString("id", id)
+                .commit();
+
+    }
 
     public void startSignin(View V) {
         signIn();

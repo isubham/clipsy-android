@@ -345,7 +345,7 @@ public class fragment_clips extends fragment_wrapper {
         reportDialog.findViewById(R.id.dialog_other_user_show_report_inappropriate)
                 .setOnClickListener(v -> {
 
-                    sendReport("1", searchedUserId, token, clipId);
+                    sendReport(Constants.report_inappropriate, searchedUserId, token, clipId);
                     reportDialog.dismiss();
 
                 });
@@ -353,7 +353,7 @@ public class fragment_clips extends fragment_wrapper {
         reportDialog.findViewById(R.id.dialog_other_user_show_report_spam)
                 .setOnClickListener(v -> {
 
-                    sendReport("1", searchedUserId, token, clipId);
+                    sendReport(Constants.report_spam, searchedUserId, token, clipId);
                     reportDialog.dismiss();
 
 

@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -36,7 +37,7 @@ import java.util.Objects;
 
 public class editor extends AppCompatActivity {
 
-    private void saveClip() {
+    private void saveClip(String visibility) {
 
         wrapper saveClip = new wrapper() {
 
@@ -57,6 +58,9 @@ public class editor extends AppCompatActivity {
             public Map makeParams() {
                 Map params = new HashMap<String, String>();
                 params.put(Constants.CLIP_CONTENT, editor.getHtml());
+                params.put(Constants.param_visibility, visibility);
+
+
                 return params;
             }
 
@@ -108,14 +112,14 @@ public class editor extends AppCompatActivity {
 
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             dialog.dismiss();
-            applyChangesToClip();
+            applyChangesToClip(lastAction);
         });
 
         dialog.show();
 
     }
 
-    private void updateClip(final String clipId) {
+    private void updateClip(final String clipId, String visibility) {
         wrapper update_clip = new wrapper() {
             @Override
             protected void handleErrorResponse(VolleyError error) {
@@ -134,6 +138,9 @@ public class editor extends AppCompatActivity {
             public Map makeParams() {
                 Map params = new HashMap<String, String>();
                 params.put(Constants.CLIP_CONTENT, editor.getHtml());
+                params.put(Constants.param_visibility, visibility);
+
+
                 return params;
             }
 
@@ -189,16 +196,43 @@ public class editor extends AppCompatActivity {
         return Objects.requireNonNull(getIntent().getExtras()).getString("clip_id");
     }
 
+    private String lastAction;
+    private void showSaveVisibilityDialog() {
 
-    private void applyChangesToClip() {
+        final Dialog showSaveVisibility = new Dialog(this);
+        showSaveVisibility.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(showSaveVisibility.getWindow()).setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
+
+        showSaveVisibility.setContentView(R.layout.dialog_save_clip_confirmation);
+
+        showSaveVisibility.findViewById(R.id.dialog_save_clip_public).setOnClickListener(v -> {
+            lastAction = Constants.visibility_public;
+            applyChangesToClip(Constants.visibility_public);
+        });
+
+        showSaveVisibility.findViewById(R.id.dialog_save_clip_private).setOnClickListener(v -> {
+            lastAction = Constants.visibility_private;
+            applyChangesToClip(Constants.visibility_private);
+        });
+
+        showSaveVisibility.findViewById(R.id.dialog_save_clip_cancel).setOnClickListener(v -> {
+            showSaveVisibility.dismiss();
+        });
+
+        showSaveVisibility.show();
+
+    }
+
+
+    private void applyChangesToClip(String visibility) {
         if (isDirty()) {
 
             Tools.showNetworkLoadingDialog(networkLoadingDialog, "editor show");
 
             if (currentclip.clip_id.equals(Constants.response_invalid_clip_id)) {
-                saveClip();
+                saveClip(visibility);
             } else {
-                updateClip(currentclip.clip_id);
+                updateClip(currentclip.clip_id, visibility);
             }
 
         } else {
@@ -225,7 +259,7 @@ public class editor extends AppCompatActivity {
 
             dialog.findViewById(R.id.dialog_unsaved_clip_menu_save).setOnClickListener(v -> {
                 dialog.dismiss();
-                saveClip();
+                showSaveVisibilityDialog();
             });
             dialog.findViewById(R.id.dialog_unsaved_clip_menu_close).setOnClickListener(v -> {
                 dialog.dismiss();
@@ -378,7 +412,7 @@ public class editor extends AppCompatActivity {
                 editor.redo();
                 break;
             case R.id.create_menu_write:
-                applyChangesToClip();
+                showSaveVisibilityDialog();
                 break;
             case R.id.create_menu_close: {
                 if (!isDirty()) {

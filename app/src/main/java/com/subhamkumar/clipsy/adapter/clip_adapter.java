@@ -127,7 +127,8 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
 
         renderHtmlInClipContent(clip_viewholder, i);
 
-        clip_viewholder.clip_time.setText(clips.get(i).clip_time);
+        String visibility = clips.get(i).visibility.equals(Constants.visibility_private) ? "Private. " : "Public. ";
+        clip_viewholder.clip_time.setText(visibility.concat(clips.get(i).clip_time));
 
 
         try {

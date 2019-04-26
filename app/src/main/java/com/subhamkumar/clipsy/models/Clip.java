@@ -5,7 +5,7 @@ import android.os.Bundle;
 public class Clip {
 
     public Profile profile;
-    public String clip_id, clip_content, clip_time, viewer_id;
+    public String clip_id, clip_content, clip_time, viewer_id, visibility;
 
     public Clip(Profile profile, String clip_id, String clip_content, String clip_time) {
         this.profile = profile;

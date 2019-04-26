@@ -18,8 +18,6 @@ import java.util.Objects;
 public class home extends AppCompatActivity {
 
     private SharedPreferences localStore;
-    private static final String myFile = "theAwesomeDataInMain";
-    static String myKey = "52521";
     Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +27,7 @@ public class home extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
         bundle = getIntent().getExtras();
-        localStore = getApplicationContext().getSharedPreferences(myFile, Context.MODE_PRIVATE);
+        localStore = getApplicationContext().getSharedPreferences(Constants.myFile , Context.MODE_PRIVATE);
 
         if (bundle != null) handleState(bundle, localStore);
 
@@ -47,7 +45,8 @@ public class home extends AppCompatActivity {
 
             // if close is clicked from panel check if login details exist if not save login details and
             if (closeButtonClicked) {
-                saveLoginDetails(localStore, token, id);
+                if (! checkLoginDetails())
+                    saveLoginDetails(localStore, token, id);
                 this.finish();
             }
 

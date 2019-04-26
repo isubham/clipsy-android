@@ -75,5 +75,21 @@ public class Constants {
     public static final String bundle_param_caller_activity_fragment_profile_list_to_profile_result = "profile_list_to_complete_profile";
 
 
+    public static final String myFile = "theAwesomeDataInMain";
+    public static String myKey = "52521";
+
+    public static final String param_visibility = "visibility";
+    public static final String visibility_public = "1";
+    public static final String visibility_private = "2";
+
+
+    // report of clips
+
+    public static final String report_spam = "1";
+    public static final String report_inappropriate = "2";
+
+
+
+
 
 }
