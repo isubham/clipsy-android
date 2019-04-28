@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Clip;
@@ -42,8 +43,11 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
         final TextView clip_time;
 
         final ImageView profile_pic;
-        final TextView
-                clip_content;
+        final TextView clip_content;
+
+        final TextView clip_visibility_text;
+        final ImageView clip_visibility_image;
+
 
         Clip_viewholder(View V) {
             super(V);
@@ -57,6 +61,11 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
             clip_content = V.findViewById(R.id.rl_clip_content);
 
             profile_pic = V.findViewById(R.id.rl_clip_profile_pic);
+
+            clip_visibility_text = V.findViewById(R.id.rl_clip_visibility_text);
+            clip_visibility_image = V.findViewById(R.id.rl_clip_visibility_image);
+
+
         }
     }
 
@@ -124,11 +133,15 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
         clip_viewholder.author_name.setText(clips.get(i).profile.name);
         clip_viewholder.author_id.setText(clips.get(i).profile.id);
         clip_viewholder.viewer_id.setText(clips.get(i).viewer_id);
+        clip_viewholder.clip_time.setText(clips.get(i).clip_time.concat(" · "));
+
+        String visibility_text = clips.get(i).visibility.equals(Constants.visibility_private) ? "Private. " : "Public. ";
+        clip_viewholder.clip_visibility_text.setText(visibility_text);
+
+        int visibility_img = clips.get(i).visibility.equals(Constants.visibility_private) ? R.drawable.user : R.drawable.globe;
+        clip_viewholder.clip_visibility_image.setImageResource(visibility_img);
 
         renderHtmlInClipContent(clip_viewholder, i);
-
-        String visibility = clips.get(i).visibility.equals(Constants.visibility_private) ? "Private. " : "Public. ";
-        clip_viewholder.clip_time.setText(visibility.concat(clips.get(i).clip_time));
 
 
         try {
@@ -149,8 +162,8 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
             @Override
             public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                 builder.linkResolver((view, link) -> {
-                        Log.i("link", link);
-                        CustomTabs.openTab(context, link);
+                    Log.i("link", link);
+                    CustomTabs.openTab(context, link);
                 });
             }
         });

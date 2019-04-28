@@ -3,7 +3,6 @@ package com.subhamkumar.clipsy.panel;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,7 +13,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.auth.signup;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.utils.Tools;
@@ -26,7 +24,7 @@ import java.util.Objects;
 
 import static android.view.View.GONE;
 
-public class view_avatar extends wrapper {
+public class ProfileSetting extends wrapper {
     @Override
     public Map<String, String> _getHeaders() {
         Map params = new HashMap<String, String>();
@@ -39,7 +37,7 @@ public class view_avatar extends wrapper {
         showNetworkUnavailableDialog();
     }
         private void showNetworkUnavailableDialog() {
-        final Dialog dialog = new Dialog(view_avatar.this);
+        final Dialog dialog = new Dialog(ProfileSetting.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
@@ -86,7 +84,7 @@ public class view_avatar extends wrapper {
         int imageResource = Constants.mThumbIds[_profile_pic];
         mediumAvatar.setImageResource(imageResource);
 
-        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "view_avatar hide");
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "ProfileSetting hide");
 
     }
 
@@ -105,9 +103,9 @@ public class view_avatar extends wrapper {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_avatar);
+        setContentView(R.layout.profile_settings);
 
-        networkLoadingDialog = new Dialog(view_avatar.this, R.style.TranslucentDialogTheme);
+        networkLoadingDialog = new Dialog(ProfileSetting.this, R.style.TranslucentDialogTheme);
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
         id = Objects.requireNonNull(getIntent().getExtras()).getString("id");
@@ -121,14 +119,14 @@ public class view_avatar extends wrapper {
         areSameUser = id.equals(searcheUserId);
         showEditAction(areSameUser);
 
-        Tools.showNetworkLoadingDialog(networkLoadingDialog, "view_avatar show");
+        Tools.showNetworkLoadingDialog(networkLoadingDialog, "ProfileSetting show");
         makeRequest();
 
     }
 
     private void showEditAction(boolean are_same_user) {
         if(are_same_user) {
-            editAvatarButton.setOnClickListener(v -> startActivity(new Intent(view_avatar.this,
+            editAvatarButton.setOnClickListener(v -> startActivity(new Intent(ProfileSetting.this,
                     choose_avatar.class)
                     .putExtra("token", token)
                     .putExtra("id", id)

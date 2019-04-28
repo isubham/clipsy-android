@@ -16,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -31,10 +32,9 @@ import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.models.ProfileMatrixApiResponse;
+import com.subhamkumar.clipsy.panel.ProfileSetting;
 import com.subhamkumar.clipsy.panel.profile_result;
-import com.subhamkumar.clipsy.panel.view_avatar;
 import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
-import com.subhamkumar.clipsy.utils.Tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,18 +46,6 @@ import java.util.Objects;
  * A simple {@link Fragment} subclass.
  */
 public class fragment_profile extends fragment_wrapper {
-
-    String profile_pic = "0";
-    private ImageView _choose_avatar_icon;
-    private String id;
-    private String searched_id;
-    private TextView _name;
-    private TextView _email;
-    private Button relationshipButton;
-    private TextView fragment_profile_followers;
-    private TextView fragment_profile_following;
-    private View V;
-    private String token;
 
     @Override
     protected void handle_error_response(VolleyError error) {
@@ -174,9 +162,13 @@ public class fragment_profile extends fragment_wrapper {
     }
 
     private void addProfileClickActions(final String user_viewed) {
-        fragment_profile_followers.setOnClickListener(view -> showPeopleDialog(user_viewed, id, token, "followers"));
-        fragment_profile_following.setOnClickListener(view -> showPeopleDialog(user_viewed, id, token, "following"));
-        _choose_avatar_icon.setOnClickListener(view -> toProfileImage(user_viewed));
+        followersCounterContainer.setOnClickListener(view -> showPeopleDialog(user_viewed, id, token, "followers"));
+        followingCounterContainer.setOnClickListener(view -> showPeopleDialog(user_viewed, id, token, "following"));
+        profile_edit.setOnClickListener(view -> {
+            // TODO goto profile settings.
+            toProfileImage(user_viewed);
+        });
+        // _choose_avatar_icon.setOnClickListener(view -> toProfileImage(user_viewed));
     }
 
 
@@ -319,7 +311,7 @@ public class fragment_profile extends fragment_wrapper {
     private Context context;
 
     private void toProfileImage(String user_viewed) {
-        startActivity(new Intent(getActivity(), view_avatar.class)
+        startActivity(new Intent(getActivity(), ProfileSetting.class)
                 .putExtra("id", id)
                 .putExtra("searched_id", user_viewed)
                 .putExtra("token", token));
@@ -402,6 +394,17 @@ public class fragment_profile extends fragment_wrapper {
 
     }
 
+    private void showEditButtonIfSameUser(String user_x, String user_y) {
+
+        if (! user_x.equals(user_y)) {
+            profile_edit.setVisibility(View.GONE);
+        }
+
+    }
+
+
+
+
     private void setProfileElements(Profile profile) {
         _email.setText(profile.email);
         _name.setText(profile.name);
@@ -413,7 +416,32 @@ public class fragment_profile extends fragment_wrapper {
         }
         int imageResource = Constants.mThumbIds[_profile_pic];
         _choose_avatar_icon.setImageResource(imageResource);
+
+        clip_count.setText(profile.clips);
+        following_count.setText(profile.following);
+        followers_count.setText(profile.followers);
+
     }
+
+    String profile_pic = "0";
+    private ImageView _choose_avatar_icon;
+    private String id;
+    private String searched_id;
+    private TextView _name;
+    private TextView _email;
+    private Button relationshipButton;
+    private TextView fragment_profile_followers;
+    private TextView fragment_profile_following;
+    private View V;
+    private String token;
+    private TextView clip_count;
+    private TextView followers_count;
+    private TextView following_count;
+    private Button profile_edit;
+    private LinearLayout clipCounterContainer;
+    private LinearLayout followersCounterContainer;
+    private LinearLayout followingCounterContainer;
+
 
     private void findViewByIds() {
 
@@ -424,6 +452,16 @@ public class fragment_profile extends fragment_wrapper {
         fragment_profile_followers = V.findViewById(R.id.fragment_profile_followers);
         fragment_profile_following = V.findViewById(R.id.fragment_profile_following);
         loadingContainer = V.findViewById(R.id.rl_profile_loading_container);
+
+        clip_count = V.findViewById(R.id.fragment_profile_clips_count);
+        followers_count = V.findViewById(R.id.fragment_profile_followers_count);
+        following_count = V.findViewById(R.id.fragment_profile_following_count);
+
+        clipCounterContainer = V.findViewById(R.id.fragment_profile_clips_container);
+        followersCounterContainer = V.findViewById(R.id.fragment_profile_followers_container);
+        followingCounterContainer = V.findViewById(R.id.fragment_profile_following_container);
+
+        profile_edit = V.findViewById(R.id.profile_edit);
 
     }
 
@@ -469,6 +507,7 @@ public class fragment_profile extends fragment_wrapper {
         try {
             setVariablesFromBundle();
             hideRelationshipButtonIfSameUser(id, searched_id);
+            showEditButtonIfSameUser(id, searched_id);
         } catch (NumberFormatException e) {
             Log.e("0097", e.getMessage());
         }

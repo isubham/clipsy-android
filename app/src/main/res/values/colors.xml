@@ -32,4 +32,8 @@
     <color name="tab_background_selected">#efefef</color>
     <color name="tab_background_unselected">@color/grey_50</color>
 
+    <color name="text_primary">#000000</color>
+    <color name="text_secondary">#696969</color>
+
+
 </resources>

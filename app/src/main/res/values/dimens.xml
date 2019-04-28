@@ -16,5 +16,9 @@
     <dimen name="dialogTextSize">16sp</dimen>
 
 
+    <dimen name="profile_card_image_size">72dp</dimen>
+    <dimen name="clip_card_image_size">32dp</dimen>
+
+
 
 </resources>
