@@ -16,7 +16,6 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".auth.home"
-            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -26,7 +25,6 @@
         </activity>
         <activity
             android:name=".auth.signin"
-            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light"
             >
@@ -34,7 +32,6 @@
         </activity>
         <activity
             android:name=".auth.signup"
-            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light"
             android:screenOrientation="portrait" />
         <activity
@@ -57,16 +54,13 @@
         <activity
             android:name=".auth.email_verification"
             android:theme="@style/Theme.AppCompat.Light"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".auth.forgot_password"
             android:theme="@style/Theme.AppCompat.Light"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".auth.change_password"
-            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light"
             android:screenOrientation="portrait" />
 

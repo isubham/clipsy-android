@@ -9,16 +9,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
-
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.auth.home;
-import com.subhamkumar.clipsy.auth.signin;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.fragments.fragment_clips;
 import com.subhamkumar.clipsy.panel.fragments.fragment_complete_profile;
@@ -96,7 +93,6 @@ public class panel extends AppCompatActivity {
         Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.newsfeed);
         Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.search);
         Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.user);
-
     }
 
 
@@ -121,6 +117,40 @@ public class panel extends AppCompatActivity {
 
 
         viewPager.setAdapter(viewPagerAdapter);
+
+        addTitleToDifferentTabs(viewPager);
+
+    }
+
+
+    private void addTitleToDifferentTabs(ViewPager viewPager) {
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        getSupportActionBar().setTitle("Clipsy");
+                        break;
+                    case 1:
+                        getSupportActionBar().setTitle("Search");
+                        break;
+                    case 2:
+                        getSupportActionBar().setTitle("Profile");
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     private Bundle user_details;
@@ -174,4 +204,5 @@ public class panel extends AppCompatActivity {
 
         initializeVaribles();
     }
+
 }

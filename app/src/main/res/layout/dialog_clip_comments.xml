@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_connected_people"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/activityPadding"
+    >
+
+    <LinearLayout
+        android:id="@+id/commentHeader"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_marginBottom="8dp"
+        android:animationCache="true"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comments"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.8" />
+
+        <ImageView
+            android:id="@+id/commentCloseButton"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/outline_close_black" />
+
+    </LinearLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/rl_comment_placeholder"
+        android:layout_below="@id/commentHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/data_placeholder_profile" />
+
+            <include layout="@layout/data_placeholder_profile" />
+
+
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/clip_comments"
+        android:background="@color/grey_50"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_comment_placeholder"
+        android:layout_marginBottom="40dp"
+        />
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/commentContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:hint="Your Comment"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/commentSubmit"
+            style="@style/primaryBigButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="Comment" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

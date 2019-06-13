@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,14 +27,15 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.clip_adapter;
+import com.subhamkumar.clipsy.adapter.comment_adapter;
 import com.subhamkumar.clipsy.models.ApiResponse;
 import com.subhamkumar.clipsy.models.ClipApiResonse;
 import com.subhamkumar.clipsy.models.Clip;
+import com.subhamkumar.clipsy.models.Comment;
+import com.subhamkumar.clipsy.models.CommentApiResonse;
 import com.subhamkumar.clipsy.models.Constants;
-import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.panel.editor;
 import com.subhamkumar.clipsy.panel.profile_result;
-import com.subhamkumar.clipsy.utils.Tools;
 
 
 import java.util.ArrayList;
@@ -45,7 +48,6 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class fragment_clips extends fragment_wrapper {
-
 
     @Override
     protected void handle_error_response(VolleyError error) {
@@ -103,7 +105,6 @@ public class fragment_clips extends fragment_wrapper {
         super.setArguments(args);
     }
 
-
     // int no_of_intent;
     @Override
     public void handleResponse(String response) {
@@ -148,6 +149,7 @@ public class fragment_clips extends fragment_wrapper {
         V.findViewById(R.id.rl_clip_author).setOnClickListener(v -> gotoProfileResult(V));
         V.findViewById(R.id.rl_clip_profile_pic).setOnClickListener(v -> gotoProfileResult(V));
         V.findViewById(R.id.rl_clip_menu).setOnClickListener(v -> clipMenuClickedDialog(V));
+        V.findViewById(R.id.rl_clip_comment).setOnClickListener(v -> clipShowComments(V));
     }
     private void gotoProfileResult(View V) {
         String searchedUserId = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
@@ -177,6 +179,20 @@ public class fragment_clips extends fragment_wrapper {
             showDifferentUserDialog(author_id);
             setSelectedUserId(author_id);
         }
+    }
+
+    private void hideLoadingContainer(ShimmerFrameLayout shimmerFrameLayout) {
+        shimmerFrameLayout.setVisibility(View.GONE);
+        shimmerFrameLayout.stopShimmer();
+    }
+
+    private void showLoadingContainer(ShimmerFrameLayout shimmerFrameLayout) {
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
+    }
+
+    private void updateClips() {
+        make_request();
     }
 
     private void showDifferentUserDialog(String authorId) {
@@ -405,6 +421,7 @@ public class fragment_clips extends fragment_wrapper {
         makeSendReportRequest(sendReport);
     }
 
+
     @Override
     public void makeVolleyRequest(StringRequest stringRequest) {
         Volley.newRequestQueue(context).add(stringRequest);
@@ -442,9 +459,6 @@ public class fragment_clips extends fragment_wrapper {
     }
 
 
-    private void updateClips() {
-        make_request();
-    }
 
     private static String token;
     private String id;
@@ -477,6 +491,290 @@ public class fragment_clips extends fragment_wrapper {
 
     }
 
+    // comment
+
+    private comment_adapter comment_adapter;
+    private LinearLayoutManager commentlinearLayoutManager;
+    private List<Comment> comments;
+    private RecyclerView commentsRecyclerView;
+
+
+
+    private List<Comment> commentList;
+    private void clipShowComments(View V) {
+
+        // show dialog
+
+        final Dialog commentsDialog = new Dialog(context);
+        commentsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        commentsDialog.setContentView(R.layout.dialog_clip_comments);
+
+        showLoadingContainer(((ShimmerFrameLayout)commentsDialog.findViewById(R.id.rl_comment_placeholder)));
+        commentsDialog.show();
+
+        Objects.requireNonNull(commentsDialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+        String clipId = ((TextView) V.findViewById(R.id.rl_clip_id)).getText().toString().trim();
+
+        addCommentDialogClickListeners(commentsDialog, clipId);
+
+        initializeCommentsDialogRecyclerView(commentsDialog, clipId);
+
+        StringRequest getClipComments = new StringRequest(
+                    Request.Method.GET,
+                    String.format(Constants.request_clip_get_comment, clipId),
+                    response -> {
+                        // fill dialog with comments
+                        fillComments(response, commentsDialog);
+                    },
+                    error -> {
+                        // network unavailable
+                    }
+            ) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    return null;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map headers = new HashMap<String, String>();
+                    headers.put(getString(R.string.header_authentication), token);
+                    return headers;
+                }
+            };
+
+        Volley.newRequestQueue(context).add(getClipComments);
+    }
+
+    private void initializeCommentsDialogRecyclerView(Dialog commentDialog, String clipId) {
+
+
+        commentsRecyclerView = commentDialog.findViewById(R.id.clip_comments);
+        commentlinearLayoutManager = new LinearLayoutManager(context);
+        comments = new ArrayList<>();
+
+        comment_adapter = new comment_adapter(comments) {
+            @Override
+            protected void addViewClickListeners(View V) {
+                // TODO
+                addCommentEditAndDeleteClickListener(V, commentDialog, clipId);
+            }
+        };
+
+        commentsRecyclerView.setAdapter(comment_adapter);
+        commentsRecyclerView.setLayoutManager(commentlinearLayoutManager);
+
+
+    }
+
+    private void addCommentEditAndDeleteClickListener(View V, Dialog CommentDialog, String clipId) {
+
+        TextView editComment = V.findViewById(R.id.rl_comment_edit);
+        TextView deleteComment = V.findViewById(R.id.rl_comment_delete);
+
+        editComment.setOnClickListener(v -> {
+                                        TextView commentIdTextView= V.findViewById(R.id.rl_comment_id);
+                                        String commentId = commentIdTextView.getText().toString().trim();
+                                        TextView commentText= V.findViewById(R.id.rl_comment_comment);
+                                        showEditCommentDialog(CommentDialog, clipId, commentText, commentId);
+                                        });
+
+        deleteComment.setOnClickListener(v -> {
+                                            TextView commentIdTextView= V.findViewById(R.id.rl_comment_id);
+                                            String commentId = commentIdTextView.getText().toString().trim();
+                                            setDeleteCommentAction(CommentDialog, clipId, commentId);
+                                          });
+
+    }
+
+    private void showEditCommentDialog(Dialog CommentDialog, String clipId, TextView commentText, String commentId) {
+        final Dialog commentEditDialog = new Dialog(context);
+        commentEditDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        commentEditDialog.setContentView(R.layout.dialog_edit_comment);
+
+        String commentWithName = commentText.getText().toString().trim();
+        int afterNameIndex = commentWithName .indexOf(Constants.DOT);
+        String comment = commentWithName.substring(afterNameIndex + 2);
+        ((EditText)commentEditDialog.findViewById(R.id.editCommentContent)).setText(comment);
+
+        commentEditDialog.findViewById(R.id.editCommentSubmit).setOnClickListener(v -> {
+            String newComment = ((EditText)commentEditDialog.findViewById(R.id.editCommentContent)).getText().toString().trim();
+            if (newComment.isEmpty()) {
+                Toast.makeText(context, "Empty Comment", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                updateComment(context, commentEditDialog, CommentDialog, clipId, commentId, id, newComment);
+            }
+        });
+
+        commentEditDialog.show();
+
+        Objects.requireNonNull(commentEditDialog .getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+    }
+
+
+    private void setDeleteCommentAction(Dialog commentDialog, String clipId, String commentId) {
+        StringRequest saveCommentRequest = new StringRequest(
+                    Request.Method.POST,
+                    "http://api.pitavya.com/clipsy/deleteComment/",
+                    response -> {
+                        // fill comment
+                        fillComments(response, commentDialog);
+                        CommentApiResonse apiResonse = new Gson().fromJson(response, CommentApiResonse.class);
+                        Toast.makeText(context, apiResonse.message, Toast.LENGTH_SHORT).show();
+                    },
+                    error -> {
+                        // network unavailable
+                    }
+            ) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map saveClip = new HashMap<String, String>();
+                    saveClip.put("clip", clipId);
+                    saveClip.put("id", commentId);
+                    return saveClip;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map headers = new HashMap<String, String>();
+                    headers.put(getString(R.string.header_authentication), token);
+                    return headers;
+                }
+            };
+
+        Volley.newRequestQueue(context).add(saveCommentRequest);
+
+    }
+
+
+    private void updateComment(Context context, Dialog commentEditDialog, Dialog commentDialog, String clipId, String commentId, String userId, String newComment) {
+        StringRequest updateCommentRequest = new StringRequest(
+                    Request.Method.POST,
+                    "http://api.pitavya.com/clipsy/updateComment/",
+                    response -> {
+                        // fill comment
+                        fillComments(response, commentDialog);
+
+                        CommentApiResonse apiResonse = new Gson().fromJson(response, CommentApiResonse.class);
+                        Toast.makeText(context, apiResonse.message, Toast.LENGTH_SHORT).show();
+                        commentEditDialog.dismiss();
+                    },
+                    error -> {
+                        // network unavailable
+                    }
+            ) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map saveClip = new HashMap<String, String>();
+                    saveClip.put("clip", clipId);
+                    saveClip.put("id", commentId);
+                    saveClip.put("comment", newComment);
+                    saveClip.put("user", userId);
+                    return saveClip;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map headers = new HashMap<String, String>();
+                    headers.put(getString(R.string.header_authentication), token);
+                    return headers;
+                }
+            };
+
+        Volley.newRequestQueue(context).add(updateCommentRequest);
+
+    }
+
+
+    private void addCommentDialogClickListeners(Dialog commentDialog, String clipId) {
+        commentDialog.findViewById(R.id.commentCloseButton).setOnClickListener(v -> {
+            updateClips();
+            commentDialog.dismiss();
+        });
+
+        commentDialog.findViewById(R.id.commentSubmit).setOnClickListener(v -> {
+
+            EditText commentEditText = (EditText)commentDialog.findViewById(R.id.commentContent);
+            String comment = (commentEditText).getText().toString();
+
+            if (comment.isEmpty()) {
+                Toast.makeText(context, "comment is Empty", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                showLoadingContainer(commentDialog.findViewById(R.id.rl_comment_placeholder));
+                comments.clear();
+                commentEditText.setText("");
+                commentEditText.clearFocus();
+                saveComment(commentDialog, comment, clipId);
+            }
+
+        });
+
+
+    }
+
+
+    private void saveComment(Dialog commentDialog, String comment, String clipId) {
+
+        StringRequest saveCommentRequest = new StringRequest(
+                    Request.Method.POST,
+                    "http://api.pitavya.com/clipsy/comment/",
+                    response -> {
+                        // fill comment
+                        fillComments(response, commentDialog);
+                    },
+                    error -> {
+                        // network unavailable
+                    }
+            ) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map saveClip = new HashMap<String, String>();
+                    saveClip.put("clip", clipId);
+                    saveClip.put("comment", comment);
+                    return saveClip;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map headers = new HashMap<String, String>();
+                    headers.put(getString(R.string.header_authentication), token);
+                    return headers;
+                }
+            };
+
+        Volley.newRequestQueue(context).add(saveCommentRequest);
+
+    }
+
+
+    private void fillComments(String response, Dialog commentDialog) {
+
+        comments.clear();
+        Log.e("Comments", response);
+        hideLoadingContainer(((ShimmerFrameLayout)commentDialog.findViewById(R.id.rl_comment_placeholder)));
+
+        CommentApiResonse commentApiResonse = new Gson().fromJson(response, CommentApiResonse.class);
+
+        for (int i = 0; i < commentApiResonse.data.size(); i++) {
+            commentApiResonse.data.get(i).viewer_id = id;
+        }
+
+        comments.addAll(commentApiResonse.data);
+        comment_adapter.notifyDataSetChanged();
+        commentsRecyclerView.scrollToPosition(comment_adapter.getItemCount()-1);
+
+    }
+
+    // end of comment
 
     private Bundle bundle;
     private String from;

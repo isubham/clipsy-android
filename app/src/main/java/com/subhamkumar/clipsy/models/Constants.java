@@ -4,22 +4,60 @@ import com.subhamkumar.clipsy.R;
 
 public class Constants {
     public static final Integer[] mThumbIds = {
-            R.drawable.boy003,
-            R.drawable.boy007,
-            R.drawable.boy016,
-            R.drawable.boy016,
-            R.drawable.girl002,
-            R.drawable.girl010,
-            R.drawable.girl017,
-            R.drawable.girl021,
-            R.drawable.man001,
-            R.drawable.man005,
-            R.drawable.man011,
-            R.drawable.man014,
-            R.drawable.woman004,
-            R.drawable.woman006,
-            R.drawable.woman012,
-            R.drawable.woman013,
+            R.drawable.avatar_1,
+            R.drawable.avatar_2,
+            R.drawable.avatar,
+
+            R.drawable.boy,
+            R.drawable.boy_1,
+            R.drawable.boy_2,
+            R.drawable.boy_3,
+            R.drawable.boy_4,
+            R.drawable.boy_5,
+            R.drawable.punk,
+            R.drawable.punk_1,
+
+            R.drawable.hindu,
+            R.drawable.heisenberg,
+            R.drawable.hood,
+            R.drawable.japanese,
+            R.drawable.knight,
+            R.drawable.kung_fu,
+            R.drawable.napoleon,
+            R.drawable.robocop,
+            R.drawable.samurai,
+            R.drawable.santa_claus,
+            R.drawable.wood_cutter,
+
+            R.drawable.man,
+            R.drawable.man_1,
+            R.drawable.man_2,
+            R.drawable.man_3,
+            R.drawable.man_4,
+            R.drawable.man_5,
+
+            R.drawable.woman,
+            R.drawable.woman_1,
+            R.drawable.woman_2,
+            R.drawable.woman_3,
+            R.drawable.woman_4,
+            R.drawable.woman_5,
+            R.drawable.woman_6,
+            R.drawable.woman_7,
+            R.drawable.woman_8,
+            R.drawable.woman_9,
+            R.drawable.woman_10,
+            R.drawable.woman_11,
+            R.drawable.woman_12,
+            R.drawable.woman_13,
+            R.drawable.woman_14,
+            R.drawable.woman_15,
+            R.drawable.woman_16,
+            R.drawable.woman_17,
+            R.drawable.woman_18,
+            R.drawable.woman_19,
+            R.drawable.hindu_1,
+
 
     };
     public static final String CLIP_CONTENT = "clip_content";
@@ -44,6 +82,7 @@ public class Constants {
     public static final String request_user_user_following = "http://api.pitavya.com/clipsy/following/%1$s";
     public static final String request_user_user_follower = "http://api.pitavya.com/clipsy/follower/%1$s";
 
+    public static final String request_clip_get_comment = "http://api.pitavya.com/clipsy/comment/%1$s";
     // status
     public static final String status_success = "1";
     public static final String status_failed = "0";
@@ -52,6 +91,8 @@ public class Constants {
 
     public static final String SIGNOUT = "sign_out";
     public static final String CLOSE = "close";
+    public static final String DOT = "·";
+
 
     // param
 

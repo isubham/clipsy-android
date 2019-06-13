@@ -58,9 +58,12 @@ public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profil
             if(profiles.get(i).profile_pic.equals("")) {
                 _profile_pic = 0;
             }
-            _profile_pic = Integer.parseInt(profiles.get(i).profile_pic);
-            int imageResource = Constants.mThumbIds[_profile_pic];
+            else{
 
+                _profile_pic = Integer.parseInt(profiles.get(i).profile_pic);
+            }
+
+            int imageResource = Constants.mThumbIds[_profile_pic];
             clip_viewholder.profile_pic.setImageResource(imageResource);
         }catch (NumberFormatException e) {
             Log.i("002", "nullformatexception" + e.getMessage());

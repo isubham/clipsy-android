@@ -103,6 +103,7 @@ public class signin extends wrapper {
             startActivity(new Intent(signin.this, panel.class)
                     .putExtra("token", signInApiResponse.data.token)
                     .putExtra("id", signInApiResponse.data.id)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
             );
 
             this.finish();

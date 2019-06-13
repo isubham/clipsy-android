@@ -43,7 +43,7 @@
                     android:id="@+id/choose_avatar_icon"
                     android:layout_width="@dimen/profile_card_image_size"
                     android:layout_height="@dimen/profile_card_image_size"
-                    android:src="@drawable/boy003"
+                    android:src="@drawable/boy"
                     android:layout_gravity="start"
                     android:contentDescription="@string/todo" />
 
@@ -165,6 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="16dp"
+                android:padding="4dp"
                 android:text="@string/follow"
                 android:textAllCaps="false" />
             <Button
@@ -173,6 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="16dp"
+                android:padding="4dp"
                 android:text="Edit Profile"
                 android:textAllCaps="false" />
             </LinearLayout>

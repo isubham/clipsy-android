@@ -182,7 +182,6 @@ public class fragment_profile extends fragment_wrapper {
 
         final Dialog showPeopleDialog = new Dialog(context);
         showPeopleDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(showPeopleDialog.getWindow()).setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
 
         showPeopleDialog.setContentView(R.layout.dialog_connected_people);
         initializeShowPeopleDialogVariables(showPeopleDialog);
@@ -217,10 +216,13 @@ public class fragment_profile extends fragment_wrapper {
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         shimmerFrameLayout.startShimmer();
     }
+
     private void getProfiles(Dialog dialog, String typeOfPeople, String viewerId) {
 
         ShimmerFrameLayout loadingContainer = dialog.findViewById(R.id.rl_fragment_connected_people_loading_container);
         dialog.show();
+        Objects.requireNonNull(dialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
         showLoadingContainer(loadingContainer);
 
 

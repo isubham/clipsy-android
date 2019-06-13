@@ -1,0 +1,33 @@
+<LinearLayout android:background="@color/white"
+    android:layout_alignParentBottom="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/activityPadding"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Comment"
+            android:textSize="20sp"
+            android:gravity="center"
+            />
+
+        <EditText
+            android:id="@+id/editCommentContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="5"
+            android:hint="Your Comment"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/editCommentSubmit"
+            style="@style/primaryBigButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comment" />
+
+
+    </LinearLayout>

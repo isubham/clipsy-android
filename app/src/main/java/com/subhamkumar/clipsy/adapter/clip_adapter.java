@@ -44,6 +44,8 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
 
         final ImageView profile_pic;
         final TextView clip_content;
+        final TextView clip_comment;
+
 
         final TextView clip_visibility_text;
         final ImageView clip_visibility_image;
@@ -59,6 +61,8 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
             author_name = V.findViewById(R.id.rl_clip_author);
             clip_time = V.findViewById(R.id.rl_clip_time);
             clip_content = V.findViewById(R.id.rl_clip_content);
+            clip_comment = V.findViewById(R.id.rl_clip_comment);
+
 
             profile_pic = V.findViewById(R.id.rl_clip_profile_pic);
 
@@ -134,6 +138,8 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
         clip_viewholder.author_id.setText(clips.get(i).profile.id);
         clip_viewholder.viewer_id.setText(clips.get(i).viewer_id);
         clip_viewholder.clip_time.setText(clips.get(i).clip_time.concat(" · "));
+        String commentMessage = String.format("View %1$s Comment%2$s", clips.get(i).comment, Integer.parseInt(clips.get(i).comment) > 1 ? "s" : "");
+        clip_viewholder.clip_comment.setText(commentMessage);
 
         String visibility_text = clips.get(i).visibility.equals(Constants.visibility_private) ? "Private. " : "Public. ";
         clip_viewholder.clip_visibility_text.setText(visibility_text);
@@ -143,14 +149,16 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
 
         renderHtmlInClipContent(clip_viewholder, i);
 
+        int imageResource, _profile_pic = 0;
 
         try {
-            int _profile_pic = Integer.parseInt(clips.get(i).profile.profile_pic);
-            int imageResource = Constants.mThumbIds[_profile_pic];
-            clip_viewholder.profile_pic.setImageResource(imageResource);
+            _profile_pic = Integer.parseInt(clips.get(i).profile.profile_pic);
         } catch (NumberFormatException e) {
-            int _profile_pic = 0;
-            int imageResource = Constants.mThumbIds[_profile_pic];
+            _profile_pic = 0;
+        }
+        finally {
+            imageResource = Constants.mThumbIds[_profile_pic];
+            clip_viewholder.profile_pic.setImageResource(imageResource);
         }
     }
 

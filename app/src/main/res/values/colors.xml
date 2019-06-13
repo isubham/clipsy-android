@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#758CFF</color>
     <color name="colorSecondary">#E0E0E0</color>
-
+    <color name="cardColorSecondary">#AAAAAA</color>
 
     <color name="red_400">#EF5350</color>
     <color name="red_500">#F44336</color>
