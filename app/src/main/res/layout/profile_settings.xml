@@ -1,26 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context=".panel.ProfileSetting">
 
     <ImageView
-        android:contentDescription="TODO"
         android:id="@+id/medium_avatar"
-        android:src="@drawable/boy"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO"
+        android:src="@drawable/boy" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Profile Pic"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/comment_card_image_size"
+        android:id="@+id/change_profile_pic_text"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/setting_name"
+            style="@style/primaryEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name"
+            android:inputType="textWebEmailAddress" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
+        android:layout_marginTop="@dimen/comment_card_image_size"
+        android:id="@+id/update_user_setting"
         style="@style/primaryBigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/edit_avatar"
-        android:id="@+id/edit_avatar"
+        android:text="Update Profile" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/userSettingProgress"
+        android:visibility="gone"
         />
 
 </LinearLayout>

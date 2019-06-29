@@ -3,9 +3,13 @@ package com.subhamkumar.clipsy.panel;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -23,8 +27,11 @@ import java.util.Map;
 import java.util.Objects;
 
 import static android.view.View.GONE;
+import static com.subhamkumar.clipsy.models.Constants.profilePicChangeRequest;
+import static com.subhamkumar.clipsy.models.Constants.request_user_update_avatar;
 
 public class ProfileSetting extends wrapper {
+
     @Override
     public Map<String, String> _getHeaders() {
         Map params = new HashMap<String, String>();
@@ -36,7 +43,8 @@ public class ProfileSetting extends wrapper {
     protected void handleErrorResponse(VolleyError error) {
         showNetworkUnavailableDialog();
     }
-        private void showNetworkUnavailableDialog() {
+
+    private void showNetworkUnavailableDialog() {
         final Dialog dialog = new Dialog(ProfileSetting.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
@@ -70,22 +78,20 @@ public class ProfileSetting extends wrapper {
 
     @Override
     public void handleResponse(String response) {
-
         Gson gson = new Gson();
-
         ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
-
         String profilePic = profileApiResponse.data.get(0).profile_pic;
-
         String parsedProficPic = profilePic.equals("") ? "0" : profilePic;
+        setProfilePic(parsedProficPic);
+        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "ProfileSetting hide");
+        uiName.setText(profileApiResponse.data.get(0).name);
+    }
 
+    private void setProfilePic(String parsedProficPic) {
         int _profile_pic = Integer.parseInt(parsedProficPic);
 
         int imageResource = Constants.mThumbIds[_profile_pic];
-        mediumAvatar.setImageResource(imageResource);
-
-        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "ProfileSetting hide");
-
+        uiProfilePic.setImageResource(imageResource);
     }
 
     @Override
@@ -93,12 +99,86 @@ public class ProfileSetting extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
+    private void updateUser() {
+        wrapper updateUserVolleyWrapper = new wrapper() {
+            @Override
+            protected Map makeParams() {
+
+                Map updateUserParams = new HashMap<String, String>();
+                updateUserParams.put("profile_pic", profile_pic);
+                updateUserParams.put("name", getName());
+                return updateUserParams;
+
+            }
+
+            @Override
+            protected void handleResponse(String response) {
+
+                hideUpdateProfileProgressBar();
+                Gson gson = new Gson();
+                ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
+                uiName.setText(profileApiResponse.data.get(0).name);
+                setProfilePic(profileApiResponse.data.get(0).profile_pic);
+
+                Toast.makeText(ProfileSetting.this, "Profile Updated.", Toast.LENGTH_SHORT).show();
+                ProfileSetting.this.finish();
+            }
+
+            @Override
+            protected void makeVolleyRequest(StringRequest stringRequest) {
+                Volley.newRequestQueue(ProfileSetting.this).add(stringRequest);
+            }
+
+            @Override
+            protected int setHttpMethod() {
+                return Request.Method.POST;
+            }
+
+            @Override
+            protected String setHttpUrl() {
+                return String.format(request_user_update_avatar, id);
+            }
+
+            @Override
+            protected Map<String, String> _getHeaders() {
+                Map params = new HashMap<String, String>();
+                params.put(Constants.header_authentication, token);
+                return params;
+            }
+
+            @Override
+            protected void handleErrorResponse(VolleyError error) {
+                showNetworkUnavailableDialog();
+            }
+        };
+        updateUserVolleyWrapper.makeRequest();
+        showUpdateProfileProgressBar();
+    }
+
+    ProgressBar progressBar;
+    private void showUpdateProfileProgressBar() {
+        ((ProgressBar) findViewById(R.id.userSettingProgress))
+                .setVisibility(View.VISIBLE);
+    }
+
+    private void hideUpdateProfileProgressBar() {
+        ((ProgressBar) findViewById(R.id.userSettingProgress))
+                .setVisibility(View.GONE);
+    }
+
+
     private String id;
     private String searcheUserId;
     private String token;
-    private Button editAvatarButton;
-    private ImageView mediumAvatar;
+    private Button update_user_setting;
+    private ImageView uiProfilePic;
     private boolean areSameUser;
+    private EditText uiName;
+
+
+    private String getName() {
+        return ((EditText) findViewById(R.id.setting_name)).getText().toString().trim();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,40 +188,73 @@ public class ProfileSetting extends wrapper {
         networkLoadingDialog = new Dialog(ProfileSetting.this, R.style.TranslucentDialogTheme);
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
-        id = Objects.requireNonNull(getIntent().getExtras()).getString("id");
-        searcheUserId = getIntent().getExtras().getString("searched_id");
-        token = getIntent().getExtras().getString("token");
+        geIdTokenSearchedIdFromBundle();
 
-
-        editAvatarButton = findViewById(R.id.edit_avatar);
-        mediumAvatar = findViewById(R.id.medium_avatar);
+        setUiVariables();
+        setClickListener();
 
         areSameUser = id.equals(searcheUserId);
-        showEditAction(areSameUser);
+        showUiElementsForSameUser(areSameUser);
 
+        addChangeProfilePicTextListener();
         Tools.showNetworkLoadingDialog(networkLoadingDialog, "ProfileSetting show");
         makeRequest();
 
     }
 
-    private void showEditAction(boolean are_same_user) {
-        if(are_same_user) {
-            editAvatarButton.setOnClickListener(v -> startActivity(new Intent(ProfileSetting.this,
-                    choose_avatar.class)
-                    .putExtra("token", token)
-                    .putExtra("id", id)
-                    .putExtra("searched_id", searcheUserId)
-            ));
-        }
-        else {
-            editAvatarButton.setVisibility(GONE);
+    private void geIdTokenSearchedIdFromBundle() {
+        id = Objects.requireNonNull(getIntent().getExtras()).getString("id");
+        searcheUserId = getIntent().getExtras().getString("searched_id");
+        token = getIntent().getExtras().getString("token");
+    }
+
+    private void setUiVariables() {
+        update_user_setting = findViewById(R.id.update_user_setting);
+        uiProfilePic = findViewById(R.id.medium_avatar);
+        uiName = findViewById(R.id.setting_name);
+    }
+
+    private void setClickListener() {
+        update_user_setting.setOnClickListener(v -> {
+            updateUser();
+        });
+    }
+
+    private void showUiElementsForSameUser(boolean areSameUser) {
+        if (areSameUser) {
+            // TODO update profile pic and name
+
+        } else {
+            update_user_setting.setVisibility(GONE);
         }
     }
 
+    private void addChangeProfilePicTextListener() {
+        (findViewById(R.id.change_profile_pic_text)).setOnClickListener(v -> {
+
+            startActivityForResult(new Intent(ProfileSetting.this,
+                            choose_avatar.class)
+                    , profilePicChangeRequest);
+
+        });
+    }
+
+
+    String profile_pic;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == profilePicChangeRequest) {
+            profile_pic = data.getStringExtra("profile_pic");
+            setProfilePic(profile_pic);
+        }
+    }
 
     @Override
     protected void onRestart() {
-        makeRequest();
+        // makeRequest();
         super.onRestart();
     }
 }

@@ -69,7 +69,7 @@ public class Constants {
     public static final String response_invalid_clip_id = "-1";
     public static final String request_clip_update = "http://api.pitavya.com/clipsy/update_clip/%1$s";
     public static final String request_user_get_user = "http://api.pitavya.com/clipsy/get/%1$s";
-    public static String request_user_update_avatar = "http://api.pitavya.com/clipsy/update_avatar/%1$s";
+    public static String request_user_update_avatar = "http://api.pitavya.com/clipsy/update_user/%1$s";
     public static final String request_clip_read = "http://api.pitavya.com/clipsy/read_clip/%1$s";
     public static final String request_clip_delete = "http://api.pitavya.com/clipsy/delete_clip/%1$s";
     public static final String request_user_update_password = "http://api.pitavya.com/clipsy/update_password";
@@ -130,6 +130,8 @@ public class Constants {
     public static final String report_inappropriate = "2";
 
 
+
+    public static int profilePicChangeRequest = 23323;
 
 
 
