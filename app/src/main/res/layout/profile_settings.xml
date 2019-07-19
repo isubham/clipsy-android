@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:padding="@dimen/activityPadding"
     android:orientation="vertical"
     tools:context=".panel.ProfileSetting">
 
@@ -33,7 +33,7 @@
             style="@style/primaryEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/name"
+            android:hint="@string/updateName"
             android:inputType="textWebEmailAddress" />
 
     </android.support.design.widget.TextInputLayout>

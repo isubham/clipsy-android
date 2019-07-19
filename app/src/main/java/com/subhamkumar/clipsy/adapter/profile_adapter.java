@@ -1,5 +1,6 @@
 package com.subhamkumar.clipsy.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,12 +16,16 @@ import com.subhamkumar.clipsy.models.Profile;
 
 import java.util.List;
 
-public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profile_viewholder> {
+abstract public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profile_viewholder> {
+
+    protected abstract void addViewClickListeners(View V);
 
     public static class Profile_viewholder extends RecyclerView.ViewHolder {
         final TextView id;
         final TextView name;
-        final TextView email; final ImageView profile_pic;
+        final TextView email;
+        final ImageView profile_pic;
+        final ImageView crossIcon;
 
         Profile_viewholder(View V) {
             super(V);
@@ -28,10 +33,13 @@ public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profil
             email = V.findViewById(R.id.rl_profile_email);
             name = V.findViewById(R.id.rl_profile_name);
             profile_pic = V.findViewById(R.id.rl_profile_profile_pic);
+            crossIcon = V.findViewById(R.id.rl_profile_close);
+
         }
     }
 
     private final List<Profile> profiles;
+    private Context context;
 
     public profile_adapter(List<Profile> profiles) {
         this.profiles = profiles;
@@ -42,15 +50,24 @@ public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profil
     public Profile_viewholder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View V = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.rl_profile, viewGroup, false);
         Profile_viewholder clip_viewholder = new Profile_viewholder(V);
+        context = viewGroup.getContext();
+        addViewClickListeners(V);
         return clip_viewholder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Profile_viewholder clip_viewholder, int i) {
+    public void onBindViewHolder(@NonNull Profile_viewholder profileViewholder, int i) {
 
-        clip_viewholder.id.setText(                 profiles.get(i).id);
-        clip_viewholder.name.setText(          profiles.get(i).name);
-        clip_viewholder.email.setText(          profiles.get(i).email);
+        profileViewholder.id.setText(profiles.get(i).id);
+        profileViewholder.name.setText(profiles.get(i).name);
+        profileViewholder.email.setText(profiles.get(i).email);
+
+        if(profiles.get(i).showCloseIcon != "1") {
+                 profileViewholder.crossIcon.setVisibility(View.GONE);
+        }
+        else{
+                  profileViewholder.crossIcon.setVisibility(View.VISIBLE);
+        }
 
         try{
             int _profile_pic;
@@ -64,7 +81,7 @@ public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profil
             }
 
             int imageResource = Constants.mThumbIds[_profile_pic];
-            clip_viewholder.profile_pic.setImageResource(imageResource);
+            profileViewholder.profile_pic.setImageResource(imageResource);
         }catch (NumberFormatException e) {
             Log.i("002", "nullformatexception" + e.getMessage());
         }

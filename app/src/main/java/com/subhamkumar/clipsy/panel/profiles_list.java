@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -122,9 +123,22 @@ public class profiles_list extends wrapper {
         linearLayoutManager = new LinearLayoutManager(this);
         profileList = new ArrayList<>();
 
-        profile_adapter = new profile_adapter(profileList);
+        profile_adapter = new profile_adapter(profileList) {
+            @Override
+            protected void addViewClickListeners(View V) {
+                V.findViewById(R.id.rl_profile_close).setOnClickListener(v -> {
+                    String searchedProfileId = ((TextView)V.findViewById(R.id.rl_profile_id)).getText().toString().trim();
+                    deleteSearchedProfile(searchedProfileId);
+                });
+            }
+        };
         rv_profile.setAdapter(profile_adapter);
         rv_profile.setLayoutManager(linearLayoutManager);
+    }
+    
+    private void deleteSearchedProfile(String searchedProfile) {
+        // TODO delete profile search
+        Toast.makeText(this, "will get removed in future.", Toast.LENGTH_SHORT).show();
     }
 
     private RecyclerView rv_profile;

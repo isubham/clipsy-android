@@ -33,7 +33,7 @@ public class fragment_complete_profile extends Fragment {
         V = inflater.inflate(R.layout.fragment_complete_profile, container, false);
 
         setUiVariables();
-
+        addProfileAndClipFragments();
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_complete_profile, container, false);
     }
@@ -70,20 +70,16 @@ public class fragment_complete_profile extends Fragment {
 
     @Override
     public void onResume() {
-        addProfileAndClipFragments();
         super.onResume();
 
     }
 
 
     @Override
-    public void onPause() {
+    public void onStop() {
         removeProfileAndClips();
-        super.onPause();
+        super.onStop();
     }
-
-
-
 
     private void removeProfileAndClips() {
         try{
@@ -94,7 +90,8 @@ public class fragment_complete_profile extends Fragment {
             transaction.remove(fragment_profile);
 
             transaction.commit();
-        }catch(Exception e){
+        }
+        catch(Exception e){
         }
     }
 }

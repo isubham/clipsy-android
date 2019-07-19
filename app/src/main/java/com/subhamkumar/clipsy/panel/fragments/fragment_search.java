@@ -17,9 +17,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -27,13 +28,12 @@ import com.android.volley.toolbox.Volley;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.models.ApiResponse;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.adapter.profile_adapter;
 import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.panel.profile_result;
-import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
-import com.subhamkumar.clipsy.utils.Tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,7 +118,14 @@ public class fragment_search extends fragment_wrapper {
         loadingContainer = V.findViewById(R.id.rl_fragment_search_loading_container);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         profileList = new ArrayList<Profile>();
-        profile_adapter = new profile_adapter(profileList);
+        profile_adapter = new profile_adapter(profileList) {
+            @Override
+            protected void addViewClickListeners(View V) {
+
+                setClickListenerOnProfileCard(V);
+
+            }
+        };
         rv_profile.setLayoutManager(linearLayoutManager);
         rv_profile.setAdapter(profile_adapter);
         live_search = V.findViewById(R.id.live_search);
@@ -137,18 +144,206 @@ public class fragment_search extends fragment_wrapper {
             }
         });
 
-        rv_profile.addOnItemTouchListener(
-               new RecyclerItemClickListener(getActivity(),
-                       (view, position) -> gotToProfileResult(view))
-        );
+    }
+
+    private void setClickListenerOnProfileCard(View V) {
+
+
+        V.findViewById(R.id.rl_profile_close).setOnClickListener(v -> {
+            String searchedUserId = ((TextView) V.findViewById(R.id.rl_profile_id)).getText().toString().trim();
+            deleteSearchResult(searchedUserId);
+        });
+
+        V.findViewById(R.id.rl_profile_name).setOnClickListener(v -> {
+            String searchedUserId = ((TextView) V.findViewById(R.id.rl_profile_id)).getText().toString().trim();
+            gotToProfileResult(searchedUserId);
+        });
+        V.findViewById(R.id.rl_profile_profile_pic).setOnClickListener(v -> {
+            String searchedUserId = ((TextView) V.findViewById(R.id.rl_profile_id)).getText().toString().trim();
+            gotToProfileResult(searchedUserId);
+        });
+        V.findViewById(R.id.rl_profile_email).setOnClickListener(v -> {
+            String searchedUserId = ((TextView) V.findViewById(R.id.rl_profile_id)).getText().toString().trim();
+            gotToProfileResult(searchedUserId);
+        });
+    }
+
+    private void deleteSearchResult(String deleteProfileId) {
+
+
+        StringRequest deleteProfileFromSearch = new StringRequest(
+                Request.Method.POST,
+                String.format(getString(R.string.request_user_delete_searched), deleteProfileId),
+                response -> {
+                    Log.i("deleteProfile", response);
+
+                    Gson gson = new Gson();
+                    ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
+                    profileList.clear();
+                    setProfileCrssIconFlag(profileApiResponse.data);
+                    hideLoadingAndShowCntent(loadingContainer, content);
+                    profileList.addAll(profileApiResponse.data);
+                    profile_adapter.notifyDataSetChanged();
+                },
+                error -> {
+                    final Dialog dialog = new Dialog(context);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+                    dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+                        dialog.dismiss();
+                    });
+
+                    dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+                        dialog.dismiss();
+                        // TODO add retry logic
+                        deleteSearchResult(deleteProfileId);
+                    });
+
+                    dialog.show();
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                return null;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                Map params = new HashMap<String, String>();
+                params.put(getString(R.string.header_authentication), token);
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(context).add(deleteProfileFromSearch);
+
     }
 
 
-    private void gotToProfileResult(View view) {
+    private void GetTop10Search() {
+        StringRequest getTop10Searches = new StringRequest(
+                Request.Method.GET,
+                getString(R.string.request_user_searched_top10),
+                response -> {
+                    Log.i("top10Search", response);
+
+                    ClearAndFillSearchResult(response, true);
+                },
+                error -> {
+                    final Dialog dialog = new Dialog(context);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+                    dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+                        dialog.dismiss();
+                    });
+
+                    dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+                        dialog.dismiss();
+                        // TODO add retry logic
+                        GetTop10Search();
+                    });
+
+                    dialog.show();
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                return null;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                Map params = new HashMap<String, String>();
+                params.put(getString(R.string.header_authentication), token);
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(context).add(getTop10Searches);
+
+    }
+
+    private void ClearAndFillSearchResult(String response, boolean showCrossIcon) {
+        profileList.clear();
+        Gson gson = new Gson();
+        ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
+        if (showCrossIcon) setProfileCrssIconFlag(profileApiResponse.data);
+        hideLoadingAndShowCntent(loadingContainer, content);
+        profileList.addAll(profileApiResponse.data);
+        profile_adapter.notifyDataSetChanged();
+    }
+
+    private void setProfileCrssIconFlag(List<Profile> profileApiResponse) {
+
+        for (int profile = 0; profile < profileApiResponse.size(); profile++) {
+            profileApiResponse.get(profile).showCloseIcon = "1";
+            Log.i("CROSS", profileApiResponse.get(profile).name + " " + profileApiResponse.get(profile).showCloseIcon);
+        }
+    }
+
+    private void saveSearchResult(String searchedUserId) {
+
+        StringRequest saveResult = new StringRequest(
+                Request.Method.POST,
+                String.format(getString(R.string.request_user_searched_user), searchedUserId),
+                response -> {
+                    ApiResponse apiResponse = new Gson().fromJson(response, ApiResponse.class);
+                    // TODO handle profile
+                },
+                error -> {
+                    final Dialog dialog = new Dialog(context);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
+
+                    dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
+                        dialog.dismiss();
+                    });
+
+                    dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
+                        dialog.dismiss();
+                        saveSearchResult(searchedUserId);
+                    });
+
+                    dialog.show();
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                return null;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                Map params = new HashMap<String, String>();
+                params.put(getString(R.string.header_authentication), token);
+                return params;
+            }
+        };
+
+        Volley.newRequestQueue(context).add(saveResult);
+
+    }
+
+
+    private void gotToProfileResult(String searchedUserId) {
+
         Intent to_profile_result = new Intent(getActivity(), profile_result.class);
 
-        String searchedUserId = ((TextView) view.findViewById(R.id.rl_profile_id)).getText().toString().trim();
+        saveSearchResult(searchedUserId);
 
+        userDetails.putString(getString(R.string.params_token), token);
+        userDetails.putString(getString(R.string.params_id), id);
         userDetails.putString(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId);
         userDetails.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
                 getString(R.string.bundle_param_caller_activity_fragment_search));
@@ -158,16 +353,15 @@ public class fragment_search extends fragment_wrapper {
     }
 
     private String query;
-    private void fillSearchResult(CharSequence charSequence){
-         query = charSequence.toString();
-         if(query.length() > 2) {
-             fetchSearchResult();
-         }
-         else {
-             profileList.clear();
-             profile_adapter.notifyDataSetChanged();
-             showLoadingAndHideCntent(loadingContainer, content);
-         }
+
+    private void fillSearchResult(CharSequence charSequence) {
+        query = charSequence.toString();
+        if (query.length() > 2) {
+            fetchSearchResult();
+        }
+        if (query.length() == 0){
+            GetTop10Search();
+        }
 
     }
 
@@ -180,6 +374,7 @@ public class fragment_search extends fragment_wrapper {
     private String token;
     private View fragment_search;
     private ShimmerFrameLayout loadingContainer;
+    private String id;
 
     private void showLoadingAndHideCntent(View V, View content) {
         loadingContainer.setVisibility(View.VISIBLE);
@@ -194,19 +389,23 @@ public class fragment_search extends fragment_wrapper {
     }
 
     RecyclerView content;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         userDetails = getArguments();
         token = Objects.requireNonNull(userDetails).getString(Constants.TOKEN);
+        id = Objects.requireNonNull((userDetails).getString("id"));
         context = getActivity();
+
 
         fragment_search = inflater.inflate(R.layout.fragment_search, container, false);
         init(fragment_search);
         showLoadingAndHideCntent(loadingContainer, content);
         showKeyboarWhenSearchFragmentLoads();
 
+        GetTop10Search();
         return fragment_search;
     }
 
@@ -219,11 +418,9 @@ public class fragment_search extends fragment_wrapper {
 
 
     @Override
-    public void setUserVisibleHint(boolean visible)
-    {
+    public void setUserVisibleHint(boolean visible) {
         super.setUserVisibleHint(visible);
-        if (visible && isResumed())
-        {
+        if (visible && isResumed()) {
             //Only manually call onResume if fragment is already visible
             //Otherwise allow natural fragment lifecycle to call onResume
             onResume();
@@ -231,11 +428,9 @@ public class fragment_search extends fragment_wrapper {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
-        if (!getUserVisibleHint())
-        {
+        if (!getUserVisibleHint()) {
             return;
         }
     }

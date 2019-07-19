@@ -24,7 +24,8 @@
             android:src="@drawable/boy" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="2dp"
@@ -49,6 +50,13 @@
 
         </LinearLayout>
 
+
+        <ImageView
+            android:id="@+id/rl_profile_close"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/outline_close_black" />
        <!-- ids -->
         <TextView
             android:id="@+id/rl_profile_id"

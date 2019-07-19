@@ -31,6 +31,12 @@
     <string name="request_user_update_avatar">http://api.pitavya.com/clipsy/update_avatar/%1$s</string>
     <string name="request_user_update_password">http://api.pitavya.com/clipsy/update_password</string>
     <string name="request_user_search_user">http://api.pitavya.com/clipsy/search/%1$s</string>
+    <string name="request_user_searched_user">http://api.pitavya.com/clipsy/searched/%1$s</string>
+    <string name="request_user_searched_top10">http://api.pitavya.com/clipsy/searched</string>
+    <string name="request_user_delete_searched">http://api.pitavya.com/clipsy/deleteSearched/%1$s</string>
+
+
+
     <string name="request_user_forgot_password">http://api.pitavya.com/clipsy/forgot_password</string>
 
     <!--clip-->
@@ -145,6 +151,7 @@
     <string name="email_address">email address</string>
     <string name="send_verification_code">Send verification Code</string>
     <string name="name">name</string>
+    <string name="updateName">New Name</string>
     <string name="verify">Verify</string>
     <string name="token">Your verification code</string>
     <string name="update_password">Update Password</string>

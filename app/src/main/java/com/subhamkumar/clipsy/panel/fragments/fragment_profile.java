@@ -145,6 +145,7 @@ public class fragment_profile extends fragment_wrapper {
 
 
     private void refreshViewsAndRelationShipButton(String response) {
+        Log.i("invalid json", response);
         Gson gson = new Gson();
         ProfileMatrixApiResponse profileMatrixApiResponse = gson.fromJson(response, ProfileMatrixApiResponse.class);
         setProfileElements(profileMatrixApiResponse.data.profile);
@@ -200,7 +201,12 @@ public class fragment_profile extends fragment_wrapper {
         linearLayoutManager = new LinearLayoutManager(context);
         profileList = new ArrayList<>();
 
-        profile_adapter = new profile_adapter(profileList);
+        profile_adapter = new profile_adapter(profileList){
+            @Override
+            protected void addViewClickListeners(View V) {
+
+            }
+        };
         rv_profile.setAdapter(profile_adapter);
         rv_profile.setLayoutManager(linearLayoutManager);
     }

@@ -1,8 +1,12 @@
 package com.subhamkumar.clipsy.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +88,8 @@ abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapt
             clip_viewholder.deleteComment.setVisibility(View.GONE);
         }
 
-        clip_viewholder.comment.setText(comments.get(i).profile.name.concat(" · ".concat(comments.get(i).comment)));
+        setCommentProfileNameAndComment(clip_viewholder, i);
+
         clip_viewholder.comment_time.setText(comments.get(i).comment_time);
 
 
@@ -98,6 +103,20 @@ abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapt
             imageResource = Constants.mThumbIds[_profile_pic];
             clip_viewholder.profile_pic.setImageResource(imageResource);
         }
+    }
+
+    private void setCommentProfileNameAndComment(@NonNull commentViewholder clip_viewholder, int i) {
+        String profileName = comments.get(i).profile.name;
+        String profileComment = comments.get(i).comment;
+
+        Spannable boldName = new SpannableString(profileName);
+        boldName.setSpan(new StyleSpan(Typeface.BOLD), 0, profileName.length(), 0);
+
+        clip_viewholder.comment.setText("");
+        clip_viewholder.comment.append(boldName);
+        clip_viewholder.comment.append(" ");
+        clip_viewholder.comment.append(profileComment);
+
     }
 
     @Override

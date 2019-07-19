@@ -1,7 +1,7 @@
 package com.subhamkumar.clipsy.models;
 
 public class Profile {
-    public String id, email, name, profile_pic, type, token, clips, followers, following;
+    public String id, email, name, profile_pic, type, token, clips, followers, following, showCloseIcon;
 
 
     public Profile() {
