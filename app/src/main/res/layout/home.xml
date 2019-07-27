@@ -12,9 +12,9 @@
     <!--brand-->
     <ImageView
         android:layout_gravity="center_horizontal"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/logo" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logotrans" />
 
 
     <!--sigup-->

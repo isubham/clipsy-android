@@ -27,7 +27,7 @@ public abstract class wrapper extends AppCompatActivity {
 
 
     public void handleJsonexceptionError(JSONException e) {
-        Log.e("v_json_excep", e.getMessage());
+       // Log.e("v_json_excep", e.getMessage());
     }
 
     public void makeRequest() {
@@ -37,7 +37,7 @@ public abstract class wrapper extends AppCompatActivity {
                 setHttpUrl(),
                 response -> {
 
-                    Log.e("base", response.toString());
+                    // Log.e("base", response.toString());
                     handleResponse(response);
 
                 },

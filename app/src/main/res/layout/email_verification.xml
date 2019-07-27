@@ -29,7 +29,8 @@
         android:id="@+id/verify_token_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/red_500" />
+        android:text="@string/we_have_send_an_email_with_a_token_use_that_to_verify_your_email_it_may_take_2_minutes_to_get_the_email"
+        android:textColor="@color/black" />
 
     <Button
         android:id="@+id/send_verify_token"

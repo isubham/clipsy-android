@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,14 +48,9 @@ import java.util.Objects;
 import static android.app.Activity.RESULT_OK;
 
 
-public class fragment_clips extends fragment_wrapper {
+public class fragment_clips extends Fragment {
 
-    @Override
-    protected void handle_error_response(VolleyError error) {
-
-        showNetworkUnavailableDialog();
-
-    }
+    // token => clips list
 
     private void showNetworkUnavailableDialog() {
         final Dialog networkUnavailableDialog = new Dialog(context);
@@ -73,53 +69,51 @@ public class fragment_clips extends fragment_wrapper {
         networkUnavailableDialog.show();
     }
 
-    @Override
-    public int setHttpMethod() {
-        return Request.Method.GET;
-    }
-
-    @Override
-    public Map makeParams() {
-        return new HashMap<String, String>();
-    }
-
-    @Override
-    public String setHttpUrl() {
+    private String getClipUrl() {
         String from = Objects.requireNonNull(getArguments()).getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips));
         return getUrl(from);
     }
 
-    @Override
-    public Map<String, String> _getHeaders() {
-        Map headers = new HashMap<String, String>();
-        headers.put(getString(R.string.header_authentication), token);
-        return headers;
+    protected void fetchClips() {
+
+        StringRequest fetchClip = new StringRequest(
+                Request.Method.GET,
+                getClipUrl(),
+                response -> {
+                    showClipsFromResponse(response);
+                },
+                error -> {
+                    showNetworkUnavailableDialog();
+                }
+
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                return new HashMap<String, String>();
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map headers = new HashMap<String, String>();
+                headers.put(getString(R.string.header_authentication), token);
+                return headers;
+            }
+        };
+        Volley.newRequestQueue(getActivity()).add(fetchClip);
     }
 
-    // token => clips list
-    public fragment_clips() {
-    }
-
-    @Override
-    public void setArguments(@Nullable Bundle args) {
-        super.setArguments(args);
-    }
-
-    // int no_of_intent;
-    @Override
-    public void handleResponse(String response) {
-        Log.i("unhand response", response);
+    private void showClipsFromResponse(String response) {
         Gson gson = new Gson();
         ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
         clipList.clear();
 
-
-        for (int i = 0; i < clipApiResonse.data.size(); i++)
+        for (int i = 0; i < clipApiResonse.data.size(); i++) {
             clipApiResonse.data.get(i).viewer_id = id;
+        }
 
         clipList.addAll(clipApiResonse.data);
         clip_adapter.notifyDataSetChanged();
-
 
         loadingContainer.stopShimmer();
         loadingContainer.setVisibility(View.GONE);
@@ -151,11 +145,13 @@ public class fragment_clips extends fragment_wrapper {
         V.findViewById(R.id.rl_clip_menu).setOnClickListener(v -> clipMenuClickedDialog(V));
         V.findViewById(R.id.rl_clip_comment).setOnClickListener(v -> clipShowComments(V));
     }
+
     private void gotoProfileResult(View V) {
         String searchedUserId = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
 
         gotoProfileResult(searchedUserId);
     }
+
     private void gotoProfileResult(String searchedUserId) {
         Bundle toProfileResult = new Bundle();
         toProfileResult.putString(getString(R.string.params_token), token);
@@ -192,7 +188,7 @@ public class fragment_clips extends fragment_wrapper {
     }
 
     private void updateClips() {
-        make_request();
+        fetchClips();
     }
 
     private void showDifferentUserDialog(String authorId) {
@@ -278,6 +274,7 @@ public class fragment_clips extends fragment_wrapper {
 
     }
 
+
     private void hidetitleofdialog(Dialog dialog) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     }
@@ -289,8 +286,9 @@ public class fragment_clips extends fragment_wrapper {
                 String.format(Constants.request_clip_delete, clipId),
                 response -> {
 
-                    ApiResponse deleteApiResponse = new Gson().fromJson(response, ApiResponse.class);
+                    ClipApiResonse deleteApiResponse = new Gson().fromJson(response, ClipApiResonse.class);
                     Toast.makeText(context, deleteApiResponse.message, Toast.LENGTH_SHORT).show();
+                    showClipsFromResponse(response);
 
                 },
 
@@ -312,6 +310,12 @@ public class fragment_clips extends fragment_wrapper {
 
 
         makeDeleteRequest(deleteClipRequest);
+    }
+
+    private void handle_error_response(VolleyError error) {
+
+        showNetworkUnavailableDialog();
+
     }
 
     private void makeDeleteRequest(StringRequest deleteClipRequest) {
@@ -422,11 +426,6 @@ public class fragment_clips extends fragment_wrapper {
     }
 
 
-    @Override
-    public void makeVolleyRequest(StringRequest stringRequest) {
-        Volley.newRequestQueue(context).add(stringRequest);
-    }
-
     private RecyclerView rv_clip;
     private LinearLayoutManager linearLayoutManager;
     private com.subhamkumar.clipsy.adapter.clip_adapter clip_adapter;
@@ -457,7 +456,6 @@ public class fragment_clips extends fragment_wrapper {
         rv_clip.setAdapter(clip_adapter);
 
     }
-
 
 
     private static String token;
@@ -499,8 +497,8 @@ public class fragment_clips extends fragment_wrapper {
     private RecyclerView commentsRecyclerView;
 
 
-
     private List<Comment> commentList;
+
     private void clipShowComments(View V) {
 
         // show dialog
@@ -510,7 +508,7 @@ public class fragment_clips extends fragment_wrapper {
 
         commentsDialog.setContentView(R.layout.dialog_clip_comments);
 
-        showLoadingContainer(((ShimmerFrameLayout)commentsDialog.findViewById(R.id.rl_comment_placeholder)));
+        showLoadingContainer(((ShimmerFrameLayout) commentsDialog.findViewById(R.id.rl_comment_placeholder)));
         commentsDialog.show();
 
         Objects.requireNonNull(commentsDialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -522,29 +520,29 @@ public class fragment_clips extends fragment_wrapper {
         initializeCommentsDialogRecyclerView(commentsDialog, clipId);
 
         StringRequest getClipComments = new StringRequest(
-                    Request.Method.GET,
-                    String.format(Constants.request_clip_get_comment, clipId),
-                    response -> {
-                        // fill dialog with comments
-                        fillComments(response, commentsDialog);
-                    },
-                    error -> {
-                        // network unavailable
-                    }
-            ) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    return null;
+                Request.Method.GET,
+                String.format(Constants.request_clip_get_comment, clipId),
+                response -> {
+                    // fill dialog with comments
+                    fillComments(response, commentsDialog);
+                },
+                error -> {
+                    // network unavailable
                 }
+        ) {
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map headers = new HashMap<String, String>();
-                    headers.put(getString(R.string.header_authentication), token);
-                    return headers;
-                }
-            };
+            @Override
+            protected Map<String, String> getParams() {
+                return null;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map headers = new HashMap<String, String>();
+                headers.put(getString(R.string.header_authentication), token);
+                return headers;
+            }
+        };
 
         Volley.newRequestQueue(context).add(getClipComments);
     }
@@ -576,17 +574,17 @@ public class fragment_clips extends fragment_wrapper {
         TextView deleteComment = V.findViewById(R.id.rl_comment_delete);
 
         editComment.setOnClickListener(v -> {
-                                        TextView commentIdTextView= V.findViewById(R.id.rl_comment_id);
-                                        String commentId = commentIdTextView.getText().toString().trim();
-                                        TextView commentText= V.findViewById(R.id.rl_comment_comment);
-                                        showEditCommentDialog(CommentDialog, clipId, commentText, commentId);
-                                        });
+            TextView commentIdTextView = V.findViewById(R.id.rl_comment_id);
+            String commentId = commentIdTextView.getText().toString().trim();
+            TextView commentText = V.findViewById(R.id.rl_comment_comment);
+            showEditCommentDialog(CommentDialog, clipId, commentText, commentId);
+        });
 
         deleteComment.setOnClickListener(v -> {
-                                            TextView commentIdTextView= V.findViewById(R.id.rl_comment_id);
-                                            String commentId = commentIdTextView.getText().toString().trim();
-                                            setDeleteCommentAction(CommentDialog, clipId, commentId);
-                                          });
+            TextView commentIdTextView = V.findViewById(R.id.rl_comment_id);
+            String commentId = commentIdTextView.getText().toString().trim();
+            setDeleteCommentAction(CommentDialog, clipId, commentId);
+        });
 
     }
 
@@ -597,56 +595,55 @@ public class fragment_clips extends fragment_wrapper {
         commentEditDialog.setContentView(R.layout.dialog_edit_comment);
 
         String commentWithName = commentText.getText().toString().trim();
-        int afterNameIndex = commentWithName .indexOf(Constants.DOT);
+        int afterNameIndex = commentWithName.indexOf(Constants.DOT);
         String comment = commentWithName.substring(afterNameIndex + 2);
-        ((EditText)commentEditDialog.findViewById(R.id.editCommentContent)).setText(comment);
+        ((EditText) commentEditDialog.findViewById(R.id.editCommentContent)).setText(comment);
 
         commentEditDialog.findViewById(R.id.editCommentSubmit).setOnClickListener(v -> {
-            String newComment = ((EditText)commentEditDialog.findViewById(R.id.editCommentContent)).getText().toString().trim();
+            String newComment = ((EditText) commentEditDialog.findViewById(R.id.editCommentContent)).getText().toString().trim();
             if (newComment.isEmpty()) {
                 Toast.makeText(context, "Empty Comment", Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
                 updateComment(context, commentEditDialog, CommentDialog, clipId, commentId, id, newComment);
             }
         });
 
         commentEditDialog.show();
 
-        Objects.requireNonNull(commentEditDialog .getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        Objects.requireNonNull(commentEditDialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
 
     private void setDeleteCommentAction(Dialog commentDialog, String clipId, String commentId) {
         StringRequest saveCommentRequest = new StringRequest(
-                    Request.Method.POST,
-                    "http://api.pitavya.com/clipsy/deleteComment/",
-                    response -> {
-                        // fill comment
-                        fillComments(response, commentDialog);
-                        CommentApiResonse apiResonse = new Gson().fromJson(response, CommentApiResonse.class);
-                        Toast.makeText(context, apiResonse.message, Toast.LENGTH_SHORT).show();
-                    },
-                    error -> {
-                        // network unavailable
-                    }
-            ) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    Map saveClip = new HashMap<String, String>();
-                    saveClip.put("clip", clipId);
-                    saveClip.put("id", commentId);
-                    return saveClip;
+                Request.Method.POST,
+                "https://api.pitavya.com/clipsy/deleteComment/",
+                response -> {
+                    // fill comment
+                    fillComments(response, commentDialog);
+                    CommentApiResonse apiResonse = new Gson().fromJson(response, CommentApiResonse.class);
+                    Toast.makeText(context, apiResonse.message, Toast.LENGTH_SHORT).show();
+                },
+                error -> {
+                    // network unavailable
                 }
+        ) {
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map headers = new HashMap<String, String>();
-                    headers.put(getString(R.string.header_authentication), token);
-                    return headers;
-                }
-            };
+            @Override
+            protected Map<String, String> getParams() {
+                Map saveClip = new HashMap<String, String>();
+                saveClip.put("clip", clipId);
+                saveClip.put("id", commentId);
+                return saveClip;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map headers = new HashMap<String, String>();
+                headers.put(getString(R.string.header_authentication), token);
+                return headers;
+            }
+        };
 
         Volley.newRequestQueue(context).add(saveCommentRequest);
 
@@ -655,38 +652,38 @@ public class fragment_clips extends fragment_wrapper {
 
     private void updateComment(Context context, Dialog commentEditDialog, Dialog commentDialog, String clipId, String commentId, String userId, String newComment) {
         StringRequest updateCommentRequest = new StringRequest(
-                    Request.Method.POST,
-                    "http://api.pitavya.com/clipsy/updateComment/",
-                    response -> {
-                        // fill comment
-                        fillComments(response, commentDialog);
+                Request.Method.POST,
+                "https://api.pitavya.com/clipsy/updateComment/",
+                response -> {
+                    // fill comment
+                    fillComments(response, commentDialog);
 
-                        CommentApiResonse apiResonse = new Gson().fromJson(response, CommentApiResonse.class);
-                        Toast.makeText(context, apiResonse.message, Toast.LENGTH_SHORT).show();
-                        commentEditDialog.dismiss();
-                    },
-                    error -> {
-                        // network unavailable
-                    }
-            ) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    Map saveClip = new HashMap<String, String>();
-                    saveClip.put("clip", clipId);
-                    saveClip.put("id", commentId);
-                    saveClip.put("comment", newComment);
-                    saveClip.put("user", userId);
-                    return saveClip;
+                    CommentApiResonse apiResonse = new Gson().fromJson(response, CommentApiResonse.class);
+                    Toast.makeText(context, apiResonse.message, Toast.LENGTH_SHORT).show();
+                    commentEditDialog.dismiss();
+                },
+                error -> {
+                    // network unavailable
                 }
+        ) {
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map headers = new HashMap<String, String>();
-                    headers.put(getString(R.string.header_authentication), token);
-                    return headers;
-                }
-            };
+            @Override
+            protected Map<String, String> getParams() {
+                Map saveClip = new HashMap<String, String>();
+                saveClip.put("clip", clipId);
+                saveClip.put("id", commentId);
+                saveClip.put("comment", newComment);
+                saveClip.put("user", userId);
+                return saveClip;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map headers = new HashMap<String, String>();
+                headers.put(getString(R.string.header_authentication), token);
+                return headers;
+            }
+        };
 
         Volley.newRequestQueue(context).add(updateCommentRequest);
 
@@ -701,13 +698,12 @@ public class fragment_clips extends fragment_wrapper {
 
         commentDialog.findViewById(R.id.commentSubmit).setOnClickListener(v -> {
 
-            EditText commentEditText = (EditText)commentDialog.findViewById(R.id.commentContent);
+            EditText commentEditText = (EditText) commentDialog.findViewById(R.id.commentContent);
             String comment = (commentEditText).getText().toString();
 
             if (comment.isEmpty()) {
                 Toast.makeText(context, "comment is Empty", Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
                 showLoadingContainer(commentDialog.findViewById(R.id.rl_comment_placeholder));
                 comments.clear();
                 commentEditText.setText("");
@@ -724,32 +720,32 @@ public class fragment_clips extends fragment_wrapper {
     private void saveComment(Dialog commentDialog, String comment, String clipId) {
 
         StringRequest saveCommentRequest = new StringRequest(
-                    Request.Method.POST,
-                    "http://api.pitavya.com/clipsy/comment/",
-                    response -> {
-                        // fill comment
-                        fillComments(response, commentDialog);
-                    },
-                    error -> {
-                        // network unavailable
-                    }
-            ) {
-
-                @Override
-                protected Map<String, String> getParams() {
-                    Map saveClip = new HashMap<String, String>();
-                    saveClip.put("clip", clipId);
-                    saveClip.put("comment", comment);
-                    return saveClip;
+                Request.Method.POST,
+                "https://api.pitavya.com/clipsy/comment/",
+                response -> {
+                    // fill comment
+                    fillComments(response, commentDialog);
+                },
+                error -> {
+                    // network unavailable
                 }
+        ) {
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map headers = new HashMap<String, String>();
-                    headers.put(getString(R.string.header_authentication), token);
-                    return headers;
-                }
-            };
+            @Override
+            protected Map<String, String> getParams() {
+                Map saveClip = new HashMap<String, String>();
+                saveClip.put("clip", clipId);
+                saveClip.put("comment", comment);
+                return saveClip;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map headers = new HashMap<String, String>();
+                headers.put(getString(R.string.header_authentication), token);
+                return headers;
+            }
+        };
 
         Volley.newRequestQueue(context).add(saveCommentRequest);
 
@@ -760,7 +756,7 @@ public class fragment_clips extends fragment_wrapper {
 
         comments.clear();
         Log.e("Comments", response);
-        hideLoadingContainer(((ShimmerFrameLayout)commentDialog.findViewById(R.id.rl_comment_placeholder)));
+        hideLoadingContainer(((ShimmerFrameLayout) commentDialog.findViewById(R.id.rl_comment_placeholder)));
 
         CommentApiResonse commentApiResonse = new Gson().fromJson(response, CommentApiResonse.class);
 
@@ -770,7 +766,7 @@ public class fragment_clips extends fragment_wrapper {
 
         comments.addAll(commentApiResonse.data);
         comment_adapter.notifyDataSetChanged();
-        commentsRecyclerView.scrollToPosition(comment_adapter.getItemCount()-1);
+        commentsRecyclerView.scrollToPosition(comment_adapter.getItemCount() - 1);
 
     }
 

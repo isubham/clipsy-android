@@ -40,13 +40,13 @@ public class Tools {
 
 
     public static void showNetworkLoadingDialog(Dialog networkLoadingDialog, String activity) {
-        Log.e("tools n/w ", activity);
+        // Log.e("tools n/w ", activity);
         networkLoadingDialog.setContentView(R.layout.dialog_network_loading);
         networkLoadingDialog.show();
     }
 
     public static void hideNetworkLoadingDialog(Dialog networkLoadingDialog, String... activity) {
-        Log.e("tools n/w ", activity[0]);
+       //  Log.e("tools n/w ", activity[0]);
         networkLoadingDialog.dismiss();
     }
 }

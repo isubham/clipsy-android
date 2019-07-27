@@ -100,8 +100,6 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
         int flags = strBuilder.getSpanFlags(span);
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(@NonNull View view) {
-                // Do something with span.getURL() to handle the link click...
-                Log.i("link", span.getURL());
                 CustomTabs.openTab(context, span.getURL());
             }
         };
@@ -138,6 +136,15 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
         clip_viewholder.author_id.setText(clips.get(i).profile.id);
         clip_viewholder.viewer_id.setText(clips.get(i).viewer_id);
         clip_viewholder.clip_time.setText(clips.get(i).clip_time.concat(" · "));
+
+        setCommentViews(clip_viewholder, i);
+
+        renderHtmlInClipContent(clip_viewholder, i);
+
+        setProfilePic(clip_viewholder, i);
+    }
+
+    private void setCommentViews(@NonNull Clip_viewholder clip_viewholder, int i) {
         String commentMessage = String.format("View %1$s Comment%2$s", clips.get(i).comment, Integer.parseInt(clips.get(i).comment) > 1 ? "s" : "");
         clip_viewholder.clip_comment.setText(commentMessage);
 
@@ -146,17 +153,16 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
 
         int visibility_img = clips.get(i).visibility.equals(Constants.visibility_private) ? R.drawable.user : R.drawable.globe;
         clip_viewholder.clip_visibility_image.setImageResource(visibility_img);
+    }
 
-        renderHtmlInClipContent(clip_viewholder, i);
-
+    private void setProfilePic(@NonNull Clip_viewholder clip_viewholder, int i) {
         int imageResource, _profile_pic = 0;
 
         try {
             _profile_pic = Integer.parseInt(clips.get(i).profile.profile_pic);
         } catch (NumberFormatException e) {
             _profile_pic = 0;
-        }
-        finally {
+        } finally {
             imageResource = Constants.mThumbIds[_profile_pic];
             clip_viewholder.profile_pic.setImageResource(imageResource);
         }
@@ -170,7 +176,7 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
             @Override
             public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                 builder.linkResolver((view, link) -> {
-                    Log.i("link", link);
+                    // Log.i("link", link);
                     CustomTabs.openTab(context, link);
                 });
             }

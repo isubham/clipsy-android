@@ -32,6 +32,8 @@ import static com.subhamkumar.clipsy.models.Constants.request_user_update_avatar
 
 public class ProfileSetting extends wrapper {
 
+    int isDirty = 0;
+
     @Override
     public Map<String, String> _getHeaders() {
         Map params = new HashMap<String, String>();
@@ -85,7 +87,11 @@ public class ProfileSetting extends wrapper {
         setProfilePic(parsedProficPic);
         Tools.hideNetworkLoadingDialog(networkLoadingDialog, "ProfileSetting hide");
         uiName.setText(profileApiResponse.data.get(0).name);
+        initialName = profileApiResponse.data.get(0).name;
+        intialProficPic = parsedProficPic;
     }
+
+    private String intialProficPic; private String initialName;
 
     private void setProfilePic(String parsedProficPic) {
         int _profile_pic = Integer.parseInt(parsedProficPic);
@@ -99,7 +105,19 @@ public class ProfileSetting extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
+    private boolean computeDirty() {
+        if (intialProficPic.equals(profile_pic) && initialName.equals(getName())) {
+            return false;
+        }
+        return true;
+    }
+
     private void updateUser() {
+        if (! computeDirty()) {
+            Toast.makeText(this, "No Changes", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         wrapper updateUserVolleyWrapper = new wrapper() {
             @Override
             protected Map makeParams() {
@@ -190,6 +208,8 @@ public class ProfileSetting extends wrapper {
 
         geIdTokenSearchedIdFromBundle();
 
+        isDirty = 0;
+
         setUiVariables();
         setClickListener();
 
@@ -249,7 +269,12 @@ public class ProfileSetting extends wrapper {
         if (requestCode == profilePicChangeRequest) {
             profile_pic = data.getStringExtra("profile_pic");
             setProfilePic(profile_pic);
+            enableEditButton();
         }
+    }
+
+    private void enableEditButton() {
+
     }
 
     @Override

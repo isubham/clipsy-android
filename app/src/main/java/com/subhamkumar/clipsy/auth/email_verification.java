@@ -73,7 +73,7 @@ public class email_verification extends wrapper {
 
     @Override
     public void handleResponse(String response) {
-        Log.i("response", "email_verification : " + response);
+        // Log.i("response", "email_verification : " + response);
 
         Gson gson = new Gson();
         ApiResponse apiResponse = gson.fromJson(response, ApiResponse.class);

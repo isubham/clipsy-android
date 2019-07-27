@@ -93,6 +93,10 @@ abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapt
         clip_viewholder.comment_time.setText(comments.get(i).comment_time);
 
 
+        setProfilePic(clip_viewholder, i);
+    }
+
+    private void setProfilePic(@NonNull commentViewholder clip_viewholder, int i) {
         int imageResource, _profile_pic = 0;
         try {
             _profile_pic = Integer.parseInt(comments.get(i).profile.profile_pic);

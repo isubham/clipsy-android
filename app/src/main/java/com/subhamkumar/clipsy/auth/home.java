@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.view.View;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.panel;
+import com.subhamkumar.clipsy.utils.LoginDb;
+import com.subhamkumar.clipsy.utils.LoginDetails;
 
 import java.util.Objects;
 
@@ -68,32 +71,32 @@ public class home extends AppCompatActivity {
 
 
 
-    @SuppressLint("ApplySharedPref")
     private void saveLoginDetails(SharedPreferences localStore, String token, String id) {
-        localStore.edit()
-                .putString("token", token)
-                .putString("id", id)
-                .commit();
-
+        LoginDb loginDb = new LoginDb(getApplicationContext());
+        loginDb.saveLoginDetails(id, token);
     }
 
     private boolean checkLoginDetails() {
-        return localStore.contains("token") && localStore.contains("token");
+        LoginDb loginDb = new LoginDb(getApplicationContext());
+        return loginDb.getLoginDetails() !=  null;
     }
 
     private void gotoPanelIFLoginDetailsExist(SharedPreferences localStore) {
-        Log.i("check_login", "contains email");
+
+        LoginDb loginDb = new LoginDb(getApplicationContext());
+        LoginDetails details = loginDb.getLoginDetails();
+        // Log.i("check_login", "contains email");
         startActivity(new Intent(home.this, panel.class)
-                .putExtra("token", localStore.getString("token", ""))
-                .putExtra("id", localStore.getString("id", "")));
+                .putExtra("token", details.getTOKEN())
+                .putExtra("id", details.getID()));
 
         this.finish();
     }
 
 
-    @SuppressLint("ApplySharedPref")
     private void deleteLoginDetails(SharedPreferences localStore) {
-        localStore.edit().clear().commit();
+        LoginDb loginDb = new LoginDb(getApplicationContext());
+        loginDb.deleteLoginDetails();
     }
 
 

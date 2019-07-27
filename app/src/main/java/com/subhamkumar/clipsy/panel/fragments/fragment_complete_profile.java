@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.android.volley.Request;
 import com.subhamkumar.clipsy.R;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -21,8 +24,6 @@ import java.util.Objects;
 public class fragment_complete_profile extends Fragment {
 
 
-    private LinearLayout _profile;
-    private LinearLayout _clips;
     private View V;
     private Bundle user_detail;
 
@@ -38,34 +39,16 @@ public class fragment_complete_profile extends Fragment {
         return inflater.inflate(R.layout.fragment_complete_profile, container, false);
     }
 
-    fragment_profile fragment_profile;
-    fragment_clips fragment_clips;
     private void addProfileAndClipFragments() {
-        FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragment_profile = new fragment_profile();
-        fragment_clips = new fragment_clips();
-
-
-        if (getActivity().getIntent().getExtras() != null) {
-            user_detail = getActivity().getIntent().getExtras();
-            fragment_profile.setArguments(user_detail);
-            fragment_clips.setArguments(user_detail);
-        }
-
-
-        fragmentTransaction.add(_profile.getId(), fragment_profile);
-        fragmentTransaction.add(_clips.getId(), fragment_clips);
-
-        fragmentTransaction.commit();
     }
 
 
     private void setUiVariables() {
-        // inflat fragment_clips and fragment_profile
-        _profile = V.findViewById(R.id.profile_complete_linearLayout);
-        _clips = V.findViewById(R.id.clips_complete_linearLayout);
+
+        if (getActivity().getIntent().getExtras() != null) {
+            user_detail = getActivity().getIntent().getExtras();
+        }
     }
 
     @Override
@@ -77,21 +60,7 @@ public class fragment_complete_profile extends Fragment {
 
     @Override
     public void onStop() {
-        removeProfileAndClips();
         super.onStop();
     }
 
-    private void removeProfileAndClips() {
-        try{
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager()
-                    .beginTransaction();
-
-            transaction.remove(fragment_clips);
-            transaction.remove(fragment_profile);
-
-            transaction.commit();
-        }
-        catch(Exception e){
-        }
-    }
 }

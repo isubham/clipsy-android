@@ -65,13 +65,13 @@ public class change_password extends wrapper {
         param.put("email", getEmailFromBundle());
         param.put("password", password);
         param.put("verify_token", token);
-        Log.i("changePassParam", param.toString());
+        // Log.i("changePassParam", param.toString());
         return param;
     }
 
     @Override
     public void handleResponse(String response) {
-        Log.i("change_pass", response);
+        // Log.i("change_pass", response);
 
         Gson gson = new Gson();
         ApiResponse apiResponse = gson.fromJson(response, ApiResponse.class);

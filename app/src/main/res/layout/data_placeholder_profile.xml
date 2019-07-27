@@ -17,13 +17,13 @@
         <!-- row 1 => user pic | name | ago-->
 
         <LinearLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:padding="4dp"
             android:orientation="horizontal">
 
             <ImageView
-                android:background="@color/background"
+                android:background="@drawable/round_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/todo"
@@ -35,31 +35,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
             android:layout_marginStart="2dp"
-            android:padding="2dp"
-            android:layout_gravity="center"
+            android:padding="4dp"
             android:orientation="vertical">
 
             <TextView
-                android:background="@color/background"
-                android:layout_width="140dp"
+                android:background="@drawable/round_background"
+                android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_weight="0.8"
                 android:textStyle="bold" />
 
-            <!-- ids -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="16sp"
-                android:minWidth="30dp"
-                android:minHeight="12dp"
-                android:textStyle="bold"
-                android:visibility="gone" />
 
             <!-- row 2 => title -->
             <TextView
-                android:background="@color/background"
+                android:background="@drawable/round_background"
                 android:layout_marginTop="8dp"
-                android:layout_width="100dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12sp" />
 

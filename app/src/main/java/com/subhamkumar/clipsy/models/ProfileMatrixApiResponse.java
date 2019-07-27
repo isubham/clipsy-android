@@ -1,5 +1,6 @@
 package com.subhamkumar.clipsy.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileMatrixApiResponse {
@@ -8,6 +9,7 @@ public class ProfileMatrixApiResponse {
 
     public class relationShip {
         public Profile profile;
+        public ArrayList<Clip> clips;
         public List<relationshipActions> actions;
     }
 

@@ -19,6 +19,7 @@ import com.subhamkumar.clipsy.auth.home;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.fragments.fragment_clips;
 import com.subhamkumar.clipsy.panel.fragments.fragment_complete_profile;
+import com.subhamkumar.clipsy.panel.fragments.fragment_profile;
 import com.subhamkumar.clipsy.panel.fragments.fragment_search;
 
 import java.util.ArrayList;
@@ -111,9 +112,9 @@ public class panel extends AppCompatActivity {
         fragment_search.setArguments(user_details);
         viewPagerAdapter.addFragment(fragment_search, "");
 
-        fragment_complete_profile fragment_complete_profile = new fragment_complete_profile();
-        fragment_complete_profile.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_complete_profile, "");
+        fragment_profile fragment_profile = new fragment_profile();
+        fragment_profile.setArguments(user_details);
+        viewPagerAdapter.addFragment(fragment_profile, "");
 
 
         viewPager.setAdapter(viewPagerAdapter);

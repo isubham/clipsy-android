@@ -24,32 +24,32 @@
     <!--network-->
 
     <!--user-->
-    <string name="request_user_sign_up">http://api.pitavya.com/clipsy/signup/</string>
-    <string name="request_user_verify_email">http://api.pitavya.com/clipsy/verify_email_verification</string>
-    <string name="request_user_sign_in">http://api.pitavya.com/clipsy/signin</string>
-    <string name="request_user_get_user">http://api.pitavya.com/clipsy/get/%1$s</string>
-    <string name="request_user_update_avatar">http://api.pitavya.com/clipsy/update_avatar/%1$s</string>
-    <string name="request_user_update_password">http://api.pitavya.com/clipsy/update_password</string>
-    <string name="request_user_search_user">http://api.pitavya.com/clipsy/search/%1$s</string>
-    <string name="request_user_searched_user">http://api.pitavya.com/clipsy/searched/%1$s</string>
-    <string name="request_user_searched_top10">http://api.pitavya.com/clipsy/searched</string>
-    <string name="request_user_delete_searched">http://api.pitavya.com/clipsy/deleteSearched/%1$s</string>
+    <string name="request_user_sign_up">https://api.pitavya.com/clipsy/signup/</string>
+    <string name="request_user_verify_email">https://api.pitavya.com/clipsy/verify_email_verification</string>
+    <string name="request_user_sign_in">https://api.pitavya.com/clipsy/signin</string>
+    <string name="request_user_get_user">https://api.pitavya.com/clipsy/get/%1$s</string>
+    <string name="request_user_update_avatar">https://api.pitavya.com/clipsy/update_avatar/%1$s</string>
+    <string name="request_user_update_password">https://api.pitavya.com/clipsy/update_password</string>
+    <string name="request_user_search_user">https://api.pitavya.com/clipsy/search/%1$s</string>
+    <string name="request_user_searched_user">https://api.pitavya.com/clipsy/searched/%1$s</string>
+    <string name="request_user_searched_top10">https://api.pitavya.com/clipsy/searched</string>
+    <string name="request_user_delete_searched">https://api.pitavya.com/clipsy/deleteSearched/%1$s</string>
 
 
 
-    <string name="request_user_forgot_password">http://api.pitavya.com/clipsy/forgot_password</string>
+    <string name="request_user_forgot_password">https://api.pitavya.com/clipsy/forgot_password</string>
 
     <!--clip-->
-    <string name="request_clip_create">http://api.pitavya.com/clipsy/create_clip</string>
-    <string name="request_clip_read">http://api.pitavya.com/clipsy/read_clip/%1$s</string>
-    <string name="request_clip_update">http://api.pitavya.com/clipsy/update_clip/%1$s</string>
-    <string name="request_clip_delete">http://api.pitavya.com/clipsy/update_clip/%1$s</string>
+    <string name="request_clip_create">https://api.pitavya.com/clipsy/create_clip</string>
+    <string name="request_clip_read">https://api.pitavya.com/clipsy/read_clip/%1$s</string>
+    <string name="request_clip_update">https://api.pitavya.com/clipsy/update_clip/%1$s</string>
+    <string name="request_clip_delete">https://api.pitavya.com/clipsy/update_clip/%1$s</string>
 
 
-    <string name="request_clip_reads">http://api.pitavya.com/clipsy/read_clips</string>
-    <string name="request_clip_reads_user">http://api.pitavya.com/clipsy/read_clips/%1$s</string>
+    <string name="request_clip_reads">https://api.pitavya.com/clipsy/read_clips</string>
+    <string name="request_clip_reads_user">https://api.pitavya.com/clipsy/read_clips/%1$s</string>
 
-    <string name="request_clip_following">http://api.pitavya.com/clipsy/following_clips</string>
+    <string name="request_clip_following">https://api.pitavya.com/clipsy/following_clips</string>
 
 
     <string name="response_invalid_clip_id">-1</string>
@@ -57,18 +57,18 @@
 
     <!--user user-->
 
-    <string name="request_user_user_follow">http://api.pitavya.com/clipsy/follow/%1$s</string>
-    <string name="request_user_user_unfollow">http://api.pitavya.com/clipsy/unfollow/%1$s</string>
+    <string name="request_user_user_follow">https://api.pitavya.com/clipsy/follow/%1$s</string>
+    <string name="request_user_user_unfollow">https://api.pitavya.com/clipsy/unfollow/%1$s</string>
 
     <!--
-    <string name="request_user_user_following">http://api.pitavya.com/clipsy/following</string>
-    <string name="request_user_user_follower">http://api.pitavya.com/clipsy/follower</string>
+    <string name="request_user_user_following">https://api.pitavya.com/clipsy/following</string>
+    <string name="request_user_user_follower">https://api.pitavya.com/clipsy/follower</string>
     -->
 
-    <string name="request_user_user_following">http://api.pitavya.com/clipsy/following/%1$s</string>
-    <string name="request_user_user_follower">http://api.pitavya.com/clipsy/follower/%1$s</string>
+    <string name="request_user_user_following">https://api.pitavya.com/clipsy/following/%1$s</string>
+    <string name="request_user_user_follower">https://api.pitavya.com/clipsy/follower/%1$s</string>
 
-    <string name="request_user_user_profile_matrix">http://api.pitavya.com/clipsy/profile_matrix/%1$s</string>
+    <string name="request_user_user_profile_matrix">https://api.pitavya.com/clipsy/profile_matrix/%1$s</string>
 
 
     <!--params-->
@@ -192,6 +192,7 @@
     <string name="already_have_an_account">Already have an account.</string>
     <string name="log_in">Log In</string>
     <string name="trouble_logging_in">Trouble logging in</string>
+    <string name="we_have_send_an_email_with_a_token_use_that_to_verify_your_email_it_may_take_2_minutes_to_get_the_email">We have send an email with a token. use that to verify your email. It may take 2 minutes to get the email</string>
 
 
 </resources>

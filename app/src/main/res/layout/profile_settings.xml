@@ -41,7 +41,7 @@
     <Button
         android:layout_marginTop="@dimen/comment_card_image_size"
         android:id="@+id/update_user_setting"
-        style="@style/primaryBigButton"
+        style="@style/secondaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Update Profile" />

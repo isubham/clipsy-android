@@ -75,7 +75,7 @@ public class forgot_password extends wrapper {
     @Override
     public void handleResponse(String response) {
 
-        Log.i("forgot_password", response);
+        // Log.i("forgot_password", response);
 
         Gson gson = new Gson();
 

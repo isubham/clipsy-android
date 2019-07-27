@@ -21,6 +21,7 @@ import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.SignInApiResponse;
 import com.subhamkumar.clipsy.panel.panel;
+import com.subhamkumar.clipsy.utils.LoginDb;
 import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 
@@ -37,7 +38,7 @@ public class signin extends wrapper {
     @Override
     protected void handleErrorResponse(VolleyError error) {
 
-        Log.e("n/w bug", error.getMessage());
+        // Log.e("n/w bug", error.getMessage());
 
         showNetworkUnavailableDialog();
         Tools.hideNetworkLoadingDialog(networkLoadingDialog, "signin hide");
@@ -86,7 +87,7 @@ public class signin extends wrapper {
 
     @Override
     public void handleResponse(String response) {
-        Log.i("signin_data", response);
+        // Log.i("signin_data", response);
 
         Gson gson = new Gson();
         SignInApiResponse signInApiResponse = gson.fromJson(response, SignInApiResponse.class);
@@ -117,10 +118,8 @@ public class signin extends wrapper {
     private Bundle bundle;
 
     private void saveLoginDetails(SharedPreferences localStore, String token, String id) {
-        localStore.edit()
-                .putString("token", token)
-                .putString("id", id)
-                .commit();
+        LoginDb loginDb = new LoginDb(getApplicationContext());
+        loginDb.saveLoginDetails(id, token);
 
     }
 

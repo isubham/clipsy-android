@@ -331,7 +331,7 @@ public class editor extends AppCompatActivity {
 
         // TODO ? save every edit.
         editor.setOnTextChangeListener(content -> {
-            Log.d(TAG, "onTextChanged: " + content);
+            // Log.d(TAG, "onTextChanged: " + content);
             //  ? applyChangesToClip();
         });
 

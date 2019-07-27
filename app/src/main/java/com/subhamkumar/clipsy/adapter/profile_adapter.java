@@ -62,13 +62,22 @@ abstract public class profile_adapter extends RecyclerView.Adapter<profile_adapt
         profileViewholder.name.setText(profiles.get(i).name);
         profileViewholder.email.setText(profiles.get(i).email);
 
+        setCrossIcon(profileViewholder, i);
+
+        setProfilePic(profileViewholder, i);
+
+    }
+
+    private void setCrossIcon(@NonNull Profile_viewholder profileViewholder, int i) {
         if(profiles.get(i).showCloseIcon != "1") {
                  profileViewholder.crossIcon.setVisibility(View.GONE);
         }
         else{
                   profileViewholder.crossIcon.setVisibility(View.VISIBLE);
         }
+    }
 
+    private void setProfilePic(@NonNull Profile_viewholder profileViewholder, int i) {
         try{
             int _profile_pic;
             // TODO set default when not set.
@@ -83,9 +92,8 @@ abstract public class profile_adapter extends RecyclerView.Adapter<profile_adapt
             int imageResource = Constants.mThumbIds[_profile_pic];
             profileViewholder.profile_pic.setImageResource(imageResource);
         }catch (NumberFormatException e) {
-            Log.i("002", "nullformatexception" + e.getMessage());
+            // Log.i("002", "nullformatexception" + e.getMessage());
         }
-
     }
 
     @Override

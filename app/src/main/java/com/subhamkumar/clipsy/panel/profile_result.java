@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.panel.fragments.fragment_complete_profile;
+import com.subhamkumar.clipsy.panel.fragments.fragment_profile;
 
 import java.util.Objects;
 
@@ -30,14 +31,14 @@ public class profile_result extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragment_complete_profile fragment_complete_profile = new fragment_complete_profile();
+        fragment_profile fragment_profile = new fragment_profile();
 
         if(getIntent().getExtras() != null) {
             Bundle user_detail = getIntent().getExtras();
-            fragment_complete_profile.setArguments(user_detail);
+            fragment_profile.setArguments(user_detail);
         }
 
-        fragmentTransaction.add(profile_result.getId(), fragment_complete_profile);
+        fragmentTransaction.add(profile_result.getId(), fragment_profile);
         fragmentTransaction.commit();
     }
 }

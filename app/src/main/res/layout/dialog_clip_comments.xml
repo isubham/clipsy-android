@@ -65,8 +65,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rl_comment_placeholder"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="60dp"
         />
+
 
     <LinearLayout
         android:background="@color/white"
@@ -75,12 +76,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+
+
         <EditText
             android:id="@+id/commentContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
+            android:lines="3"
+            android:background="@drawable/edittext_round_border"
             android:hint="Your Comment"
+            android:padding="@dimen/activityPadding"
             android:textSize="12sp" />
 
         <TextView
@@ -90,8 +96,8 @@
             android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:text="Comment" />
 
 

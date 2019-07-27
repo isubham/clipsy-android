@@ -63,26 +63,26 @@ public class Constants {
     public static final String CLIP_CONTENT = "clip_content";
     public static final String TOKEN = "token";
 
-    public static final String request_clip_create = "http://api.pitavya.com/clipsy/create_clip";
+    public static final String request_clip_create = "https://api.pitavya.com/clipsy/create_clip";
     public static final String header_authentication = "Authentication";
 
     public static final String response_invalid_clip_id = "-1";
-    public static final String request_clip_update = "http://api.pitavya.com/clipsy/update_clip/%1$s";
-    public static final String request_user_get_user = "http://api.pitavya.com/clipsy/get/%1$s";
-    public static String request_user_update_avatar = "http://api.pitavya.com/clipsy/update_user/%1$s";
-    public static final String request_clip_read = "http://api.pitavya.com/clipsy/read_clip/%1$s";
-    public static final String request_clip_delete = "http://api.pitavya.com/clipsy/delete_clip/%1$s";
-    public static final String request_user_update_password = "http://api.pitavya.com/clipsy/update_password";
-    public static final String request_report_send = "http://api.pitavya.com/clipsy/report/";
-    public static final String request_signup = "http://api.pitavya.com/clipsy/signup/";
-    public static final String request_user_forgot_password = "http://api.pitavya.com/clipsy/forgot_password";
-    public static final String request_user_sign_in = "http://api.pitavya.com/clipsy/signin";
-    public static final String request_user_verify_email = "http://api.pitavya.com/clipsy/verify_email_verification";
+    public static final String request_clip_update = "https://api.pitavya.com/clipsy/update_clip/%1$s";
+    public static final String request_user_get_user = "https://api.pitavya.com/clipsy/get/%1$s";
+    public static String request_user_update_avatar = "https://api.pitavya.com/clipsy/update_user/%1$s";
+    public static final String request_clip_read = "https://api.pitavya.com/clipsy/read_clip/%1$s";
+    public static final String request_clip_delete = "https://api.pitavya.com/clipsy/delete_clip/%1$s";
+    public static final String request_user_update_password = "https://api.pitavya.com/clipsy/update_password";
+    public static final String request_report_send = "https://api.pitavya.com/clipsy/report/";
+    public static final String request_signup = "https://api.pitavya.com/clipsy/signup/";
+    public static final String request_user_forgot_password = "https://api.pitavya.com/clipsy/forgot_password";
+    public static final String request_user_sign_in = "https://api.pitavya.com/clipsy/signin";
+    public static final String request_user_verify_email = "https://api.pitavya.com/clipsy/verify_email_verification";
 
-    public static final String request_user_user_following = "http://api.pitavya.com/clipsy/following/%1$s";
-    public static final String request_user_user_follower = "http://api.pitavya.com/clipsy/follower/%1$s";
+    public static final String request_user_user_following = "https://api.pitavya.com/clipsy/following/%1$s";
+    public static final String request_user_user_follower = "https://api.pitavya.com/clipsy/follower/%1$s";
 
-    public static final String request_clip_get_comment = "http://api.pitavya.com/clipsy/comment/%1$s";
+    public static final String request_clip_get_comment = "https://api.pitavya.com/clipsy/comment/%1$s";
     // status
     public static final String status_success = "1";
     public static final String status_failed = "0";
