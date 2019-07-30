@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.subhamkumar.clipsy.utils.Message.fragmentSearchToProfileResult;
+
 
 public class fragment_search extends fragment_wrapper {
     @Override
@@ -153,7 +155,6 @@ public class fragment_search extends fragment_wrapper {
             String searchedUserId = ((TextView) V.findViewById(R.id.rl_profile_id)).getText().toString().trim();
             deleteSearchResult(searchedUserId);
         });
-
         V.findViewById(R.id.rl_profile_name).setOnClickListener(v -> {
             String searchedUserId = ((TextView) V.findViewById(R.id.rl_profile_id)).getText().toString().trim();
             gotToProfileResult(searchedUserId);
@@ -339,16 +340,8 @@ public class fragment_search extends fragment_wrapper {
     private void gotToProfileResult(String searchedUserId) {
 
         Intent to_profile_result = new Intent(getActivity(), profile_result.class);
-
         saveSearchResult(searchedUserId);
-
-        userDetails.putString(getString(R.string.params_token), token);
-        userDetails.putString(getString(R.string.params_id), id);
-        userDetails.putString(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId);
-        userDetails.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
-                getString(R.string.bundle_param_caller_activity_fragment_search));
-
-        to_profile_result.putExtras(userDetails);
+        to_profile_result.putExtras(fragmentSearchToProfileResult(token, id, searchedUserId));
         startActivity(to_profile_result);
     }
 

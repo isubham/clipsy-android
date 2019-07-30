@@ -87,6 +87,10 @@ abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapt
             clip_viewholder.editComment.setVisibility(View.GONE);
             clip_viewholder.deleteComment.setVisibility(View.GONE);
         }
+        else{
+            clip_viewholder.editComment.setVisibility(View.VISIBLE);
+            clip_viewholder.deleteComment.setVisibility(View.VISIBLE);
+        }
 
         setCommentProfileNameAndComment(clip_viewholder, i);
 
@@ -118,7 +122,7 @@ abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapt
 
         clip_viewholder.comment.setText("");
         clip_viewholder.comment.append(boldName);
-        clip_viewholder.comment.append(" ");
+        clip_viewholder.comment.append(Constants.DOT + " ");
         clip_viewholder.comment.append(profileComment);
 
     }

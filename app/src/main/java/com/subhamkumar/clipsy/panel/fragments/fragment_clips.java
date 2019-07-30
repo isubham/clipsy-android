@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
+import static com.subhamkumar.clipsy.utils.Message.fragmentClipToProfileResult;
 
 
 public class fragment_clips extends Fragment {
@@ -70,7 +71,7 @@ public class fragment_clips extends Fragment {
     }
 
     private String getClipUrl() {
-        String from = Objects.requireNonNull(getArguments()).getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips));
+        String from = Objects.requireNonNull(getArguments()).getString(Constants.TO_HOME);
         return getUrl(from);
     }
 
@@ -146,23 +147,12 @@ public class fragment_clips extends Fragment {
         V.findViewById(R.id.rl_clip_comment).setOnClickListener(v -> clipShowComments(V));
     }
 
+
     private void gotoProfileResult(View V) {
         String searchedUserId = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
-
-        gotoProfileResult(searchedUserId);
+        startActivity(new Intent(getActivity(), profile_result.class).putExtras(fragmentClipToProfileResult(token, id, searchedUserId)));
     }
 
-    private void gotoProfileResult(String searchedUserId) {
-        Bundle toProfileResult = new Bundle();
-        toProfileResult.putString(getString(R.string.params_token), token);
-        toProfileResult.putString(getString(R.string.params_id), id);
-        toProfileResult.putString(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId);
-
-        toProfileResult.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
-                getString(R.string.bundle_param_caller_activity_fragment_search));
-
-        startActivity(new Intent(getActivity(), profile_result.class).putExtras(toProfileResult));
-    }
 
     private void clipMenuClickedDialog(View V) {
         String author_id = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
@@ -171,7 +161,8 @@ public class fragment_clips extends Fragment {
         setSelectedClipId(clip_id);
         if (author_id.equals(viewer_id)) {
             showSameUserDialog(author_id, clip_id);
-        } else {
+        }
+        else {
             showDifferentUserDialog(author_id);
             setSelectedUserId(author_id);
         }
@@ -788,7 +779,7 @@ public class fragment_clips extends Fragment {
         try {
             id = bundle.getString(getString(R.string.params_id));
             token = bundle.getString(getString(R.string.params_token));
-            from = bundle.getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips));
+            from = bundle.getString(Constants.TO_HOME);
 
         } catch (NullPointerException e) {
             Toast.makeText(context, "null on" + e.getMessage(), Toast.LENGTH_SHORT).show();

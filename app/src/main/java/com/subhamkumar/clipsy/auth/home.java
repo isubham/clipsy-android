@@ -32,43 +32,51 @@ public class home extends AppCompatActivity {
         bundle = getIntent().getExtras();
         localStore = getApplicationContext().getSharedPreferences(Constants.myFile , Context.MODE_PRIVATE);
 
-        if (bundle != null) handleState(bundle, localStore);
+        handleState(bundle, localStore);
+
 
     }
 
 
     private void handleState(Bundle bundle, SharedPreferences localStore) {
-        boolean closeButtonClicked = bundle.containsKey(Constants.CLOSE);
-        boolean signOutButtonClicked = bundle.containsKey(Constants.SIGNOUT);
-        boolean loginDetailsExist =  checkLoginDetails();
 
-        if (closeButtonClicked || signOutButtonClicked) {
-            String token = bundle.getString("token");
-            String id = bundle.getString("id");
+        if (bundle != null) {
 
-            // if close is clicked from panel check if login details exist if not save login details and
-            if (closeButtonClicked) {
-                if (! checkLoginDetails())
-                    saveLoginDetails(localStore, token, id);
-                this.finish();
+            boolean closeButtonClicked = bundle.containsKey(Constants.CLOSE);
+            boolean signOutButtonClicked = bundle.containsKey(Constants.SIGNOUT);
+            boolean loginDetailsExist = checkLoginDetails();
+
+            if (closeButtonClicked || signOutButtonClicked) {
+                String token = bundle.getString("token");
+                String id = bundle.getString("id");
+
+                // if close is clicked from panel check if login details exist if not save login details and
+                if (closeButtonClicked) {
+                    if (!loginDetailsExist)
+                        saveLoginDetails(localStore, token, id);
+                    this.finish();
+                }
+
+                // if sign_out is clicked from panel delete login details and stay
+                else {
+                    deleteLoginDetails(localStore);
+                }
+
             }
-
-            // if sign_out is clicked from panel delete login details and stay
             else {
-                deleteLoginDetails(localStore);
+                if (loginDetailsExist) {
+                    gotoPanelIFLoginDetailsExist(localStore);
+                }
             }
-
         }
-
-        // else login details exist goto panel
-        else
-        {
-            if(loginDetailsExist){
+        else{
+            boolean loginExist = checkLoginDetails();
+            if (loginExist) {
                 gotoPanelIFLoginDetailsExist(localStore);
             }
         }
-    }
 
+    }
 
 
     private void saveLoginDetails(SharedPreferences localStore, String token, String id) {
@@ -85,7 +93,6 @@ public class home extends AppCompatActivity {
 
         LoginDb loginDb = new LoginDb(getApplicationContext());
         LoginDetails details = loginDb.getLoginDetails();
-        // Log.i("check_login", "contains email");
         startActivity(new Intent(home.this, panel.class)
                 .putExtra("token", details.getTOKEN())
                 .putExtra("id", details.getID()));

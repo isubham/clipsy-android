@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.panel.fragments.fragment_complete_profile;
 import com.subhamkumar.clipsy.panel.fragments.fragment_profile;
 
 import java.util.Objects;
@@ -40,5 +39,11 @@ public class profile_result extends AppCompatActivity {
 
         fragmentTransaction.add(profile_result.getId(), fragment_profile);
         fragmentTransaction.commit();
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
     }
 }

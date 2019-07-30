@@ -52,6 +52,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.subhamkumar.clipsy.utils.Message.fragmentProfileToProfileResult;
+import static com.subhamkumar.clipsy.utils.Message.getSearchId_forClips_orSearch_orProfileList;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -388,7 +391,6 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
     private void initializeCommentsDialogRecyclerView(Dialog commentDialog, String clipId) {
 
-
         commentsRecyclerView = commentDialog.findViewById(R.id.clip_comments);
         commentlinearLayoutManager = new LinearLayoutManager(context);
         comments = new ArrayList<>();
@@ -403,7 +405,6 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
         commentsRecyclerView.setAdapter(comment_adapter);
         commentsRecyclerView.setLayoutManager(commentlinearLayoutManager);
-
 
     }
 
@@ -429,7 +430,6 @@ public class fragment_profile extends android.support.v4.app.Fragment {
             }
 
         });
-
 
     }
 
@@ -865,16 +865,8 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
     protected void gotToProfileResult(View view) {
         Intent to_profile_result = new Intent(context, profile_result.class);
-
         String searchedUserId = ((TextView) view.findViewById(R.id.rl_profile_id)).getText().toString().trim();
-
-        to_profile_result.putExtra(getString(R.string.bundle_param_profile_result_searched_user_id), searchedUserId)
-                .putExtra(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
-                        getString(R.string.bundle_param_caller_activity_fragment_profile_list_to_profile_result))
-                .putExtra(getString(R.string.params_token), getTokenFromBundle())
-                .putExtra(getString(R.string.params_id), getIdFromToken());
-
-
+        to_profile_result.putExtras(fragmentProfileToProfileResult(token, id, searchedUserId));
         startActivity(to_profile_result);
     }
 
@@ -1050,23 +1042,30 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     protected void setVariablesFromBundle() {
         id = Objects.requireNonNull(getArguments()).getString(getString(R.string.params_id));
         token = getArguments().getString(getString(R.string.params_token));
-        searched_id = setSearchIdIfComingFromFragmentSearchOrCompleteProfileOrProfileList(id);
+        searched_id = getSearchId_forClips_orSearch_orProfileList(getArguments(), id);
     }
 
-    protected String setSearchIdIfComingFromFragmentSearchOrCompleteProfileOrProfileList(String id) {
+    // TODO BUG
+    protected String setSearchId_forClips_orSearch_orProfileList(String id) {
         String searchedId = id;
-        if (Objects.requireNonNull(getArguments()).containsKey(getString(R.string.bundle_param_caller_activity_to_fragment_clips))) {
-            if (Objects.requireNonNull(getArguments().getString(getString(R.string.bundle_param_caller_activity_to_fragment_clips)))
+
+        /*
+        if (Objects.requireNonNull(getArguments()).containsKey(getString(R.string.TO_HOME))) {
+            if (Objects.requireNonNull(getArguments().getString(getString(R.string.TO_HOME)))
                     .equals(getString(R.string.bundle_param_caller_activity_fragment_search))) {
-                return getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
+                return getArguments().getString(getString(R.string.SEARCHED_ID));
             }
         }
+        */
+
         if (getArguments().containsKey(getString(R.string.bundle_param_profile_result_searched_user_id))) {
             return getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
         }
+
         if (getArguments().containsKey(getString(R.string.bundle_param_caller_activity_to_fragment_clips))) {
             return getArguments().getString(getString(R.string.params_id));
         }
+
         return searchedId;
     }
 

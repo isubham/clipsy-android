@@ -69,7 +69,7 @@ public class Constants {
     public static final String response_invalid_clip_id = "-1";
     public static final String request_clip_update = "https://api.pitavya.com/clipsy/update_clip/%1$s";
     public static final String request_user_get_user = "https://api.pitavya.com/clipsy/get/%1$s";
-    public static String request_user_update_avatar = "https://api.pitavya.com/clipsy/update_user/%1$s";
+    public static final String request_user_update_avatar = "https://api.pitavya.com/clipsy/update_user/%1$s";
     public static final String request_clip_read = "https://api.pitavya.com/clipsy/read_clip/%1$s";
     public static final String request_clip_delete = "https://api.pitavya.com/clipsy/delete_clip/%1$s";
     public static final String request_user_update_password = "https://api.pitavya.com/clipsy/update_password";
@@ -108,13 +108,13 @@ public class Constants {
     public static final String param_search_id = "search_id";
 
     public static final String bundle_param_caller_activity_to_email_verification = "callback";
-    public static final String bundle_param_caller_activity_to_fragment_clips = "where_to_fragment_clips";
-    public static final String bundle_param_caller_activity_panel = "panel";
-    public static final String bundle_param_caller_button_to_profile_list = "profile_list";
-    public static final String bundle_param_caller_button_following = "following";
-    public static final String bundle_param_profile_result_searched_user_id = "searched_id";
-    public static final String bundle_param_caller_activity_fragment_profile_list_to_profile_result = "profile_list_to_complete_profile";
-
+    public static final String TO_HOME = "where_to_home";
+    public static final String PANEL = "panel";
+    public static final String PROFILE_LIST = "profile_list";
+    public static final String FOLLOWING = "following";
+    public static final String SEARCHED_ID = "searched_id";
+    public static final String PROFILE_LIST_TO_COMPLETE_PROFILE = "profile_list_to_complete_profile";
+    public static final String PROFILE_LIST_TO_PROFILE_RESULT = "PROFILE_LIST_TO_PROFILE_RESULT";
 
     public static final String myFile = "theAwesomeDataInMain";
     public static String myKey = "52521";
@@ -132,7 +132,12 @@ public class Constants {
 
 
     public static int profilePicChangeRequest = 23323;
+    public static String token = "token";
+    public static String id = "id";
+    public static String fragment_search = "fragment_search";
+    public static String fragment_profile = "fragment_profile";
 
 
+    public static String searched_user_id = "searched_id";
 
 }

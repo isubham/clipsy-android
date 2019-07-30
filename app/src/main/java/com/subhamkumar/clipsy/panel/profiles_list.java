@@ -72,8 +72,8 @@ public class profiles_list extends wrapper {
         String searchedId = getSeacrchedId();
 
         boolean isFollowingButtonClicked =
-                Objects.requireNonNull(bundle.getString(Constants.bundle_param_caller_button_to_profile_list))
-                        .equals(Constants.bundle_param_caller_button_following);
+                Objects.requireNonNull(bundle.getString(Constants.PROFILE_LIST))
+                        .equals(Constants.FOLLOWING);
 
         return String.format(isFollowingButtonClicked
                         ? Constants.request_user_user_following :
@@ -94,9 +94,9 @@ public class profiles_list extends wrapper {
 
         String searchedUserId = ((TextView) view.findViewById(R.id.rl_profile_id)).getText().toString().trim();
 
-        to_profile_result.putExtra(Constants.bundle_param_profile_result_searched_user_id, searchedUserId)
-                .putExtra(Constants.bundle_param_caller_activity_to_fragment_clips,
-                        Constants.bundle_param_caller_activity_fragment_profile_list_to_profile_result)
+        to_profile_result.putExtra(Constants.SEARCHED_ID, searchedUserId)
+                .putExtra(Constants.TO_HOME,
+                        Constants.PROFILE_LIST_TO_COMPLETE_PROFILE)
                 .putExtra(Constants.param_token, getTokenFromBundle())
                 .putExtra(Constants.param_id, getIntent().getStringExtra(Constants.param_id));
 

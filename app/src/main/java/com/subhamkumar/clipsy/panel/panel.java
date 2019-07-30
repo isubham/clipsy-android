@@ -1,7 +1,6 @@
 package com.subhamkumar.clipsy.panel;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -18,7 +17,6 @@ import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.auth.home;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.fragments.fragment_clips;
-import com.subhamkumar.clipsy.panel.fragments.fragment_complete_profile;
 import com.subhamkumar.clipsy.panel.fragments.fragment_profile;
 import com.subhamkumar.clipsy.panel.fragments.fragment_search;
 
@@ -26,13 +24,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.subhamkumar.clipsy.utils.Message.getId;
+import static com.subhamkumar.clipsy.utils.Message.getToken;
+
 public class panel extends AppCompatActivity {
 
+    // Top Right Action Menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        createTopRightOptionMenu(menu);
+        return true;
+    }
+
+    private void createTopRightOptionMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu, menu);
-        return true;
     }
 
     @Override
@@ -48,10 +54,12 @@ public class panel extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     private void toSignOut() {
         startActivity(new Intent(panel.this, home.class).putExtra(Constants.SIGNOUT, "1"));
         this.finish();
     }
+    // End of Top Right Action Menu
 
     //  Creating adapter for the viewpager
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -80,8 +88,9 @@ public class panel extends AppCompatActivity {
         }
 
     }
-
     // end of adapter classs
+
+
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -91,6 +100,10 @@ public class panel extends AppCompatActivity {
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setElevation(0);
+        setActionIcons();
+    }
+
+    private void setActionIcons() {
         Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.newsfeed);
         Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.search);
         Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.user);
@@ -101,26 +114,34 @@ public class panel extends AppCompatActivity {
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        user_details.putString(Constants.bundle_param_caller_activity_to_fragment_clips,
-                Constants.bundle_param_caller_activity_panel);
+        user_details.putString(Constants.TO_HOME,
+                Constants.PANEL);
 
-        fragment_clips fragment_clips = new fragment_clips();
-        fragment_clips.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_clips, "");
+        addClip(viewPagerAdapter);
+        addSearch(viewPagerAdapter);
+        addProfile(viewPagerAdapter);
 
-        fragment_search fragment_search = new fragment_search();
-        fragment_search.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_search, "");
+        viewPager.setAdapter(viewPagerAdapter);
+        addTitleToDifferentTabs(viewPager);
 
+    }
+
+    private void addProfile(ViewPagerAdapter viewPagerAdapter) {
         fragment_profile fragment_profile = new fragment_profile();
         fragment_profile.setArguments(user_details);
         viewPagerAdapter.addFragment(fragment_profile, "");
+    }
 
+    private void addSearch(ViewPagerAdapter viewPagerAdapter) {
+        fragment_search fragment_search = new fragment_search();
+        fragment_search.setArguments(user_details);
+        viewPagerAdapter.addFragment(fragment_search, "");
+    }
 
-        viewPager.setAdapter(viewPagerAdapter);
-
-        addTitleToDifferentTabs(viewPager);
-
+    private void addClip(ViewPagerAdapter viewPagerAdapter) {
+        fragment_clips fragment_clips = new fragment_clips();
+        fragment_clips.setArguments(user_details);
+        viewPagerAdapter.addFragment(fragment_clips, "");
     }
 
 
@@ -161,35 +182,40 @@ public class panel extends AppCompatActivity {
                 .putExtra("token", token)
                 .putExtra("action", "save")
 
-
         );
     }
 
-    private String token; // for createClip
 
     // for persistence
 
     @Override
     public void onBackPressed() {
 
+        showExitDialog();
+
+    }
+
+    private void showExitDialog() {
         final Dialog dialog = new Dialog(panel.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_backbutton_click);
 
         dialog.findViewById(R.id.dialog_backbutton_close).setOnClickListener(v -> {
-            Intent toHomeForClose = new Intent(panel.this, home.class)
-                    .putExtras(user_details).putExtra(Constants.CLOSE, "1");
-            startActivity(toHomeForClose);
-            finish();
+            toHome();
             dialog.dismiss();
         });
         dialog.findViewById(R.id.dialog_backbutton_cancel).setOnClickListener(v -> dialog.dismiss());
-
         dialog.show();
-
     }
 
-    String id;
+    private void toHome() {
+        Intent toHomeForClose = new Intent(panel.this, home.class)
+                .putExtras(user_details).putExtra(Constants.CLOSE, "1");
+        startActivity(toHomeForClose);
+        finish();
+    }
+
+    String id, token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,8 +225,8 @@ public class panel extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             user_details = getIntent().getExtras();
-            token = user_details.getString("token");
-            id = user_details.getString("id");
+            token = getToken(user_details);
+            id = getId(user_details);
         }
 
         initializeVaribles();

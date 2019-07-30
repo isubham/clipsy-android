@@ -83,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
-            android:lines="3"
+            android:lines="2"
             android:background="@drawable/edittext_round_border"
             android:hint="Your Comment"
             android:padding="@dimen/activityPadding"
@@ -96,8 +96,9 @@
             android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:paddingTop="@dimen/activityPadding"
+            android:layout_marginStart="8dp"
+            android:paddingBottom="@dimen/activityPadding"
             android:text="Comment" />
 
 
