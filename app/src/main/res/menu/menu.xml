@@ -10,6 +10,13 @@
         myapp:showAsAction="always"
         android:icon="@drawable/outline_create_black"
         />
+    <item
+        android:id="@+id/notification"
+        android:title="@string/notification"
+        android:visible="true"
+        myapp:showAsAction="always"
+        android:icon="@drawable/globe"
+        />
      <item
         android:id="@+id/sign_out"
         android:title="@string/sign_out"

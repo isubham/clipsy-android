@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
     <application
         android:allowBackup="true"
@@ -28,8 +30,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light"
             >
-
         </activity>
+
         <activity
             android:name=".auth.signup"
             android:theme="@style/Theme.AppCompat.Light"
@@ -38,7 +40,8 @@
             android:name=".panel.panel"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
         <activity
             android:name=".panel.profile_result"
             android:screenOrientation="portrait"
@@ -63,9 +66,6 @@
             android:name=".auth.change_password"
             android:theme="@style/Theme.AppCompat.Light"
             android:screenOrientation="portrait" />
-
-        <receiver android:name=".utils.CustomTabs$CopyBroadcastReceiver" />
-
         <activity
             android:name=".panel.choose_avatar"
             android:theme="@style/Theme.AppCompat.Light"
@@ -74,6 +74,23 @@
             android:name=".panel.ProfileSetting"
             android:theme="@style/Theme.AppCompat.Light"
             android:screenOrientation="portrait" />
+
+
+        <receiver android:name=".utils.CustomTabs$CopyBroadcastReceiver" />
+        <service android:name=".utils.Daemon"
+            android:enabled="true"></service>
+        <receiver
+            android:enabled="true"
+            android:exported="true"
+            android:name=".utils.NotificationBroadcast">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.REBOOT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

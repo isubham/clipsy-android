@@ -39,6 +39,10 @@ public class Tools {
     }
 
 
+    public static String getToken(Context context) {
+        return new LoginDb(context).getLoginDetails().TOKEN;
+    }
+
     public static void showNetworkLoadingDialog(Dialog networkLoadingDialog, String activity) {
         // Log.e("tools n/w ", activity);
         networkLoadingDialog.setContentView(R.layout.dialog_network_loading);

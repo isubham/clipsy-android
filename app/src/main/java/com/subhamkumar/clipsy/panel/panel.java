@@ -1,7 +1,12 @@
 package com.subhamkumar.clipsy.panel;
 
+import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +25,10 @@ import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.fragments.fragment_clips;
 import com.subhamkumar.clipsy.panel.fragments.fragment_profile;
 import com.subhamkumar.clipsy.panel.fragments.fragment_search;
+import com.subhamkumar.clipsy.utils.Daemon;
+import com.subhamkumar.clipsy.utils.LoginDb;
+import com.subhamkumar.clipsy.utils.LoginDetails;
+import com.subhamkumar.clipsy.utils.NotificationBroadcast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +36,7 @@ import java.util.Objects;
 
 import static com.subhamkumar.clipsy.utils.Message.getId;
 import static com.subhamkumar.clipsy.utils.Message.getToken;
+import static com.subhamkumar.clipsy.utils.NotificationHelper.notificationClickAction;
 
 public class panel extends AppCompatActivity {
 
@@ -217,6 +228,10 @@ public class panel extends AppCompatActivity {
 
     String id, token;
 
+    protected LoginDetails getloginDetails() {
+        return new LoginDb(this).getLoginDetails();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,11 +240,71 @@ public class panel extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             user_details = getIntent().getExtras();
-            token = getToken(user_details);
-            id = getId(user_details);
+        }
+        else{
+            LoginDetails loginDetails = getloginDetails();
+            user_details = new Bundle();
+            user_details.putString("id", loginDetails.ID);
+            user_details.putString("token", loginDetails.TOKEN);
         }
 
+        token = getToken(user_details);
+        id = getId(user_details);
         initializeVaribles();
+        ctx = this;
+        daemon = new Daemon(ctx);
+        daemonIntent = new Intent(ctx, daemon.getClass());
+        if (!isNotificationServiceRunning(daemonIntent.getClass())) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(daemonIntent);
+                }
+
+                startService(daemonIntent);
+        }
     }
+
+    Context ctx;
+    public Context getCtx() {
+        return ctx;
+    }
+
+    private Daemon daemon;
+    private Intent daemonIntent;
+
+    private boolean isNotificationServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("isMyServiceRunning?", true+"");
+                return true;
+            }
+        }
+        Log.i ("isMyServiceRunning?", false+"");
+        return false;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        stopService(daemonIntent);
+        Log.i("MAINACT", "onDestroy!");
+        super.onDestroy();
+
+    }
+
+    public void startNotificationService() {
+
+            // Setup a PendingIntent that will perform a broadcast
+            Intent notificationIntent = new Intent(this, NotificationBroadcast.class);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
+
+    }
+
+
 
 }

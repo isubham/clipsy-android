@@ -83,6 +83,12 @@ public class Constants {
     public static final String request_user_user_follower = "https://api.pitavya.com/clipsy/follower/%1$s";
 
     public static final String request_clip_get_comment = "https://api.pitavya.com/clipsy/comment/%1$s";
+    public static final String newNotificationRequest = "https://api.pitavya.com/clipsy/newNotification";
+
+         public static final String notificationTypeFollowing = "following";
+        public static final String notificationTypeNewClip = "followingUserNewclip";
+        public static final String notificationTypeNewComment = "clipNewComment";
+
     // status
     public static final String status_success = "1";
     public static final String status_failed = "0";
@@ -139,5 +145,7 @@ public class Constants {
 
 
     public static String searched_user_id = "searched_id";
+
+
 
 }

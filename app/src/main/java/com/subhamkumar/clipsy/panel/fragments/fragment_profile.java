@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -913,11 +915,15 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
         relationshipButton.setOnClickListener(v -> {
 
+            disableButton();
+
             relationShipStringRequest = new StringRequest(
                     Request.Method.POST,
                     getUrlByResponseMessage(message, searched_id),
                     response -> {
                         getProfileAndClips(response);
+                        enableRelationShipButton();
+
                     },
                     error -> {
                         networkretry = NETWORKRETRY.RELATIONSHIPBUTTON;
@@ -941,6 +947,16 @@ public class fragment_profile extends android.support.v4.app.Fragment {
             performRelationShipAction();
 
         });
+    }
+
+    private void enableRelationShipButton() {
+        relationshipButton.setEnabled(true);
+        ViewCompat.setBackgroundTintList(relationshipButton, ContextCompat.getColorStateList(getActivity(), R.color.blue_A700));
+    }
+
+    private void disableButton() {
+        relationshipButton.setEnabled(false);
+        ViewCompat.setBackgroundTintList(relationshipButton, ContextCompat.getColorStateList(getActivity(), R.color.grey_300));
     }
 
     protected void performRelationShipAction() {
@@ -1043,30 +1059,6 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         id = Objects.requireNonNull(getArguments()).getString(getString(R.string.params_id));
         token = getArguments().getString(getString(R.string.params_token));
         searched_id = getSearchId_forClips_orSearch_orProfileList(getArguments(), id);
-    }
-
-    // TODO BUG
-    protected String setSearchId_forClips_orSearch_orProfileList(String id) {
-        String searchedId = id;
-
-        /*
-        if (Objects.requireNonNull(getArguments()).containsKey(getString(R.string.TO_HOME))) {
-            if (Objects.requireNonNull(getArguments().getString(getString(R.string.TO_HOME)))
-                    .equals(getString(R.string.bundle_param_caller_activity_fragment_search))) {
-                return getArguments().getString(getString(R.string.SEARCHED_ID));
-            }
-        }
-        */
-
-        if (getArguments().containsKey(getString(R.string.bundle_param_profile_result_searched_user_id))) {
-            return getArguments().getString(getString(R.string.bundle_param_profile_result_searched_user_id));
-        }
-
-        if (getArguments().containsKey(getString(R.string.bundle_param_caller_activity_to_fragment_clips))) {
-            return getArguments().getString(getString(R.string.params_id));
-        }
-
-        return searchedId;
     }
 
     LinearLayoutManager clipLayoutManager;

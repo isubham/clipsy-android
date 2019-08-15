@@ -13,6 +13,7 @@ import android.view.View;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.panel;
+import com.subhamkumar.clipsy.utils.Daemon;
 import com.subhamkumar.clipsy.utils.LoginDb;
 import com.subhamkumar.clipsy.utils.LoginDetails;
 
@@ -122,5 +123,14 @@ public class home extends AppCompatActivity {
     public void gotoForgotPassword(View view) {
         startActivity(new Intent(home.this, forgot_password.class));
     }
+
+    public void startRingtone(View v) {
+        sendBroadcast(new Intent(this, Daemon.class));
+    }
+
+    public void stopRingtone(View v) {
+        stopService(new Intent(this, Daemon.class));
+    }
+
 
 }

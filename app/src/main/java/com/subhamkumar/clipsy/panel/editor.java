@@ -292,6 +292,8 @@ public class editor extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
         networkLoadingDialog = new Dialog(editor.this, R.style.TranslucentDialogTheme);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         init();
 
         // Insert Link
@@ -422,6 +424,11 @@ public class editor extends AppCompatActivity {
                 }
             }
             break;
+            case android.R.id.home:{
+                finish();
+                return true;
+            }
+            default:return true;
         }
         return true;
 

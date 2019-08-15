@@ -113,10 +113,7 @@ public class ProfileSetting extends wrapper {
     }
 
     private void updateUser() {
-        if (! computeDirty()) {
-            Toast.makeText(this, "No Changes", Toast.LENGTH_SHORT).show();
-            return;
-        }
+
 
         wrapper updateUserVolleyWrapper = new wrapper() {
             @Override

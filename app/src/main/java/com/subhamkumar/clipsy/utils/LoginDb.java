@@ -57,7 +57,6 @@ public class LoginDb extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + LOGIN_TABLE + " WHERE "+ id + " > 0");
     }
 
-
     public  LoginDetails getLoginDetails() {
         ArrayList<LoginDetails> loginDetail = new ArrayList<LoginDetails>();
         String selectQuery = "SELECT " + id +", " + ID + ", " + TOKEN + " FROM " + LOGIN_TABLE;

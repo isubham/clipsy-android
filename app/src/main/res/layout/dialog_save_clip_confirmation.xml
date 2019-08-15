@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="@dimen/activityPadding">
+    >
 
 
     <LinearLayout
@@ -17,7 +17,6 @@
             android:id="@+id/dialog_save_clip_public"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             android:textSize="@dimen/dialogTextSize"
             android:background="@color/grey_50"
             android:fontFamily="sans-serif-medium"
@@ -31,18 +30,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/dialogTextSize"
-            android:layout_margin="4dp"
             android:background="@color/grey_50"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_horizontal"
             android:padding="8dp"
-            android:text="private Save" />
+            android:text="Private Save" />
 
         <TextView
             android:id="@+id/dialog_save_clip_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             android:textSize="@dimen/dialogTextSize"
             android:background="@color/grey_50"
             android:fontFamily="sans-serif-medium"

@@ -176,6 +176,9 @@
     <string name="closeApp">Close App</string>
     <string name="write">Write</string>
     <string name="sign_out">Sign Out</string>
+    <string name="notification">Notification</string>
+
+
     <string name="save">Save</string>
     <string name="Continue">Continue</string>
     <string name="tryAgain">Try Again</string>

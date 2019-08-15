@@ -11,7 +11,8 @@
             android:layout_height="wrap_content"
             android:text="Edit Comment"
             android:textSize="20sp"
-            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/activityPadding"
             />
 
         <EditText
@@ -19,7 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lines="5"
+            android:background="@drawable/edittext_round_border"
             android:hint="Your Comment"
+            android:padding="@dimen/activityPadding"
             android:textSize="12sp" />
 
         <Button

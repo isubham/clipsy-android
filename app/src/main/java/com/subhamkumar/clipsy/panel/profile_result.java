@@ -1,9 +1,11 @@
 package com.subhamkumar.clipsy.panel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.subhamkumar.clipsy.R;
@@ -19,9 +21,22 @@ public class profile_result extends AppCompatActivity {
     private LinearLayout profile_result;
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivity(new Intent(profile_result.this, panel.class));
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_result);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         profile_result = findViewById(R.id.profile_result);
 
@@ -40,6 +55,13 @@ public class profile_result extends AppCompatActivity {
         fragmentTransaction.add(profile_result.getId(), fragment_profile);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(profile_result.this, panel.class));
+    }
+
 
 
     @Override
