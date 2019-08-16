@@ -3,6 +3,7 @@ package com.subhamkumar.clipsy.utils;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -45,6 +46,16 @@ public class Daemon extends Service {
     long oldTime=0;
     public int counter;
 
+    public void startHandler() {
+        Handler handler = new Handler();
+        Runnable fetchNotifications = () -> {
+            counter++;
+            if(counter % 2 == 0) fetchNotificationResouse();
+            handler.postDelayed(this::fetchNotificationResouse, 5000);
+        };
+       handler.post(fetchNotifications);
+    }
+
     public void startTimer() {
         //set a new Timer
         timer = new Timer();
@@ -53,14 +64,14 @@ public class Daemon extends Service {
         initializeTimerTask();
 
         //schedule the timer, to wake up every 1 second
-        timer.schedule(timerTask, 1000, 5000); //
+        timer.schedule(timerTask, 1000, 10000); //
     }
 
     public void initializeTimerTask() {
         timerTask = new TimerTask() {
             public void run() {
                 Log.i("in timer", "in timer ++++  "+ (counter++));
-                fetchNotificationResouse();
+                if(counter %2 == 0) fetchNotificationResouse();
             }
         };
     }

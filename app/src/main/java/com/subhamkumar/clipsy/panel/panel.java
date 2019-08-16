@@ -287,7 +287,6 @@ public class panel extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        stopService(daemonIntent);
         Log.i("MAINACT", "onDestroy!");
         super.onDestroy();
 
