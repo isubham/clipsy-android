@@ -44,6 +44,9 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
 
         final ImageView profile_pic;
         final TextView clip_content;
+        final TextView clip_title;
+
+
         final TextView clip_comment;
 
 
@@ -61,6 +64,9 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
             author_name = V.findViewById(R.id.rl_clip_author);
             clip_time = V.findViewById(R.id.rl_clip_time);
             clip_content = V.findViewById(R.id.rl_clip_content);
+            clip_title = V.findViewById(R.id.rl_clip_title);
+
+
             clip_comment = V.findViewById(R.id.rl_clip_comment);
 
 
@@ -94,40 +100,6 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
     }
 
 
-    private void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span) {
-        int start = strBuilder.getSpanStart(span);
-        int end = strBuilder.getSpanEnd(span);
-        int flags = strBuilder.getSpanFlags(span);
-        ClickableSpan clickable = new ClickableSpan() {
-            public void onClick(@NonNull View view) {
-                CustomTabs.openTab(context, span.getURL());
-            }
-        };
-        strBuilder.setSpan(clickable, start, end, flags);
-        strBuilder.removeSpan(span);
-    }
-
-    protected void setTextViewHTML(TextView textView, String html) {
-        CharSequence sequence = Html.fromHtml(html);
-        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
-        URLSpan[] urls = strBuilder.getSpans(0, sequence.length(), URLSpan.class);
-        for (URLSpan span : urls) {
-            makeLinkClickable(strBuilder, span);
-        }
-        textView.setText(strBuilder);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-    }
-
-    protected void setTextViewHTML(TextView textView, Spanned spanned) {
-        SpannableStringBuilder strBuilder = new SpannableStringBuilder(spanned);
-        URLSpan[] urls = strBuilder.getSpans(0, spanned.length(), URLSpan.class);
-        for (URLSpan span : urls) {
-            makeLinkClickable(strBuilder, span);
-        }
-        textView.setText(strBuilder);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-    }
-
     @Override
     public void onBindViewHolder(@NonNull Clip_viewholder clip_viewholder, int i) {
 
@@ -136,6 +108,7 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
         clip_viewholder.author_id.setText(clips.get(i).profile.id);
         clip_viewholder.viewer_id.setText(clips.get(i).viewer_id);
         clip_viewholder.clip_time.setText(clips.get(i).clip_time.concat(" · "));
+        clip_viewholder.clip_title.setText(clips.get(i).clip_title);
 
         setCommentViews(clip_viewholder, i);
 
@@ -145,7 +118,14 @@ abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Cli
     }
 
     private void setCommentViews(@NonNull Clip_viewholder clip_viewholder, int i) {
-        String commentMessage = String.format("View %1$s Comment%2$s", clips.get(i).comment, Integer.parseInt(clips.get(i).comment) > 1 ? "s" : "");
+        int commentCount = Integer.parseInt(clips.get(i).comment);
+        String commentMessage;
+        if (commentCount == 0) {
+            commentMessage = "Be first commenter";
+        }
+        else{
+            commentMessage = String.format("View %1$s Comment%2$s", clips.get(i).comment,  commentCount > 1 ? "s" : "");
+        }
         clip_viewholder.clip_comment.setText(commentMessage);
 
         String visibility_text = clips.get(i).visibility.equals(Constants.visibility_private) ? "Private. " : "Public. ";

@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,24 +29,27 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.adapter.clip_adapter;
-import com.subhamkumar.clipsy.adapter.comment_adapter;
+import com.subhamkumar.clipsy.adapter.Unidapter;
 import com.subhamkumar.clipsy.adapter.profile_adapter;
 import com.subhamkumar.clipsy.models.ApiResponse;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.models.ClipApiResonse;
-import com.subhamkumar.clipsy.models.Comment;
 import com.subhamkumar.clipsy.models.CommentApiResonse;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
+import com.subhamkumar.clipsy.models.ProfileDetail;
 import com.subhamkumar.clipsy.models.ProfileMatrixApiResponse;
 import com.subhamkumar.clipsy.panel.ProfileSetting;
 import com.subhamkumar.clipsy.panel.editor;
 import com.subhamkumar.clipsy.panel.profile_result;
 import com.subhamkumar.clipsy.utils.RecyclerItemClickListener;
+import com.subhamkumar.clipsy.utils.Tools;
+import com.subhamkumar.clipsy.utils.VolleySingleton;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,32 +65,8 @@ import static com.subhamkumar.clipsy.utils.Message.getSearchId_forClips_orSearch
 public class fragment_profile extends android.support.v4.app.Fragment {
 
 
-    // start of clips
-    private ArrayList<Clip> clipList;
-
-    private void showClipsFromResponse(ArrayList<Clip> clipApiResonse) {
-        clipList.clear();
-
-        for (int i = 0; i < clipApiResonse.size(); i++) {
-            clipApiResonse.get(i).viewer_id = id;
-        }
-
-        clipList.addAll(clipApiResonse);
-        clip_adapter.notifyDataSetChanged();
-
-    }
-
-
-    private void addClickListener(View V) {
-        V.findViewById(R.id.rl_clip_author).setOnClickListener(v -> gotoProfileResult(V));
-        V.findViewById(R.id.rl_clip_profile_pic).setOnClickListener(v -> gotoProfileResult(V));
-        V.findViewById(R.id.rl_clip_menu).setOnClickListener(v -> clipMenuClickedDialog(V));
-        V.findViewById(R.id.rl_clip_comment).setOnClickListener(v -> clipShowComments(V));
-    }
-
     private void gotoProfileResult(View V) {
         String searchedUserId = ((TextView) V.findViewById(R.id.rl_clip_author_id)).getText().toString();
-
         gotoProfileResult(searchedUserId);
     }
 
@@ -101,7 +79,8 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         toProfileResult.putString(getString(R.string.bundle_param_caller_activity_to_fragment_clips),
                 getString(R.string.bundle_param_caller_activity_fragment_search));
 
-        startActivity(new Intent(getActivity(), profile_result.class).putExtras(toProfileResult));
+        Intent to_profile = new Intent(getActivity(), profile_result.class);
+        startActivity(to_profile.putExtras(toProfileResult));
     }
 
     private void clipMenuClickedDialog(View V) {
@@ -182,7 +161,8 @@ public class fragment_profile extends android.support.v4.app.Fragment {
                     ClipApiResonse deleteApiResponse = new Gson().fromJson(response, ClipApiResonse.class);
                     Toast.makeText(context, deleteApiResponse.message, Toast.LENGTH_SHORT).show();
                     ArrayList<Clip> clipList = new Gson().fromJson(response, ClipApiResonse.class).data;
-                    showClipsFromResponse(clipList);
+                    // TODO regresh on deleting
+                    // setItemsAndNotifyAdapter(clipList);
                 },
 
                 error -> handle_error_response(error)
@@ -338,7 +318,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         selected_user_id = user;
     }
 
-    private void clipShowComments(View V) {
+    private void clipShowComments(View clipView) {
 
         // show dialog
 
@@ -352,11 +332,11 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
         Objects.requireNonNull(commentsDialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
-        String clipId = ((TextView) V.findViewById(R.id.rl_clip_id)).getText().toString().trim();
+        String clipId = ((TextView) clipView.findViewById(R.id.rl_clip_id)).getText().toString().trim();
 
-        addCommentDialogClickListeners(commentsDialog, clipId);
+        addCommentDialogClickListeners(commentsDialog, clipView);
 
-        initializeCommentsDialogRecyclerView(commentsDialog, clipId);
+        initializeCommentsDialogRecyclerView(commentsDialog, clipView);
 
         StringRequest getClipComments = new StringRequest(
                 Request.Method.GET,
@@ -386,37 +366,51 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         Volley.newRequestQueue(context).add(getClipComments);
     }
 
-    private comment_adapter comment_adapter;
+    private void showProgressBar(boolean show) {
+
+        ShimmerFrameLayout layout = V.findViewById(R.id.shimmer_profile_clips);
+        if (show) {
+            layout.setVisibility(View.VISIBLE);
+            layout.startShimmer();
+        } else {
+            layout.stopShimmer();
+            layout.setVisibility(View.GONE);
+        }
+    }
+
+    private Unidapter unidapter;
     private LinearLayoutManager commentlinearLayoutManager;
-    private List<Comment> comments;
+    private ArrayList<Object> comments;
     private RecyclerView commentsRecyclerView;
 
-    private void initializeCommentsDialogRecyclerView(Dialog commentDialog, String clipId) {
+    private void initializeCommentsDialogRecyclerView(Dialog commentDialog, View clipView) {
 
         commentsRecyclerView = commentDialog.findViewById(R.id.clip_comments);
         commentlinearLayoutManager = new LinearLayoutManager(context);
         comments = new ArrayList<>();
 
-        comment_adapter = new comment_adapter(comments) {
+        unidapter = new Unidapter(comments) {
             @Override
             protected void addViewClickListeners(View V) {
                 // TODO
-                addCommentEditAndDeleteClickListener(V, commentDialog, clipId);
+                addCommentEditAndDeleteClickListener(V, commentDialog, clipView);
             }
         };
 
-        commentsRecyclerView.setAdapter(comment_adapter);
+        commentsRecyclerView.setAdapter(unidapter);
         commentsRecyclerView.setLayoutManager(commentlinearLayoutManager);
 
     }
 
-    private void addCommentDialogClickListeners(Dialog commentDialog, String clipId) {
+    private void addCommentDialogClickListeners(Dialog commentDialog, View clipView) {
         commentDialog.findViewById(R.id.commentCloseButton).setOnClickListener(v -> {
             fetchProfile();
             commentDialog.dismiss();
         });
 
         commentDialog.findViewById(R.id.commentSubmit).setOnClickListener(v -> {
+            View clip = clipView;
+            String clipId = ((TextView) clip.findViewById(R.id.rl_clip_id)).getText().toString().trim();
 
             EditText commentEditText = (EditText) commentDialog.findViewById(R.id.commentContent);
             String comment = (commentEditText).getText().toString();
@@ -435,7 +429,9 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
     }
 
-    private void addCommentEditAndDeleteClickListener(View V, Dialog CommentDialog, String clipId) {
+    private void addCommentEditAndDeleteClickListener(View V, Dialog CommentDialog, View clipView) {
+
+        String clipId = ((TextView) clipView.findViewById(R.id.rl_clip_id)).getText().toString().trim();
 
         TextView editComment = V.findViewById(R.id.rl_comment_edit);
         TextView deleteComment = V.findViewById(R.id.rl_comment_delete);
@@ -504,6 +500,8 @@ public class fragment_profile extends android.support.v4.app.Fragment {
                 saveClip.put("id", commentId);
                 saveClip.put("comment", newComment);
                 saveClip.put("user", userId);
+                saveClip.put(Constants.param_timestamp, Tools.getTimeStamp());
+
                 return saveClip;
             }
 
@@ -539,6 +537,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
                 Map saveClip = new HashMap<String, String>();
                 saveClip.put("clip", clipId);
                 saveClip.put("id", commentId);
+                saveClip.put(Constants.param_timestamp, Tools.getTimeStamp());
                 return saveClip;
             }
 
@@ -573,6 +572,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
                 Map saveClip = new HashMap<String, String>();
                 saveClip.put("clip", clipId);
                 saveClip.put("comment", comment);
+                saveClip.put(Constants.param_timestamp, Tools.getTimeStamp());
                 return saveClip;
             }
 
@@ -602,18 +602,19 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         }
 
         comments.addAll(commentApiResonse.data);
-        comment_adapter.notifyDataSetChanged();
-        commentsRecyclerView.scrollToPosition(comment_adapter.getItemCount() - 1);
+        unidapter.notifyDataSetChanged();
+        commentsRecyclerView.scrollToPosition(unidapter.getItemCount() - 1);
 
     }
     // end of clips
 
     public void fetchProfile() {
+        showLoadingContainer(clipAndprofileLoadingContainer);
         StringRequest fetch = new StringRequest(Request.Method.GET, String.format(getString(R.string.request_user_user_profile_matrix), searched_id),
                 response -> {
 
                     getProfileAndClips(response);
-                    showProfileAndClipUIAndHideLoading();
+                    // showProfileAndClipUIAndHideLoading();
                 },
                 error -> {
                     showNetworkRetryDialog();
@@ -671,52 +672,14 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     private void networkRetryRequest() {
         Log.i("n/w retry", networkretry.name().toString());
         switch (networkretry) {
-            case FOLLOWERS:
-                getConnectedUsers();
-                break;
-            case FOLLOWING:
-                getConnectedUsers();
-                break;
             case PROFILE:
-                fetchProfileMatrix();
+                fetchProfile();
                 break;
             case RELATIONSHIPBUTTON:
-                performRelationShipAction();
+                // TODO Correct this
+                fetchProfile();
                 break;
         }
-    }
-
-
-    private void showProfileAndClipUIAndHideLoading() {
-        profileLoadingContainer.stopShimmer();
-        profileLoadingContainer.setVisibility(View.GONE);
-
-        clipLoadingContainer.stopShimmer();
-        clipLoadingContainer.setVisibility(View.GONE);
-
-        V.findViewById(R.id.fragment_profile_contet_card).setVisibility(View.VISIBLE);
-        V.findViewById(R.id.clip_fragment_recycleview).setVisibility(View.VISIBLE);
-    }
-
-    private void hideProfileAndClipUIAndShowLoading() {
-        V.findViewById(R.id.fragment_profile_contet_card).setVisibility(View.GONE);
-        V.findViewById(R.id.clip_fragment_recycleview).setVisibility(View.GONE);
-
-        profileLoadingContainer.setVisibility(View.VISIBLE);
-        profileLoadingContainer.startShimmer();
-
-        clipLoadingContainer.setVisibility(View.VISIBLE);
-        clipLoadingContainer.startShimmer();
-    }
-
-    String viewedProfileName;
-
-    private String getViewedProfileName() {
-        return viewedProfileName;
-    }
-
-    private void setViewedProfileName(String name) {
-        viewedProfileName = name;
     }
 
 
@@ -724,24 +687,12 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         Log.i("invalid json", response);
         Gson gson = new Gson();
         ProfileMatrixApiResponse profileMatrixApiResponse = gson.fromJson(response, ProfileMatrixApiResponse.class);
-        setProfileElements(profileMatrixApiResponse.data.profile);
-        showClipsFromResponse(profileMatrixApiResponse.data.clips);
-        setViewedProfileName(profileMatrixApiResponse.data.profile.name);
-        relationshipButton.setText(profileMatrixApiResponse.message.equals("Following") ? "Unfollow" : profileMatrixApiResponse.message);
-        addRelationShipClickAction(profileMatrixApiResponse.message, searched_id);
+        setItemsAndNotifyAdapter(profileMatrixApiResponse.data);
+
     }
 
 
     public fragment_profile() {
-    }
-
-    private void addProfileClickActions(final String user_viewed) {
-        followersCounterContainer.setOnClickListener(view -> showPeopleDialog(user_viewed, id, token, "followers"));
-        followingCounterContainer.setOnClickListener(view -> showPeopleDialog(user_viewed, id, token, "following"));
-        profile_edit.setOnClickListener(view -> {
-            // TODO goto profile settings.
-            toProfileImage(user_viewed);
-        });
     }
 
 
@@ -751,7 +702,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     private List<Profile> profileList;
 
 
-    private void showPeopleDialog(String viewedId, String viewerId, String token, String typOfPeople) {
+    private void showPeopleDialog(String viewedId, String viewerId, String token, String typOfPeople, String profile_name) {
 
         final Dialog showPeopleDialog = new Dialog(context);
         showPeopleDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -763,7 +714,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         closeButton.setOnClickListener(v -> showPeopleDialog.dismiss());
 
         TextView typeOfConnectedPeople = showPeopleDialog.findViewById(R.id.typeOfConnectedPeople);
-        typeOfConnectedPeople.setText(getViewedProfileName().concat(" > ".concat(typOfPeople)));
+        typeOfConnectedPeople.setText(profile_name.concat(" > ".concat(typOfPeople)));
 
         getProfiles(showPeopleDialog, typOfPeople, viewedId);
     }
@@ -795,7 +746,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         profileLoadingContainer.startShimmer();
     }
 
-    ShimmerFrameLayout clipLoadingContainer, profileLoadingContainer;
+    ShimmerFrameLayout clipAndprofileLoadingContainer;
     ShimmerFrameLayout connectedProfileContainer;
 
     private void getProfiles(Dialog dialog, String typeOfPeople, String viewerId) {
@@ -848,14 +799,10 @@ public class fragment_profile extends android.support.v4.app.Fragment {
             }
         };
 
-
-        getConnectedUsers();
-
-    }
-
-    private void getConnectedUsers() {
         Volley.newRequestQueue(context).add(getConnectedUsers);
+
     }
+
 
     private void profileListClickToProfilePage() {
 
@@ -872,31 +819,101 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         startActivity(to_profile_result);
     }
 
+    protected Bundle bundle;
 
-    protected void toProfileImage(String user_viewed) {
-        startActivity(new Intent(getActivity(), ProfileSetting.class)
-                .putExtra("id", id)
-                .putExtra("searched_id", user_viewed)
-                .putExtra("token", token));
+    protected String getTokenFromBundle() {
+        return bundle.getString(getString(R.string.params_token));
     }
 
-    protected void toFollowing(String user_viewed, Intent to_profiles_list) {
-        to_profiles_list.putExtra(getString(R.string.bundle_param_caller_button_to_profile_list),
-                getString(R.string.bundle_param_caller_button_following))
-                .putExtra(getString(R.string.params_search_id), user_viewed)
-                .putExtra(getString(R.string.params_token), token)
-                .putExtra(getString(R.string.params_id), id);
-        startActivity(to_profiles_list);
+    protected String getIdFromToken() {
+        return bundle.getString(getString(R.string.params_id));
     }
 
-    protected void toFollowers(String user_viewed, Intent to_profiles_list) {
-        to_profiles_list.putExtra(getString(R.string.bundle_param_caller_button_to_profile_list),
-                getString(R.string.bundle_param_caller_button_followers))
-                .putExtra(getString(R.string.params_search_id), user_viewed)
-                .putExtra(getString(R.string.params_token), token)
-                .putExtra(getString(R.string.params_id), id);
-        startActivity(to_profiles_list);
+
+    protected Context context;
+
+    String id, token, searched_id;
+
+    protected void setVariablesFromBundle() {
+        id = Objects.requireNonNull(getArguments()).getString(getString(R.string.params_id));
+        token = getArguments().getString(getString(R.string.params_token));
+        searched_id = getSearchId_forClips_orSearch_orProfileList(getArguments(), id);
     }
+
+    LinearLayoutManager clipLayoutManager;
+    ViewGroup fragment_profile;
+    Dialog networkRetryDialog;
+    RecyclerView rv_clip;
+    private Unidapter uniDapterForClipAndProfile;
+
+    protected void inializeUnidapter(View V) {
+        clipLayoutManager = new LinearLayoutManager(getActivity());
+        rv_clip = V.findViewById(R.id.fragment_profile_clip_profile);
+
+        uniDapterForClipAndProfile = new Unidapter(objects) {
+            @Override
+            public void addViewClickListeners(View V) {
+                addTouchListener(V);
+            }
+        };
+
+        rv_clip.setLayoutManager(clipLayoutManager);
+        rv_clip.setAdapter(uniDapterForClipAndProfile);
+    }
+
+    View V;
+    // start of clips
+    private ArrayList<Object> objects;
+
+    private void setItemsAndNotifyAdapter(ArrayList<Object> objects) {
+        this.objects.clear();
+
+        Gson gson = new Gson();
+        // TODO add viewer id
+        String viewer_id = "";
+        //
+
+        for (int i = 0; i < objects.size(); i++) {
+            if (i == 0) {
+                Type type = new TypeToken<ProfileDetail>() {
+                }.getType();
+                ProfileDetail profileDetail = gson.fromJson(gson.toJson(objects.get(i)), type);
+                viewer_id = profileDetail.viewer_id;
+                objects.set(i, profileDetail);
+            } else {
+                Type type = new TypeToken<Clip>() {
+                }.getType();
+                Clip clip = gson.fromJson(gson.toJson(objects.get(i)), type);
+                clip.viewer_id = viewer_id;
+                objects.set(i, clip);
+            }
+        }
+        //
+
+        this.objects.addAll(objects);
+        hideLoadingContainer(clipAndprofileLoadingContainer);
+        uniDapterForClipAndProfile.notifyDataSetChanged();
+
+    }
+
+
+    private void addTouchListener(View V) {
+        if (V.getId() == R.id.rl_clip_layout) {
+
+            V.findViewById(R.id.rl_clip_author).setOnClickListener(v -> gotoProfileResult(V));
+            V.findViewById(R.id.rl_clip_extra_space).setOnClickListener(v -> gotoProfileResult(V));
+            V.findViewById(R.id.rl_clip_profile_pic).setOnClickListener(v -> gotoProfileResult(V));
+            V.findViewById(R.id.rl_clip_date_privacy_container).setOnClickListener(v -> gotoProfileResult(V));
+            V.findViewById(R.id.rl_clip_menu).setOnClickListener(v -> clipMenuClickedDialog(V));
+            V.findViewById(R.id.rl_clip_comment).setOnClickListener(v -> clipShowComments(V));
+        }
+
+        if (V.getId() == R.id.profile_landing_layout) {
+            addProfileDetailClickActions(V);
+        }
+    }
+
+    StringRequest relationShipStringRequest;
 
     protected String getUrlByResponseMessage(String message, String searched_id) {
         switch (message) {
@@ -909,21 +926,41 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         }
     }
 
-    StringRequest relationShipStringRequest;
+    private void addProfileDetailClickActions(View V) {
 
-    protected void addRelationShipClickAction(final String message, final String searched_id) {
+        V.findViewById(R.id.fragment_profile_followers_container).setOnClickListener(view -> {
+            String user_viewed = ((TextView) V.findViewById(R.id.profile_landing_id)).getText().toString().trim();
+            String profile_name = ((TextView) V.findViewById(R.id.fragment_profile_name)).getText().toString().trim();
+            showPeopleDialog(user_viewed, id, token, "followers", profile_name);
+        });
 
-        relationshipButton.setOnClickListener(v -> {
+        V.findViewById(R.id.fragment_profile_following_container).setOnClickListener(view -> {
+            String user_viewed = ((TextView) V.findViewById(R.id.profile_landing_id)).getText().toString().trim();
+            String profile_name = ((TextView) V.findViewById(R.id.fragment_profile_name)).getText().toString().trim();
+            showPeopleDialog(user_viewed, id, token, "following", profile_name);
+        });
 
-            disableButton();
+        V.findViewById(R.id.profile_edit).setOnClickListener(view -> {
+            String user_viewed = ((TextView) V.findViewById(R.id.profile_landing_id)).getText().toString().trim();
+            startActivity(new Intent(getActivity(), ProfileSetting.class)
+                    .putExtra("id", id)
+                    .putExtra("searched_id", user_viewed)
+                    .putExtra("token", token));
+        });
 
+        V.findViewById(R.id.rx).setOnClickListener(v -> {
+
+            v.setEnabled(false);
+            ViewCompat.setBackgroundTintList(v, ContextCompat.getColorStateList(getActivity(), R.color.grey_300));
+
+            String message = ((Button) V.findViewById(R.id.rx)).getText().toString().trim();
             relationShipStringRequest = new StringRequest(
                     Request.Method.POST,
                     getUrlByResponseMessage(message, searched_id),
                     response -> {
                         getProfileAndClips(response);
-                        enableRelationShipButton();
-
+                        v.setEnabled(true);
+                        ViewCompat.setBackgroundTintList(v, ContextCompat.getColorStateList(getActivity(), R.color.blue_A700));
                     },
                     error -> {
                         networkretry = NETWORKRETRY.RELATIONSHIPBUTTON;
@@ -944,142 +981,10 @@ public class fragment_profile extends android.support.v4.app.Fragment {
                 }
             };
 
-            performRelationShipAction();
+            VolleySingleton.getInstance(Objects.requireNonNull(getActivity())).addToRequestQueue(relationShipStringRequest);
 
         });
-    }
 
-    private void enableRelationShipButton() {
-        relationshipButton.setEnabled(true);
-        ViewCompat.setBackgroundTintList(relationshipButton, ContextCompat.getColorStateList(getActivity(), R.color.blue_A700));
-    }
-
-    private void disableButton() {
-        relationshipButton.setEnabled(false);
-        ViewCompat.setBackgroundTintList(relationshipButton, ContextCompat.getColorStateList(getActivity(), R.color.grey_300));
-    }
-
-    protected void performRelationShipAction() {
-        Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(relationShipStringRequest);
-    }
-
-    protected void hideRelationshipButtonIfSameUser(String user_x, String user_y) {
-
-        if (user_x.equals(user_y)) {
-            relationshipButton.setVisibility(View.GONE);
-        }
-
-    }
-
-    protected void showEditButtonIfSameUser(String user_x, String user_y) {
-
-        if (!user_x.equals(user_y)) {
-            profile_edit.setVisibility(View.GONE);
-        }
-
-    }
-
-
-    protected void setProfileElements(Profile profile) {
-        _email.setText(profile.email);
-        _name.setText(profile.name);
-        int _profile_pic;
-        try {
-            _profile_pic = Integer.parseInt(profile.profile_pic);
-        } catch (NumberFormatException e) {
-            _profile_pic = 0;
-        }
-        int imageResource = Constants.mThumbIds[_profile_pic];
-        _choose_avatar_icon.setImageResource(imageResource);
-
-        clip_count.setText(profile.clips);
-        following_count.setText(profile.following);
-        followers_count.setText(profile.followers);
-
-    }
-
-    String profile_pic = "0";
-    protected ImageView _choose_avatar_icon;
-    protected String id;
-    protected String searched_id;
-    protected TextView _name;
-    protected TextView _email;
-    protected Button relationshipButton;
-    protected TextView fragment_profile_followers;
-    protected TextView fragment_profile_following;
-    protected View V;
-    protected String token;
-    protected TextView clip_count;
-    protected TextView followers_count;
-    protected TextView following_count;
-    protected Button profile_edit;
-    protected LinearLayout clipCounterContainer;
-    protected LinearLayout followersCounterContainer;
-    protected LinearLayout followingCounterContainer;
-
-    protected Bundle bundle;
-
-    protected String getTokenFromBundle() {
-        return bundle.getString(getString(R.string.params_token));
-    }
-
-    protected String getIdFromToken() {
-        return bundle.getString(getString(R.string.params_id));
-    }
-
-
-    protected Context context;
-
-    protected void findViewByIds() {
-
-        relationshipButton = V.findViewById(R.id.rx);
-        _name = V.findViewById(R.id.fragment_profile_name);
-        _choose_avatar_icon = V.findViewById(R.id.choose_avatar_icon);
-        _email = V.findViewById(R.id.fragment_profile_email);
-        fragment_profile_followers = V.findViewById(R.id.fragment_profile_followers);
-        fragment_profile_following = V.findViewById(R.id.fragment_profile_following);
-
-
-        clip_count = V.findViewById(R.id.fragment_profile_clips_count);
-        followers_count = V.findViewById(R.id.fragment_profile_followers_count);
-        following_count = V.findViewById(R.id.fragment_profile_following_count);
-
-        clipCounterContainer = V.findViewById(R.id.fragment_profile_clips_container);
-
-        followersCounterContainer = V.findViewById(R.id.fragment_profile_followers_container);
-        followingCounterContainer = V.findViewById(R.id.fragment_profile_following_container);
-        profileLoadingContainer = V.findViewById(R.id.rl_profile_loading_container);
-        clipLoadingContainer = V.findViewById(R.id.rl_clip_loading_container);
-
-        profile_edit = V.findViewById(R.id.profile_edit);
-
-    }
-
-    protected void setVariablesFromBundle() {
-        id = Objects.requireNonNull(getArguments()).getString(getString(R.string.params_id));
-        token = getArguments().getString(getString(R.string.params_token));
-        searched_id = getSearchId_forClips_orSearch_orProfileList(getArguments(), id);
-    }
-
-    LinearLayoutManager clipLayoutManager;
-    ViewGroup fragment_profile;
-    Dialog networkRetryDialog;
-    RecyclerView rv_clip;
-    private com.subhamkumar.clipsy.adapter.clip_adapter clip_adapter;
-
-    protected void initializeClipAdapter(View V) {
-        clipLayoutManager = new LinearLayoutManager(getActivity());
-        rv_clip = V.findViewById(R.id.clip_fragment_recycleview);
-
-        clip_adapter = new clip_adapter(clipList) {
-            @Override
-            public void addViewClickListeners(View V) {
-                addClickListener(V);
-            }
-        };
-
-        rv_clip.setLayoutManager(clipLayoutManager);
-        rv_clip.setAdapter(clip_adapter);
     }
 
     @Override
@@ -1087,37 +992,27 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         context = getActivity();
         bundle = getArguments();
         networkRetryDialog = new Dialog(context, R.style.CustomDialogTheme);
-        clipList = new ArrayList<>();
+        objects = new ArrayList<>();
 
         V = inflater.inflate(R.layout.fragment_profile, container, false);
-        initializeClipAdapter(V);
+        clipAndprofileLoadingContainer = (ShimmerFrameLayout)V.findViewById(R.id.shimmer_profile_clips);
+        showLoadingContainer(clipAndprofileLoadingContainer);
+        inializeUnidapter(V);
         fragment_profile = (ViewGroup) V;
-        findViewByIds();
-        hideProfileAndClipUIAndShowLoading();
 
         try {
             setVariablesFromBundle();
-            hideRelationshipButtonIfSameUser(id, searched_id);
-            showEditButtonIfSameUser(id, searched_id);
         } catch (NumberFormatException e) {
-            // Log.e("0097", e.getMessage());
         }
         if (getUserVisibleHint()) {
-            fetchProfileMatrix();
-            addProfileClickActions(searched_id);
+            fetchProfile();
         }
         return V;
     }
 
-    protected void fetchProfileMatrix() {
-        fetchProfile();
-    }
-
-
     @Override
     public void onResume() {
         super.onResume();
-        fetchProfileMatrix();
-        addProfileClickActions(searched_id);
+        fetchProfile();
     }
 }

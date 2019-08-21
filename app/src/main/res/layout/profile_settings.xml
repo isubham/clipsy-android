@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activityPadding"
+    android:id="@+id/profileSettingLayout"
     android:orientation="vertical"
     tools:context=".panel.ProfileSetting">
 
@@ -46,11 +47,5 @@
         android:layout_height="wrap_content"
         android:text="Update Profile" />
 
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/userSettingProgress"
-        android:visibility="gone"
-        />
 
 </LinearLayout>

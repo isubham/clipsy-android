@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shimmer_profile_clips"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/data_placeholder_fragment_profile" />
+
+        <include layout="@layout/data_placeholder_clip" />
+
+        <include layout="@layout/data_placeholder_clip" />
+
+        <include layout="@layout/data_placeholder_clip" />
+
+        <include layout="@layout/data_placeholder_clip" />
+    </LinearLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>

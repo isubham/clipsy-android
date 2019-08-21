@@ -24,7 +24,6 @@ public class profile_result extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                startActivity(new Intent(profile_result.this, panel.class));
                 finish();
                 return true;
         }
@@ -59,7 +58,7 @@ public class profile_result extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(profile_result.this, panel.class));
+        this.finish();
     }
 
 

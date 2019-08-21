@@ -61,6 +61,11 @@ public class Constants {
 
     };
     public static final String CLIP_CONTENT = "clip_content";
+    public static final String CLIP_TIMESTAMP = "timestamp";
+    public static final String CLIP_TITLE = "clip_title";
+
+
+
     public static final String TOKEN = "token";
 
     public static final String request_clip_create = "https://api.pitavya.com/clipsy/create_clip";
@@ -105,6 +110,9 @@ public class Constants {
 
     public static final String param_id = "id";
     public static final String param_email = "email";
+    public static final String param_timestamp = "timestamp";
+
+
     public static final String param_verify_token = "verify_token";
     public static final String param_password = "password";
     public static final String param_type = "type";

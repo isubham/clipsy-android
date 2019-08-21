@@ -34,6 +34,7 @@ import com.subhamkumar.clipsy.adapter.profile_adapter;
 import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.panel.profile_result;
+import com.subhamkumar.clipsy.utils.Tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -344,6 +345,8 @@ public class fragment_search extends fragment_wrapper {
         to_profile_result.putExtras(fragmentSearchToProfileResult(token, id, searchedUserId));
         startActivity(to_profile_result);
     }
+
+
 
     private String query;
 

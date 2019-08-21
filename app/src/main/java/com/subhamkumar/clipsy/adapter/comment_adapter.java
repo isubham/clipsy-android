@@ -76,31 +76,31 @@ abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapt
 
 
     @Override
-    public void onBindViewHolder(@NonNull commentViewholder clip_viewholder, int i) {
+    public void onBindViewHolder(@NonNull commentViewholder commentViewholder, int i) {
 
-        clip_viewholder.id.setText(comments.get(i).comment_id);
+        commentViewholder.id.setText(comments.get(i).comment_id);
 
-        clip_viewholder.author_id.setText(comments.get(i).profile.id);
-        clip_viewholder.viewer_id.setText(comments.get(i).viewer_id);
+        commentViewholder.author_id.setText(comments.get(i).profile.id);
+        commentViewholder.viewer_id.setText(comments.get(i).viewer_id);
 
         if (!comments.get(i).profile.id.equals(comments.get(i).viewer_id)) {
-            clip_viewholder.editComment.setVisibility(View.GONE);
-            clip_viewholder.deleteComment.setVisibility(View.GONE);
+            commentViewholder.editComment.setVisibility(View.GONE);
+            commentViewholder.deleteComment.setVisibility(View.GONE);
         }
         else{
-            clip_viewholder.editComment.setVisibility(View.VISIBLE);
-            clip_viewholder.deleteComment.setVisibility(View.VISIBLE);
+            commentViewholder.editComment.setVisibility(View.VISIBLE);
+            commentViewholder.deleteComment.setVisibility(View.VISIBLE);
         }
 
-        setCommentProfileNameAndComment(clip_viewholder, i);
+        setCommentProfileNameAndComment(commentViewholder, i);
 
-        clip_viewholder.comment_time.setText(comments.get(i).comment_time);
+        commentViewholder.comment_time.setText(comments.get(i).comment_time);
 
 
-        setProfilePic(clip_viewholder, i);
+        setProfilePic(commentViewholder, i);
     }
 
-    private void setProfilePic(@NonNull commentViewholder clip_viewholder, int i) {
+    private void setProfilePic(@NonNull commentViewholder commentViewholder, int i) {
         int imageResource, _profile_pic = 0;
         try {
             _profile_pic = Integer.parseInt(comments.get(i).profile.profile_pic);
@@ -109,21 +109,21 @@ abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapt
         }
         finally {
             imageResource = Constants.mThumbIds[_profile_pic];
-            clip_viewholder.profile_pic.setImageResource(imageResource);
+            commentViewholder.profile_pic.setImageResource(imageResource);
         }
     }
 
-    private void setCommentProfileNameAndComment(@NonNull commentViewholder clip_viewholder, int i) {
+    private void setCommentProfileNameAndComment(@NonNull commentViewholder commentViewholder, int i) {
         String profileName = comments.get(i).profile.name;
         String profileComment = comments.get(i).comment;
 
         Spannable boldName = new SpannableString(profileName);
         boldName.setSpan(new StyleSpan(Typeface.BOLD), 0, profileName.length(), 0);
 
-        clip_viewholder.comment.setText("");
-        clip_viewholder.comment.append(boldName);
-        clip_viewholder.comment.append(Constants.DOT + " ");
-        clip_viewholder.comment.append(profileComment);
+        commentViewholder.comment.setText("");
+        commentViewholder.comment.append(boldName);
+        commentViewholder.comment.append(Constants.DOT + " ");
+        commentViewholder.comment.append(profileComment);
 
     }
 

@@ -2,10 +2,10 @@ package com.subhamkumar.clipsy.models;
 
 import android.os.Bundle;
 
-public class Comment {
+public class Comment extends BaseModel{
 
     public Profile profile;
-    public String comment_id, comment, comment_time, viewer_id, visibility;
+    public String comment_id, comment, comment_time, visibility;
 
     public Comment(Profile profile, String comment_id, String comment_content, String comment_time) {
         this.profile = profile;

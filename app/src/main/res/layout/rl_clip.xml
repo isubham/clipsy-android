@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_clip_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/clipMarginTop"
@@ -20,15 +21,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="@dimen/clip_margin"
             android:orientation="horizontal"
             android:paddingTop="4dp"
             android:paddingBottom="4dp">
 
             <ImageView
                 android:id="@+id/rl_clip_profile_pic"
-                android:layout_width="@dimen/clip_card_image_size"
-                android:layout_height="@dimen/clip_card_image_size"
+                android:layout_width="@dimen/clip_image"
+                android:layout_height="@dimen/clip_image"
                 android:contentDescription="@string/todo"
                 android:src="@drawable/boy" />
 
@@ -42,50 +43,53 @@
                 <TextView
                     android:id="@+id/rl_clip_author"
                     android:layout_width="wrap_content"
-                    android:layout_height="14dp"
+                    android:layout_height="wrap_content"
                     android:text="Name"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/clip_name"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/rl_clip_date_privacy_container"
                     android:layout_marginTop="2dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/rl_clip_time"
                         android:layout_width="wrap_content"
-                        android:layout_height="12dp"
+                        android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
                         android:text="sample date"
                         android:textColor="#939393"
-                        android:textSize="10sp" />
+                        android:textSize="12sp" />
 
                     <ImageView
                         android:id="@+id/rl_clip_visibility_image"
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="8dp"
                         android:contentDescription="TODO"
                         android:src="@drawable/user" />
 
                     <TextView
                         android:id="@+id/rl_clip_visibility_text"
                         android:layout_width="wrap_content"
-                        android:layout_height="12dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:minWidth="40dp"
                         android:text="public"
                         android:textColor="@color/text_secondary"
-                        android:textSize="10sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <View
+                android:id="@+id/rl_clip_extra_space"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <ImageView
@@ -98,22 +102,31 @@
         </LinearLayout>
 
 
-        <!-- row 3 => clip_content -->
+        <!-- row 3 => clip_title -->
+        <TextView
+            android:id="@+id/rl_clip_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/clip_margin"
+            android:text=""
+            android:textSize="@dimen/clip_title" />
+
         <TextView
             android:id="@+id/rl_clip_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:text="sample text" />
+            android:text="sample text"
+            android:textSize="@dimen/clip_content" />
 
 
         <TextView
             android:id="@+id/rl_clip_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/cardColorSecondary"
-            android:text="24 Comments" />
+            android:layout_marginTop="@dimen/clip_margin"
+            android:text="24 Comments"
+            android:textColor="@color/cardColorSecondary" />
 
         <!-- ids -->
         <TextView

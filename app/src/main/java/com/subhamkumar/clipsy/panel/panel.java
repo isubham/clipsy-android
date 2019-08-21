@@ -292,18 +292,6 @@ public class panel extends AppCompatActivity {
 
     }
 
-    public void startNotificationService() {
-
-            // Setup a PendingIntent that will perform a broadcast
-            Intent notificationIntent = new Intent(this, NotificationBroadcast.class);
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-            manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
-
-    }
-
 
 
 }

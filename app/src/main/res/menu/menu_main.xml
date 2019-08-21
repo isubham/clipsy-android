@@ -11,6 +11,7 @@
         app:showAsAction="always"
         android:icon="@drawable/outline_save_black"
         />
+    <!--
     <item
         android:id="@+id/create_menu_close"
         android:orderInCategory="500"
@@ -19,6 +20,7 @@
         app:showAsAction="always"
         android:icon="@drawable/outline_close_black"
         />
+        -->
     <item
         android:id="@+id/action_undo"
         android:orderInCategory="100"

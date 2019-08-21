@@ -4,16 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileMatrixApiResponse {
-    public String message, status;
-    public relationShip data;
-
-    public class relationShip {
-        public Profile profile;
-        public ArrayList<Clip> clips;
-        public List<relationshipActions> actions;
-    }
-
-    private class relationshipActions {
-            public String action;
-    }
+    public String message, status, viewer_id;
+    public ArrayList<Object> data;
 }

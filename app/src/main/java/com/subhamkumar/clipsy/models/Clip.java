@@ -2,16 +2,17 @@ package com.subhamkumar.clipsy.models;
 
 import android.os.Bundle;
 
-public class Clip {
+public class Clip extends BaseModel {
 
     public Profile profile;
-    public String clip_id, comment, clip_content, clip_time, viewer_id, visibility;
+    public String clip_id, comment, clip_content, clip_title, clip_time, visibility;
 
-    public Clip(Profile profile, String clip_id, String clip_content, String clip_time) {
+    public Clip(Profile profile, String clip_id, String clip_content, String clip_time, String clip_title) {
         this.profile = profile;
         this.clip_id = clip_id;
         this.clip_content = clip_content;
         this.clip_time = clip_time;
+        this.clip_title = clip_title;
     }
 
     public Clip(Bundle bundle) {
@@ -22,6 +23,7 @@ public class Clip {
         this.clip_id = bundle.getString("clip_id");
         this.clip_content = bundle.getString("clip_content");
         this.clip_time = bundle.getString("clip_time");
+        this.clip_title = bundle.getString("clip_title");
 
     }
 

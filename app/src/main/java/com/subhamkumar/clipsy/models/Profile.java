@@ -15,9 +15,6 @@ public class Profile {
         this.profile_pic = profile_pic;
     }
 
-    public static Profile dummyProfile() {
-        return new Profile("1", "subham@gmail.com", "subham", "1");
-    }
 
     public String getProfile_pic() {
         return profile_pic;

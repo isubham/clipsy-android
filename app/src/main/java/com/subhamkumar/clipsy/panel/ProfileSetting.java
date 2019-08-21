@@ -2,12 +2,15 @@ package com.subhamkumar.clipsy.panel;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -19,7 +22,6 @@ import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
-import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 
 import java.util.HashMap;
@@ -80,12 +82,12 @@ public class ProfileSetting extends wrapper {
 
     @Override
     public void handleResponse(String response) {
+        Log.i("setting", response);
         Gson gson = new Gson();
         ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
         String profilePic = profileApiResponse.data.get(0).profile_pic;
         String parsedProficPic = profilePic.equals("") ? "0" : profilePic;
         setProfilePic(parsedProficPic);
-        Tools.hideNetworkLoadingDialog(networkLoadingDialog, "ProfileSetting hide");
         uiName.setText(profileApiResponse.data.get(0).name);
         initialName = profileApiResponse.data.get(0).name;
         intialProficPic = parsedProficPic;
@@ -95,7 +97,6 @@ public class ProfileSetting extends wrapper {
 
     private void setProfilePic(String parsedProficPic) {
         int _profile_pic = Integer.parseInt(parsedProficPic);
-
         int imageResource = Constants.mThumbIds[_profile_pic];
         uiProfilePic.setImageResource(imageResource);
     }
@@ -105,10 +106,7 @@ public class ProfileSetting extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    private boolean computeDirty() {
-        if (intialProficPic.equals(profile_pic) && initialName.equals(getName())) {
-            return false;
-        }
+    private boolean changed() {
         return true;
     }
 
@@ -129,7 +127,6 @@ public class ProfileSetting extends wrapper {
             @Override
             protected void handleResponse(String response) {
 
-                hideUpdateProfileProgressBar();
                 Gson gson = new Gson();
                 ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
                 uiName.setText(profileApiResponse.data.get(0).name);
@@ -167,19 +164,10 @@ public class ProfileSetting extends wrapper {
             }
         };
         updateUserVolleyWrapper.makeRequest();
-        showUpdateProfileProgressBar();
     }
 
-    ProgressBar progressBar;
-    private void showUpdateProfileProgressBar() {
-        ((ProgressBar) findViewById(R.id.userSettingProgress))
-                .setVisibility(View.VISIBLE);
-    }
 
-    private void hideUpdateProfileProgressBar() {
-        ((ProgressBar) findViewById(R.id.userSettingProgress))
-                .setVisibility(View.GONE);
-    }
+
 
 
     private String id;
@@ -200,6 +188,8 @@ public class ProfileSetting extends wrapper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_settings);
 
+        profileSettingLayout = findViewById(R.id.profileSettingLayout);
+
         networkLoadingDialog = new Dialog(ProfileSetting.this, R.style.TranslucentDialogTheme);
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
@@ -214,7 +204,6 @@ public class ProfileSetting extends wrapper {
         showUiElementsForSameUser(areSameUser);
 
         addChangeProfilePicTextListener();
-        Tools.showNetworkLoadingDialog(networkLoadingDialog, "ProfileSetting show");
         makeRequest();
 
     }
@@ -233,10 +222,11 @@ public class ProfileSetting extends wrapper {
 
     private void setClickListener() {
         update_user_setting.setOnClickListener(v -> {
-            updateUser();
+                updateUser();
         });
     }
 
+    LinearLayout profileSettingLayout;
     private void showUiElementsForSameUser(boolean areSameUser) {
         if (areSameUser) {
             // TODO update profile pic and name

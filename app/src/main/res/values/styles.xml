@@ -1,5 +1,8 @@
 <resources>
 
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
+        <item name="android:textAllCaps">false</item>
+    </style>
     <style name="button">
         <item name="android:elevation">0sp</item>
         <item name="android:layout_marginBottom">4dp</item>

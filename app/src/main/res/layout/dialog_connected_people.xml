@@ -48,8 +48,10 @@
 
             <include layout="@layout/data_placeholder_profile" />
             <include layout="@layout/data_placeholder_profile" />
-
-
+            <include layout="@layout/data_placeholder_profile" />
+            <include layout="@layout/data_placeholder_profile" />
+            <include layout="@layout/data_placeholder_profile" />
+            <include layout="@layout/data_placeholder_profile" />
         </LinearLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
 

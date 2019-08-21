@@ -37,6 +37,7 @@ import com.subhamkumar.clipsy.models.CommentApiResonse;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.editor;
 import com.subhamkumar.clipsy.panel.profile_result;
+import com.subhamkumar.clipsy.utils.Tools;
 
 
 import java.util.ArrayList;
@@ -105,6 +106,7 @@ public class fragment_clips extends Fragment {
     }
 
     private void showClipsFromResponse(String response) {
+
         Gson gson = new Gson();
         ClipApiResonse clipApiResonse = gson.fromJson(response, ClipApiResonse.class);
         clipList.clear();
@@ -114,10 +116,12 @@ public class fragment_clips extends Fragment {
         }
 
         clipList.addAll(clipApiResonse.data);
-        clip_adapter.notifyDataSetChanged();
 
         loadingContainer.stopShimmer();
         loadingContainer.setVisibility(View.GONE);
+
+        clip_adapter.notifyDataSetChanged();
+
     }
 
     private void addClipFullyScrolledLisentener() {
@@ -288,7 +292,9 @@ public class fragment_clips extends Fragment {
 
             @Override
             protected Map<String, String> getParams() {
-                return new HashMap<String, String>();
+                HashMap<String, String> params = new HashMap<>();
+                params.put(Constants.param_timestamp, Tools.getTimeStamp());
+                return params;
             }
 
             @Override
@@ -433,7 +439,7 @@ public class fragment_clips extends Fragment {
 
         context = getActivity();
 
-        loadingContainer = V.findViewById(R.id.rl_clip_loading_container);
+        loadingContainer = V.findViewById(R.id.shimmer_clips);
         loadingContainer.startShimmer();
 
         clip_adapter = new clip_adapter(clipList) {
@@ -623,8 +629,8 @@ public class fragment_clips extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 Map saveClip = new HashMap<String, String>();
-                saveClip.put("clip", clipId);
-                saveClip.put("id", commentId);
+                saveClip.put(Constants.param_timestamp, Tools.getTimeStamp());
+
                 return saveClip;
             }
 
@@ -665,6 +671,8 @@ public class fragment_clips extends Fragment {
                 saveClip.put("id", commentId);
                 saveClip.put("comment", newComment);
                 saveClip.put("user", userId);
+                saveClip.put(Constants.param_timestamp, Tools.getTimeStamp());
+
                 return saveClip;
             }
 
@@ -727,6 +735,7 @@ public class fragment_clips extends Fragment {
                 Map saveClip = new HashMap<String, String>();
                 saveClip.put("clip", clipId);
                 saveClip.put("comment", comment);
+                saveClip.put("timestamp", Tools.getTimeStamp());
                 return saveClip;
             }
 
