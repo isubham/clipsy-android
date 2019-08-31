@@ -1,19 +1,17 @@
 package com.subhamkumar.clipsy.panel;
 
 import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,9 +24,7 @@ import com.subhamkumar.clipsy.panel.fragments.fragment_clips;
 import com.subhamkumar.clipsy.panel.fragments.fragment_profile;
 import com.subhamkumar.clipsy.panel.fragments.fragment_search;
 import com.subhamkumar.clipsy.utils.Daemon;
-import com.subhamkumar.clipsy.utils.LoginDb;
-import com.subhamkumar.clipsy.utils.LoginDetails;
-import com.subhamkumar.clipsy.utils.NotificationBroadcast;
+import com.subhamkumar.clipsy.utils.LoginPersistance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +32,6 @@ import java.util.Objects;
 
 import static com.subhamkumar.clipsy.utils.Message.getId;
 import static com.subhamkumar.clipsy.utils.Message.getToken;
-import static com.subhamkumar.clipsy.utils.NotificationHelper.notificationClickAction;
 
 public class panel extends AppCompatActivity {
 
@@ -58,18 +53,11 @@ public class panel extends AppCompatActivity {
             case R.id.write_clip:
                 toCreateClip();
                 break;
-            case R.id.sign_out:
-                toSignOut();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    private void toSignOut() {
-        startActivity(new Intent(panel.this, home.class).putExtra(Constants.SIGNOUT, "1"));
-        this.finish();
-    }
     // End of Top Right Action Menu
 
     //  Creating adapter for the viewpager
@@ -91,10 +79,10 @@ public class panel extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        void addFragment(Fragment fragment, String title) {
+        void addFragment(Fragment fragment) {
             mFragmentList.add(fragment);
-            if (!title.equals("")) {
-                mFragmentTitleList.add(title);
+            if (!"".equals("")) {
+                mFragmentTitleList.add("");
             }
         }
 
@@ -102,11 +90,10 @@ public class panel extends AppCompatActivity {
     // end of adapter classs
 
 
-    private ViewPager viewPager;
     private TabLayout tabLayout;
 
     private void initializeVaribles() {
-        viewPager = findViewById(R.id.user_panel_viewpager);
+        ViewPager viewPager = findViewById(R.id.user_panel_viewpager);
         tabLayout = findViewById(R.id.user_panel_tabs);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -115,9 +102,9 @@ public class panel extends AppCompatActivity {
     }
 
     private void setActionIcons() {
-        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.newsfeed);
-        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.search);
-        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.user);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.round_library_books_black_48);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.round_search_black_48);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.round_person_black_48);
     }
 
 
@@ -140,19 +127,19 @@ public class panel extends AppCompatActivity {
     private void addProfile(ViewPagerAdapter viewPagerAdapter) {
         fragment_profile fragment_profile = new fragment_profile();
         fragment_profile.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_profile, "");
+        viewPagerAdapter.addFragment(fragment_profile);
     }
 
     private void addSearch(ViewPagerAdapter viewPagerAdapter) {
         fragment_search fragment_search = new fragment_search();
         fragment_search.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_search, "");
+        viewPagerAdapter.addFragment(fragment_search);
     }
 
     private void addClip(ViewPagerAdapter viewPagerAdapter) {
         fragment_clips fragment_clips = new fragment_clips();
         fragment_clips.setArguments(user_details);
-        viewPagerAdapter.addFragment(fragment_clips, "");
+        viewPagerAdapter.addFragment(fragment_clips);
     }
 
 
@@ -163,13 +150,13 @@ public class panel extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        getSupportActionBar().setTitle("Clipsy");
+                        Objects.requireNonNull(getSupportActionBar()).setTitle("Clipsy");
                         break;
                     case 1:
-                        getSupportActionBar().setTitle("Search");
+                        Objects.requireNonNull(getSupportActionBar()).setTitle("Search");
                         break;
                     case 2:
-                        getSupportActionBar().setTitle("Profile");
+                        Objects.requireNonNull(getSupportActionBar()).setTitle("Profile");
                         break;
                 }
             }
@@ -226,11 +213,9 @@ public class panel extends AppCompatActivity {
         finish();
     }
 
-    String id, token;
+    private String id;
+    private String token;
 
-    protected LoginDetails getloginDetails() {
-        return new LoginDb(this).getLoginDetails();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,18 +227,17 @@ public class panel extends AppCompatActivity {
             user_details = getIntent().getExtras();
         }
         else{
-            LoginDetails loginDetails = getloginDetails();
             user_details = new Bundle();
-            user_details.putString("id", loginDetails.ID);
-            user_details.putString("token", loginDetails.TOKEN);
+            user_details.putString("id", LoginPersistance.GetId(getApplicationContext()));
+            user_details.putString("token", LoginPersistance.GetToken(getApplicationContext()));
         }
 
         token = getToken(user_details);
         id = getId(user_details);
         initializeVaribles();
         ctx = this;
-        daemon = new Daemon(ctx);
-        daemonIntent = new Intent(ctx, daemon.getClass());
+        Daemon daemon = new Daemon(ctx);
+        Intent daemonIntent = new Intent(ctx, daemon.getClass());
         if (!isNotificationServiceRunning(daemonIntent.getClass())) {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -264,13 +248,10 @@ public class panel extends AppCompatActivity {
         }
     }
 
-    Context ctx;
+    private Context ctx;
     public Context getCtx() {
         return ctx;
     }
-
-    private Daemon daemon;
-    private Intent daemonIntent;
 
     private boolean isNotificationServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

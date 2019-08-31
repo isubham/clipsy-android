@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,24 +11,25 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:padding="4dp">
+        android:padding="@dimen/clip_padding"
+        >
 
         <!-- row 1 => user pic | name | ago-->
 
 
         <ImageView
             android:id="@+id/rl_profile_profile_pic"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/search_image"
+            android:layout_height="@dimen/search_image"
             android:contentDescription="@string/todo"
             android:src="@drawable/boy" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="2dp"
+            android:layout_weight="0.5"
             android:orientation="vertical">
 
             <TextView
@@ -36,6 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="sample name"
+                android:textSize="@dimen/search_name"
                 android:textStyle="bold" />
 
 
@@ -45,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="sample email"
-                android:textSize="12sp" />
+                android:textSize="@dimen/search_email" />
 
 
         </LinearLayout>
@@ -55,10 +57,9 @@
             android:id="@+id/rl_profile_close"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
             android:contentDescription="@string/todo"
             android:src="@drawable/outline_close_black" />
-       <!-- ids -->
+        <!-- ids -->
         <TextView
             android:id="@+id/rl_profile_id"
             android:layout_width="wrap_content"
@@ -69,11 +70,11 @@
             android:visibility="gone" />
 
         <TextView
-                android:id="@+id/rl_profile_viewer_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/author_id"
-                android:textStyle="bold"
-                android:visibility="gone" />
+            android:id="@+id/rl_profile_viewer_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/author_id"
+            android:textStyle="bold"
+            android:visibility="gone" />
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

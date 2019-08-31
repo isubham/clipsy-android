@@ -10,7 +10,7 @@ public class Notification {
         return getNotificationType().get(notificationType);
     }
 
-    public HashMap<String, String> getNotificationType() {
+    private HashMap<String, String> getNotificationType() {
         HashMap<String, String> notificationTitle = new HashMap<>();
 
         notificationTitle.put("following", "New follower");

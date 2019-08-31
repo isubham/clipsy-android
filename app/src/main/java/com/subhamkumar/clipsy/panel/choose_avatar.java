@@ -1,12 +1,11 @@
 package com.subhamkumar.clipsy.panel;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.GridView;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.image_adapter;
-import com.subhamkumar.clipsy.utils.Tools;
+
 import java.util.Objects;
 
 import static com.subhamkumar.clipsy.models.Constants.profilePicChangeRequest;

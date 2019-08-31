@@ -1,7 +1,7 @@
 package com.subhamkumar.clipsy.utils;
 
 public class LoginDetails {
-    public long id;
+    private long id;
     public String ID, TOKEN;
 
     public long getId() {

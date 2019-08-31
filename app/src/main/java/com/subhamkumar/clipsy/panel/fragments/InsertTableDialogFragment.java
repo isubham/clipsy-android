@@ -2,13 +2,12 @@ package com.subhamkumar.clipsy.panel.fragments;
 
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialogFragment;
+import androidx.annotation.NonNull;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -55,28 +54,20 @@ public class InsertTableDialogFragment extends AppCompatDialogFragment {
         AlertDialog.Builder dialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         dialog.setTitle(R.string.title_insert_table);
         dialog.setView(view);
-        dialog.setPositiveButton(R.string.insert, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String colCount = Objects.requireNonNull(columnCountEditText.getText()).toString().trim();
-                String rowCount = Objects.requireNonNull(rowCountEditText.getText()).toString().trim();
+        dialog.setPositiveButton(R.string.insert, (dialog1, which) -> {
+            String colCount = Objects.requireNonNull(columnCountEditText.getText()).toString().trim();
+            String rowCount = Objects.requireNonNull(rowCountEditText.getText()).toString().trim();
 
-                if (listener != null) {
-                    listener.onInsertClick(Integer.valueOf(colCount), Integer.valueOf(rowCount));
-                }
+            if (listener != null) {
+                listener.onInsertClick(Integer.valueOf(colCount), Integer.valueOf(rowCount));
             }
         });
-        dialog.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        dialog.setNegativeButton(android.R.string.cancel, (dialog12, which) -> dialog12.cancel());
 
         return dialog.create();
     }
 
-    public interface OnInsertClickListener {
+    interface OnInsertClickListener {
         void onInsertClick(int colCount, int rowCount);
     }
 }

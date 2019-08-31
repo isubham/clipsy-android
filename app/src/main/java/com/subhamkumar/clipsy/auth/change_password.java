@@ -3,11 +3,14 @@ package com.subhamkumar.clipsy.auth;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import androidx.appcompat.app.ActionBar;
+
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -18,6 +21,7 @@ import com.subhamkumar.clipsy.models.ApiResponse;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -51,14 +55,17 @@ public class change_password extends wrapper {
     public Map<String, String> _getHeaders() {
         return new HashMap<>();
     }
+
     @Override
     public int setHttpMethod() {
         return Request.Method.POST;
     }
+
     @Override
     public String setHttpUrl() {
         return Constants.request_user_update_password;
     }
+
     @Override
     public Map makeParams() {
         Map param = new HashMap<String, String>();
@@ -76,13 +83,12 @@ public class change_password extends wrapper {
         Gson gson = new Gson();
         ApiResponse apiResponse = gson.fromJson(response, ApiResponse.class);
 
-        if( apiResponse.success.equals(Constants.status_success) ) {
+        if (apiResponse.success.equals(Constants.status_success)) {
             startActivity(new Intent(change_password.this, signin.class)
                     .putExtra("email", getEmailFromBundle())
                     .putExtra("sign_out", "1")
             );
-        }
-        else {
+        } else {
             statusLabel.setText(apiResponse.message);
         }
         Tools.hideNetworkLoadingDialog(networkLoadingDialog, "change_password hide");
@@ -98,7 +104,6 @@ public class change_password extends wrapper {
     String confirmPassword;
     private String password;
     private String token;
-    private Bundle bundle;
     private TextView confirmPasswordLabel;
     private TextView passwordLabel;
     private TextView tokenLabel;
@@ -109,7 +114,6 @@ public class change_password extends wrapper {
     private Dialog networkLoadingDialog;
 
 
-
     private void init() {
         passwordLabel = findViewById(R.id.change_password_new_password_label);
         confirmPasswordLabel = findViewById(R.id.change_password_confirm_new_password_label);
@@ -117,8 +121,8 @@ public class change_password extends wrapper {
         statusLabel = findViewById(R.id.change_password_status);
 
         confirmPasswordEditText = findViewById(R.id.change_password_confirm_new_password);
-        passwordEditText    = findViewById(R.id.change_password_new_password);
-        tokenEditText    = findViewById(R.id.change_password_token);
+        passwordEditText = findViewById(R.id.change_password_new_password);
+        tokenEditText = findViewById(R.id.change_password_token);
         networkLoadingDialog = new Dialog(change_password.this, R.style.TranslucentDialogTheme);
     }
 
@@ -128,13 +132,29 @@ public class change_password extends wrapper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_password);
 
-        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+        setActionBar();
 
         init();
     }
 
+    private void setActionBar() {
+        ActionBar bar = getSupportActionBar();
+        Objects.requireNonNull(bar).setDisplayHomeAsUpEnabled(true);
+        bar.setTitle("Change Password");
+        Objects.requireNonNull(bar).setElevation(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return true;
+    }
+
     private String getEmailFromBundle() {
-        bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             return getIntent().getExtras().getString("email");
         }
@@ -146,15 +166,15 @@ public class change_password extends wrapper {
     }
 
     private boolean validateFields() {
-        boolean isPassEmpty  = showLabelIfEmptyField("Password cannot by empty.", passwordLabel, passwordEditText);
+        boolean isPassEmpty = showLabelIfEmptyField("Password cannot by empty.", passwordLabel, passwordEditText);
         boolean isConfirmPassEmpty = showLabelIfEmptyField("Confirm password cannot by empty.", confirmPasswordLabel, confirmPasswordEditText);
         boolean isTokenEmpty = showLabelIfEmptyField("Token cannot by empty.", tokenLabel, tokenEditText);
-        return isConfirmPassEmpty  && isPassEmpty && isTokenEmpty;
+        return isConfirmPassEmpty && isPassEmpty && isTokenEmpty;
     }
 
 
     private boolean showLabelIfEmptyField(String message, TextView label, EditText editText) {
-        if(editText.getText().toString().trim().equals("")) {
+        if (editText.getText().toString().trim().equals("")) {
             label.setText(message);
             return false;
         }
@@ -169,14 +189,14 @@ public class change_password extends wrapper {
     }
 
     private void changePassword() {
-        if(validateFields()) {
+        if (validateFields()) {
             if (text(R.id.change_password_new_password).equals(text(R.id.change_password_confirm_new_password))) {
                 Tools.showNetworkLoadingDialog(networkLoadingDialog, "change_password show");
                 password = text(R.id.change_password_new_password);
                 token = text(R.id.change_password_token);
                 makeRequest();
                 statusLabel.setText("");
-            }else{
+            } else {
                 confirmPasswordLabel.setText("Password Don't Match");
             }
         }

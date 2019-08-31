@@ -9,7 +9,7 @@
         android:title="@string/save"
         android:visible="true"
         app:showAsAction="always"
-        android:icon="@drawable/outline_save_black"
+        android:icon="@drawable/round_save_black_48"
         />
     <!--
     <item

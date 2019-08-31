@@ -3,8 +3,10 @@ package com.subhamkumar.clipsy.auth;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -132,15 +134,32 @@ public class forgot_password extends wrapper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forgot_password);
 
-        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+        setActionBar();
 
         init();
 
     }
 
+    private void setActionBar() {
+        ActionBar bar= getSupportActionBar();
+        bar.setTitle(R.string.forgot_password);
+        Objects.requireNonNull(bar).setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(bar).setElevation(0);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return true;
+    }
+
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(forgot_password.this, home.class));
+        finish();
     }
 
 }

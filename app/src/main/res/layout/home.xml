@@ -19,7 +19,7 @@
 
     <!--sigup-->
     <Button
-        style="@style/primaryBigButton"
+        style="@style/primaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="gotoSignUp"
@@ -35,7 +35,7 @@
         android:text="@string/already_have_an_account" />
     <!--sign in-->
     <Button
-        style="@style/primaryBigButton"
+        style="@style/primaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="gotoSignIn"
@@ -51,7 +51,7 @@
         android:text="@string/trouble_logging_in" />
 
     <Button
-        style="@style/secondaryBigButton"
+        style="@style/secondaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="gotoForgotPassword"

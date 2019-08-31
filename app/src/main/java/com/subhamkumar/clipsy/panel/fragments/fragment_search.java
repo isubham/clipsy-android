@@ -4,10 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,7 +18,6 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,7 +33,6 @@ import com.subhamkumar.clipsy.adapter.profile_adapter;
 import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.panel.profile_result;
-import com.subhamkumar.clipsy.utils.Tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,9 +57,7 @@ public class fragment_search extends fragment_wrapper {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             dialog.dismiss();
@@ -74,8 +70,7 @@ public class fragment_search extends fragment_wrapper {
 
     @Override
     public String setHttpUrl() {
-        String url = String.format(getString(R.string.request_user_search_user), query);
-        return url;
+        return String.format(getString(R.string.request_user_search_user), query);
     }
 
     @Override
@@ -108,19 +103,17 @@ public class fragment_search extends fragment_wrapper {
     }
 
 
-    private RecyclerView rv_profile;
-    private LinearLayoutManager linearLayoutManager;
     private profile_adapter profile_adapter;
     private List<Profile> profileList;
 
     private EditText live_search;
 
     private void init(View V) {
-        rv_profile = V.findViewById(R.id.profile_fragment_recycleview);
+        RecyclerView rv_profile = V.findViewById(R.id.profile_fragment_recycleview);
         content = V.findViewById(R.id.profile_fragment_recycleview);
         loadingContainer = V.findViewById(R.id.rl_fragment_search_loading_container);
-        linearLayoutManager = new LinearLayoutManager(getActivity());
-        profileList = new ArrayList<Profile>();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        profileList = new ArrayList<>();
         profile_adapter = new profile_adapter(profileList) {
             @Override
             protected void addViewClickListeners(View V) {
@@ -192,9 +185,7 @@ public class fragment_search extends fragment_wrapper {
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-                    dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-                        dialog.dismiss();
-                    });
+                    dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
                     dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
                         dialog.dismiss();
@@ -233,16 +224,14 @@ public class fragment_search extends fragment_wrapper {
                 response -> {
                     Log.i("top10Search", response);
 
-                    ClearAndFillSearchResult(response, true);
+                    ClearAndFillSearchResult(response);
                 },
                 error -> {
                     final Dialog dialog = new Dialog(context);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-                    dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-                        dialog.dismiss();
-                    });
+                    dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
                     dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
                         dialog.dismiss();
@@ -273,11 +262,11 @@ public class fragment_search extends fragment_wrapper {
 
     }
 
-    private void ClearAndFillSearchResult(String response, boolean showCrossIcon) {
+    private void ClearAndFillSearchResult(String response) {
         profileList.clear();
         Gson gson = new Gson();
         ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
-        if (showCrossIcon) setProfileCrssIconFlag(profileApiResponse.data);
+        if (true) setProfileCrssIconFlag(profileApiResponse.data);
         hideLoadingAndShowCntent(loadingContainer, content);
         profileList.addAll(profileApiResponse.data);
         profile_adapter.notifyDataSetChanged();
@@ -305,9 +294,7 @@ public class fragment_search extends fragment_wrapper {
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-                    dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-                        dialog.dismiss();
-                    });
+                    dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
                     dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
                         dialog.dismiss();
@@ -342,7 +329,7 @@ public class fragment_search extends fragment_wrapper {
 
         Intent to_profile_result = new Intent(getActivity(), profile_result.class);
         saveSearchResult(searchedUserId);
-        to_profile_result.putExtras(fragmentSearchToProfileResult(token, id, searchedUserId));
+        to_profile_result.putExtras(fragmentSearchToProfileResult(token, id, searchedUserId, Constants.fromActivity_Activity));
         startActivity(to_profile_result);
     }
 
@@ -366,9 +353,7 @@ public class fragment_search extends fragment_wrapper {
     }
 
     private Context context;
-    private Bundle userDetails;
     private String token;
-    private View fragment_search;
     private ShimmerFrameLayout loadingContainer;
     private String id;
 
@@ -384,19 +369,19 @@ public class fragment_search extends fragment_wrapper {
         content.setVisibility(View.VISIBLE);
     }
 
-    RecyclerView content;
+    private RecyclerView content;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        userDetails = getArguments();
+        Bundle userDetails = getArguments();
         token = Objects.requireNonNull(userDetails).getString(Constants.TOKEN);
         id = Objects.requireNonNull((userDetails).getString("id"));
         context = getActivity();
 
 
-        fragment_search = inflater.inflate(R.layout.fragment_search, container, false);
+        View fragment_search = inflater.inflate(R.layout.fragment_search, container, false);
         init(fragment_search);
         showLoadingAndHideCntent(loadingContainer, content);
         showKeyboarWhenSearchFragmentLoads();
@@ -427,7 +412,6 @@ public class fragment_search extends fragment_wrapper {
     public void onResume() {
         super.onResume();
         if (!getUserVisibleHint()) {
-            return;
         }
     }
 

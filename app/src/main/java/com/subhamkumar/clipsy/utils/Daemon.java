@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -24,7 +24,8 @@ import java.util.TimerTask;
 
 public class Daemon extends Service {
 
-    Context ctx;
+    private Context ctx;
+
     public Daemon(Context context) {
         super();
         ctx = context;
@@ -43,20 +44,20 @@ public class Daemon extends Service {
 
     private Timer timer;
     private TimerTask timerTask;
-    long oldTime=0;
-    public int counter;
+    long oldTime = 0;
+    private int counter;
 
     public void startHandler() {
         Handler handler = new Handler();
         Runnable fetchNotifications = () -> {
             counter++;
-            if(counter % 2 == 0) fetchNotificationResouse();
+            if (counter % 2 == 0) fetchNotificationResouse();
             handler.postDelayed(this::fetchNotificationResouse, 5000);
         };
-       handler.post(fetchNotifications);
+        handler.post(fetchNotifications);
     }
 
-    public void startTimer() {
+    private void startTimer() {
         //set a new Timer
         timer = new Timer();
 
@@ -67,16 +68,19 @@ public class Daemon extends Service {
         timer.schedule(timerTask, 1000, 10000); //
     }
 
-    public void initializeTimerTask() {
+    private void initializeTimerTask() {
         timerTask = new TimerTask() {
             public void run() {
-                Log.i("in timer", "in timer ++++  "+ (counter++));
-                if(counter %2 == 0) fetchNotificationResouse();
+                counter++;
+                if (counter % 2 == 0) {
+                    Tools._log("fetching");
+                    fetchNotificationResouse();
+                }
             }
         };
     }
 
-    public void stoptimertask() {
+    private void stoptimertask() {
         //stop the timer, if it's not already null
         if (timer != null) {
             timer.cancel();
@@ -92,20 +96,20 @@ public class Daemon extends Service {
     }
 
 
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.i("EXIT", "ondestroy!");
-        Intent broadcastIntent = new Intent(this, NotificationBroadcast.class);
+        if (LoginPersistance.GetToken(getApplicationContext()) != null) {
+            // Intent broadcastIntent = new Intent(this, NotificationBroadcast.class);
+            // sendBroadcast(broadcastIntent);
+            stoptimertask();
+        }
 
-        sendBroadcast(broadcastIntent);
-        stoptimertask();
     }
 
 
-    public void fetchNotificationResouse() {
+    private void fetchNotificationResouse() {
 
 
         StringRequest fetchNotification = new StringRequest(Request.Method.GET, Constants.newNotificationRequest,
@@ -131,8 +135,7 @@ public class Daemon extends Service {
                 }) {
             @Override
             protected Map<String, String> getParams() {
-                Map params = new HashMap<String, String>();
-                return params;
+                return new HashMap<String, String>();
             }
 
             @Override
@@ -148,6 +151,6 @@ public class Daemon extends Service {
     }
 
     private String getToken(Context context) {
-        return new LoginDb(context).getLoginDetails().TOKEN;
+        return LoginPersistance.GetToken(getApplicationContext());
     }
 }

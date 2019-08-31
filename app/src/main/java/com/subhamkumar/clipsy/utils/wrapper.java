@@ -1,13 +1,10 @@
 package com.subhamkumar.clipsy.utils;
 
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.subhamkumar.clipsy.R;
 
 import org.json.JSONException;
 
@@ -32,17 +29,13 @@ public abstract class wrapper extends AppCompatActivity {
 
     public void makeRequest() {
 
+        // Log.e("base", response.toString());
         StringRequest stringRequest = new StringRequest(
                 setHttpMethod(),
                 setHttpUrl(),
-                response -> {
+                this::handleResponse,
 
-                    // Log.e("base", response.toString());
-                    handleResponse(response);
-
-                },
-
-                error -> handleErrorResponse(error)
+                this::handleErrorResponse
         ) {
 
             @Override

@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import androidx.appcompat.app.ActionBar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -21,7 +23,7 @@ import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.SignInApiResponse;
 import com.subhamkumar.clipsy.panel.panel;
-import com.subhamkumar.clipsy.utils.LoginDb;
+import com.subhamkumar.clipsy.utils.LoginPersistance;
 import com.subhamkumar.clipsy.utils.Tools;
 import com.subhamkumar.clipsy.utils.wrapper;
 
@@ -118,9 +120,7 @@ public class signin extends wrapper {
     private Bundle bundle;
 
     private void saveLoginDetails(SharedPreferences localStore, String token, String id) {
-        LoginDb loginDb = new LoginDb(getApplicationContext());
-        loginDb.saveLoginDetails(id, token);
-
+        LoginPersistance.Save(id, token, getApplicationContext());
     }
 
     public void startSignin(View V) {
@@ -164,7 +164,7 @@ public class signin extends wrapper {
         super.onCreate(savedInstanceState);
         screenshotOff();
         setContentView(R.layout.signin);
-        setTabHeightToZero();
+        setActionBar();
         initializeViews();
     }
 
@@ -183,8 +183,20 @@ public class signin extends wrapper {
         networkLoadingDialog = new Dialog(signin.this, R.style.TranslucentDialogTheme);
     }
 
-    private void setTabHeightToZero() {
-        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+    private void setActionBar() {
+        ActionBar bar= getSupportActionBar();
+        Objects.requireNonNull(bar).setDisplayHomeAsUpEnabled(true);
+        bar.setTitle(R.string.log_in);
+        Objects.requireNonNull(bar).setElevation(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return true;
     }
 
     private void screenshotOff() {
@@ -199,7 +211,7 @@ public class signin extends wrapper {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(signin.this, home.class));
+        finish();
     }
 
 }

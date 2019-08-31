@@ -145,14 +145,20 @@ public class Constants {
 
 
 
-    public static int profilePicChangeRequest = 23323;
-    public static String token = "token";
-    public static String id = "id";
+    public static final int profilePicChangeRequest = 23323;
+    public static final String token = "token";
+    public static final String id = "id";
     public static String fragment_search = "fragment_search";
     public static String fragment_profile = "fragment_profile";
 
 
-    public static String searched_user_id = "searched_id";
+    public static final String searched_user_id = "searched_id";
+
+
+    public static final String fromActivity = "fromActivity";
+
+    public static final String fromActivity_Activity = "ac";
+    public static final String fromActivity_Notification = "no";
 
 
 

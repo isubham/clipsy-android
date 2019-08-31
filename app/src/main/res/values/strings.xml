@@ -153,9 +153,12 @@
     <string name="name">name</string>
     <string name="updateName">New Name</string>
     <string name="verify">Verify</string>
-    <string name="token">Your verification code</string>
+    <string name="token">Your 6 letter code from email</string>
     <string name="update_password">Update Password</string>
     <string name="new_password">new password</string>
+    <string name="Submit">Submit</string>
+
+
     <string name="confirm_new_password">confirm new password</string>
     <string name="name_or_email">name or email</string>
     <string name="start_typing">Start Typing</string>
@@ -185,8 +188,13 @@
 
 
     <string name="title">title</string>
+    <string name="editor_title">Add Clip</string>
+
+
     <string name="edit_avatar">Edit Avatar</string>
     <string name="view_profile">View Profile</string>
+
+    <string name="edit_profile">Edit Profile</string>
 
     <string name="report">Report</string>
     <string name="Inappropriate">Inappropriate</string>
@@ -195,7 +203,9 @@
     <string name="already_have_an_account">Already have an account.</string>
     <string name="log_in">Log In</string>
     <string name="trouble_logging_in">Trouble logging in</string>
-    <string name="we_have_send_an_email_with_a_token_use_that_to_verify_your_email_it_may_take_2_minutes_to_get_the_email">We have send an email with a token. use that to verify your email. It may take 2 minutes to get the email</string>
+    <string name="we_have_send_an_email_with_a_token_use_that_to_verify_your_email_it_may_take_2_minutes_to_get_the_email">Paste 6 letter code from the email.</string>
+    <string name="email_verification_pre_help">An email with a code will be send to your email account.</string>
+
 
 
 </resources>

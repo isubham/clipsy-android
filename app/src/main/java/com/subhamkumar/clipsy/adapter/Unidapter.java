@@ -2,8 +2,8 @@ package com.subhamkumar.clipsy.adapter;
 
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +24,20 @@ import java.util.ArrayList;
 
 public abstract class Unidapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    final int PROFILE_DETAIL = 0, CLIP = 1, PROFILE_SEARCH = 2, COMMENT = 3;
-    private ArrayList<Object> items;
+    private final int PROFILE_DETAIL = 0;
+    private final int CLIP = 1;
+    private final int PROFILE_SEARCH = 2;
+    private final int COMMENT = 3;
+    private final ArrayList<Object> items;
     private Context context;
 
     protected abstract void addViewClickListeners(View V);
 
-    public Context getContext() {
+    private Context getContext() {
         return context;
     }
 
-    public void setContext(Context context) {
+    private void setContext(Context context) {
         this.context = context;
     }
 

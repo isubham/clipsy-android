@@ -12,11 +12,11 @@
         android:id="@+id/signin_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:padding="@dimen/padding_10"
         android:gravity="center_horizontal"
         android:textColor="@color/red_500" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/email"
             android:inputType="textWebEmailAddress" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/signin_email_label"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/red_500" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -47,7 +47,7 @@
             android:hint="@string/password"
 
             android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/signin_pass_label"
@@ -57,20 +57,26 @@
 
     <Button
 
-        style="@style/primaryBigButton"
+        style="@style/primaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="startSignin"
         android:text="@string/login" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:text="@string/trouble_logging_in" />
 
     <Button
         style="@style/secondaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="startForgetPassword"
-        android:text="@string/forgot_password"
-        android:visibility="gone"
-        />
+        android:text="@string/forgot_password" />
 
     <Button
         style="@style/secondaryButton"

@@ -7,7 +7,7 @@
     <dimen name="dialog_content_bottom_padding">24dp</dimen>
 
 
-    <dimen name="activityPadding">8dp</dimen>
+    <dimen name="activityPadding">12dp</dimen>
     <dimen name="clipCardPadding">16dp</dimen>
     <dimen name="clipMarginTop">8dp</dimen>
     <dimen name="commentMarginTop">4dp</dimen>
@@ -29,19 +29,33 @@
     <dimen name="profile_card_element_padding">24dp</dimen>
 
     <!--clip styling-->
-    <dimen name="search_name">16sp</dimen>
-    <dimen name="search_title">18sp</dimen>
-    <dimen name="search_content">14sp</dimen>
-    <dimen name="search_margin">10sp</dimen>
-    <dimen name="search_image">36dp</dimen>
+    <dimen name="profile_card_name">16sp</dimen>
+    <dimen name="profile_card_title">18sp</dimen>
+    <dimen name="profile_card_content">14sp</dimen>
+    <dimen name="profile_card_margin">10sp</dimen>
+    <dimen name="profile_card_big_image">96dp</dimen>
+
     <!--clip styling-->
-    <dimen name="clip_name">16sp</dimen>
+    <dimen name="search_name">14sp</dimen>
+    <dimen name="search_email">14sp</dimen>
+    <dimen name="search_margin">10sp</dimen>
+    <dimen name="search_image">48dp</dimen>
+    <!--clip styling-->
+    <dimen name="clip_name">14sp</dimen>
     <dimen name="clip_title">18sp</dimen>
     <dimen name="clip_content">14sp</dimen>
     <dimen name="clip_margin">10sp</dimen>
+    <dimen name="clip_padding">4dp</dimen>
+
 
 
     <dimen name="clip_image">36dp</dimen>
+
+
+
+    <dimen name="button_radius">8dp</dimen>
+
+
 
 
 

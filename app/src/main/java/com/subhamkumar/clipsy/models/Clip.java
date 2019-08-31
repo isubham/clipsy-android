@@ -2,6 +2,8 @@ package com.subhamkumar.clipsy.models;
 
 import android.os.Bundle;
 
+import java.util.Objects;
+
 public class Clip extends BaseModel {
 
     public Profile profile;
@@ -16,7 +18,7 @@ public class Clip extends BaseModel {
     }
 
     public Clip(Bundle bundle) {
-        this.profile.id = bundle.getString("id");
+        Objects.requireNonNull(this.profile).id = bundle.getString("id");
         this.profile.name = bundle.getString("name");
         this.profile.profile_pic = bundle.getString("profile_pic");
 

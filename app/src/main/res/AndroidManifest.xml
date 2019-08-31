@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.subhamkumar.clipsy">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light"
+        android:usesCleartextTraffic="true"
+        android:fullBackupContent="@xml/backup_descriptor">
+        <activity
+            android:name=".auth.home"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".auth.signin"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light"
+            >
+        </activity>
+
+        <activity
+            android:name=".auth.signup"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".panel.panel"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".panel.profile_result"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".panel.profiles_list"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".panel.editor"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait"
+
+            />
+        <activity
+            android:name=".auth.email_verification"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".auth.forgot_password"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".auth.change_password"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".panel.choose_avatar"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".panel.ProfileSetting"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:screenOrientation="portrait" />
+
+
+        <receiver android:name=".utils.CustomTabs$CopyBroadcastReceiver" />
+        <service android:name=".utils.Daemon"
+            android:enabled="true" />
+        <receiver
+            android:enabled="true"
+            android:exported="true"
+            android:name=".utils.NotificationBroadcast">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.REBOOT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

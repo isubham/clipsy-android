@@ -10,21 +10,21 @@ import java.util.ArrayList;
 
 public class LoginDb extends SQLiteOpenHelper {
 
-    public static final String id = "_id";
-    public static final String LOGIN_TABLE = "SAVELOGIN";
-    public static final String ID = "ID";
-    public static final String TOKEN = "TOKEN";
-    private static String createLoginTable = "CREATE TABLE "+ LOGIN_TABLE + "(" + id + " INTEGER PRIMARY KEY, " + ID + " TEXT, " + TOKEN + " TEXT)";
-    private static String deleteLoginTable =  "DROP TABLE IF EXISTS " + LOGIN_TABLE;
+    private static final String id = "_id";
+    private static final String LOGIN_TABLE = "SAVELOGIN";
+    private static final String ID = "ID";
+    private static final String TOKEN = "TOKEN";
     private static String deleteLoginDetails =  "DELETE FROM " + LOGIN_TABLE;
 
     private static final String DATABASE_NAME = "CDB";
-    private static int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 1;
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String deleteLoginTable = "DROP TABLE IF EXISTS " + LOGIN_TABLE;
         db.execSQL(deleteLoginTable);
+        String createLoginTable = "CREATE TABLE " + LOGIN_TABLE + "(" + id + " INTEGER PRIMARY KEY, " + ID + " TEXT, " + TOKEN + " TEXT)";
         db.execSQL(createLoginTable);
     }
 
@@ -58,7 +58,7 @@ public class LoginDb extends SQLiteOpenHelper {
     }
 
     public  LoginDetails getLoginDetails() {
-        ArrayList<LoginDetails> loginDetail = new ArrayList<LoginDetails>();
+        ArrayList<LoginDetails> loginDetail = new ArrayList<>();
         String selectQuery = "SELECT " + id +", " + ID + ", " + TOKEN + " FROM " + LOGIN_TABLE;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

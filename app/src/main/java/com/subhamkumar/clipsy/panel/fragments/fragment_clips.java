@@ -4,11 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,9 +59,7 @@ public class fragment_clips extends Fragment {
         networkUnavailableDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         networkUnavailableDialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        networkUnavailableDialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            networkUnavailableDialog.dismiss();
-        });
+        networkUnavailableDialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> networkUnavailableDialog.dismiss());
 
         networkUnavailableDialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             networkUnavailableDialog.dismiss();
@@ -76,23 +74,19 @@ public class fragment_clips extends Fragment {
         return getUrl(from);
     }
 
-    protected void fetchClips() {
+    private void fetchClips() {
 
         StringRequest fetchClip = new StringRequest(
                 Request.Method.GET,
                 getClipUrl(),
-                response -> {
-                    showClipsFromResponse(response);
-                },
-                error -> {
-                    showNetworkUnavailableDialog();
-                }
+                this::showClipsFromResponse,
+                error -> showNetworkUnavailableDialog()
 
         ) {
 
             @Override
             protected Map<String, String> getParams() {
-                return new HashMap<String, String>();
+                return new HashMap<>();
             }
 
             @Override
@@ -102,7 +96,7 @@ public class fragment_clips extends Fragment {
                 return headers;
             }
         };
-        Volley.newRequestQueue(getActivity()).add(fetchClip);
+        Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(fetchClip);
     }
 
     private void showClipsFromResponse(String response) {
@@ -234,20 +228,20 @@ public class fragment_clips extends Fragment {
         closeAction.setOnClickListener(v -> dialog.dismiss());
 
         editAction.setOnClickListener(v -> {
-            gotoClip(v, "update", authorId, clipId);
+            gotoClip(v, authorId, clipId);
             dialog.dismiss();
         });
 
         deleteAction.setOnClickListener(v -> {
             dialog.dismiss();
-            showConfirmationToDelete(v, "delete", authorId, clipId);
+            showConfirmationToDelete(v, authorId, clipId);
         });
 
         dialog.show();
 
     }
 
-    private void showConfirmationToDelete(View V, String action, String authorId, String clipId) {
+    private void showConfirmationToDelete(View V, String authorId, String clipId) {
 
         final Dialog delete_clip_confirmation = new Dialog(context);
         hidetitleofdialog(delete_clip_confirmation);
@@ -261,9 +255,7 @@ public class fragment_clips extends Fragment {
             delete_clip_confirmation.dismiss();
         });
 
-        closeAction.setOnClickListener(v -> {
-            delete_clip_confirmation.dismiss();
-        });
+        closeAction.setOnClickListener(v -> delete_clip_confirmation.dismiss());
 
         delete_clip_confirmation.show();
 
@@ -287,7 +279,7 @@ public class fragment_clips extends Fragment {
 
                 },
 
-                error -> handle_error_response(error)
+                this::handle_error_response
         ) {
 
             @Override
@@ -325,13 +317,13 @@ public class fragment_clips extends Fragment {
     }
 
     private Context context;
-    private int clipUpdateRequestCode = 123;
+    private final int clipUpdateRequestCode = 123;
 
-    private void gotoClip(View V, String action, String authorId, String clipId) {
+    private void gotoClip(View V, String authorId, String clipId) {
 
         Bundle toClip = new Bundle();
         toClip.putString("token", token);
-        toClip.putString("action", action);
+        toClip.putString("action", "update");
         toClip.putString("id", authorId);
         toClip.putString("clip_id", clipId);
         toClip.putString("clip", "clip");
@@ -377,11 +369,7 @@ public class fragment_clips extends Fragment {
                 });
 
         reportDialog.findViewById(R.id.dialog_other_user_show_report_close)
-                .setOnClickListener(v -> {
-
-                    reportDialog.dismiss();
-
-                });
+                .setOnClickListener(v -> reportDialog.dismiss());
 
         reportDialog.show();
     }
@@ -398,7 +386,7 @@ public class fragment_clips extends Fragment {
 
                 },
 
-                error -> handle_error_response(error)
+                this::handle_error_response
         ) {
 
             @Override
@@ -423,18 +411,16 @@ public class fragment_clips extends Fragment {
     }
 
 
-    private RecyclerView rv_clip;
-    private LinearLayoutManager linearLayoutManager;
     private com.subhamkumar.clipsy.adapter.clip_adapter clip_adapter;
     private List<Clip> clipList;
-    ViewGroup fragment_clip;
+    private ViewGroup fragment_clip;
 
 
     private void init(View V) {
         // no_of_intent = 0;
         fragment_clip = (ViewGroup) V;
-        rv_clip = V.findViewById(R.id.clip_fragment_recycleview);
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView rv_clip = V.findViewById(R.id.clip_fragment_recycleview);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         clipList = new ArrayList<>();
 
         context = getActivity();
@@ -457,9 +443,7 @@ public class fragment_clips extends Fragment {
 
     private static String token;
     private String id;
-    private String searched_id;
     String _fx;
-    private View V;
 
     private String getUrl(String from) {
 
@@ -473,11 +457,11 @@ public class fragment_clips extends Fragment {
             }
             if (from.equals(fromSearch) || from.equals(fromProfileResult)) {
                 // if following clip is there
-                String baseActivity = getActivity().getClass().getSimpleName();
+                String baseActivity = Objects.requireNonNull(getActivity()).getClass().getSimpleName();
                 if (baseActivity.equals("panel")) {
                     return getString(R.string.request_clip_following);
                 }
-                searched_id = Objects.requireNonNull(getArguments()).getString(getString(R.string.bundle_param_profile_result_searched_user_id));
+                String searched_id = Objects.requireNonNull(getArguments()).getString(getString(R.string.bundle_param_profile_result_searched_user_id));
                 return String.format(getString(R.string.request_clip_reads_user), searched_id);
             }
         }
@@ -489,7 +473,6 @@ public class fragment_clips extends Fragment {
     // comment
 
     private comment_adapter comment_adapter;
-    private LinearLayoutManager commentlinearLayoutManager;
     private List<Comment> comments;
     private RecyclerView commentsRecyclerView;
 
@@ -505,7 +488,7 @@ public class fragment_clips extends Fragment {
 
         commentsDialog.setContentView(R.layout.dialog_clip_comments);
 
-        showLoadingContainer(((ShimmerFrameLayout) commentsDialog.findViewById(R.id.rl_comment_placeholder)));
+        showLoadingContainer(commentsDialog.findViewById(R.id.rl_comment_placeholder));
         commentsDialog.show();
 
         Objects.requireNonNull(commentsDialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -548,7 +531,7 @@ public class fragment_clips extends Fragment {
 
 
         commentsRecyclerView = commentDialog.findViewById(R.id.clip_comments);
-        commentlinearLayoutManager = new LinearLayoutManager(context);
+        LinearLayoutManager commentlinearLayoutManager = new LinearLayoutManager(context);
         comments = new ArrayList<>();
 
         comment_adapter = new comment_adapter(comments) {
@@ -697,7 +680,7 @@ public class fragment_clips extends Fragment {
 
         commentDialog.findViewById(R.id.commentSubmit).setOnClickListener(v -> {
 
-            EditText commentEditText = (EditText) commentDialog.findViewById(R.id.commentContent);
+            EditText commentEditText = commentDialog.findViewById(R.id.commentContent);
             String comment = (commentEditText).getText().toString();
 
             if (comment.isEmpty()) {
@@ -756,7 +739,7 @@ public class fragment_clips extends Fragment {
 
         comments.clear();
         Log.e("Comments", response);
-        hideLoadingContainer(((ShimmerFrameLayout) commentDialog.findViewById(R.id.rl_comment_placeholder)));
+        hideLoadingContainer(commentDialog.findViewById(R.id.rl_comment_placeholder));
 
         CommentApiResonse commentApiResonse = new Gson().fromJson(response, CommentApiResonse.class);
 
@@ -772,8 +755,6 @@ public class fragment_clips extends Fragment {
 
     // end of comment
 
-    private Bundle bundle;
-    private String from;
     private ShimmerFrameLayout loadingContainer;
 
 
@@ -782,13 +763,13 @@ public class fragment_clips extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        bundle = getArguments();
+        Bundle bundle = getArguments();
 
 
         try {
             id = bundle.getString(getString(R.string.params_id));
             token = bundle.getString(getString(R.string.params_token));
-            from = bundle.getString(Constants.TO_HOME);
+            String from = bundle.getString(Constants.TO_HOME);
 
         } catch (NullPointerException e) {
             Toast.makeText(context, "null on" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -796,10 +777,10 @@ public class fragment_clips extends Fragment {
         }
 
 
-        V = inflater.inflate(R.layout.fragment_clips, container, false);
+        View v = inflater.inflate(R.layout.fragment_clips, container, false);
         context = Objects.requireNonNull(container).getContext();
-        init(V);
-        return V;
+        init(v);
+        return v;
     }
 
 

@@ -2,9 +2,9 @@ package com.subhamkumar.clipsy.panel;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -120,7 +120,7 @@ public class profiles_list extends wrapper {
 
     private void init() {
         rv_profile = findViewById(R.id.profiles_list_recycleview);
-        linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         profileList = new ArrayList<>();
 
         profile_adapter = new profile_adapter(profileList) {
@@ -142,7 +142,6 @@ public class profiles_list extends wrapper {
     }
 
     private RecyclerView rv_profile;
-    private LinearLayoutManager linearLayoutManager;
     private profile_adapter profile_adapter;
     private List<Profile> profileList;
     private Bundle bundle;

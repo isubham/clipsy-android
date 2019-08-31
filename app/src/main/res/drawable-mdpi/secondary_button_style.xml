@@ -5,11 +5,8 @@
 
     <solid android:color="@color/colorSecondary" />
 
-    <corners
-        android:bottomLeftRadius="16dp"
-        android:bottomRightRadius="16dp"
-        android:topLeftRadius="16dp"
-        android:topRightRadius="16dp" />
+    <corners android:bottomLeftRadius="@dimen/button_radius" android:bottomRightRadius="@dimen/button_radius" android:topLeftRadius="@dimen/button_radius" android:topRightRadius="@dimen/button_radius" />
+
 </shape></item>
 
 </selector>

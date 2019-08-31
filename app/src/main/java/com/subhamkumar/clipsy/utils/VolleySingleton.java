@@ -31,7 +31,7 @@ public class VolleySingleton {
         return mInstance;
     }
 
-    public RequestQueue getRequestQueue() {
+    private RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
 
             mRequestQueue = Volley.newRequestQueue(mctx.getApplicationContext());

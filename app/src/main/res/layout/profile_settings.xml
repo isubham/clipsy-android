@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profileSettingLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/activityPadding"
-    android:id="@+id/profileSettingLayout"
     android:orientation="vertical"
+    android:padding="@dimen/activityPadding"
     tools:context=".panel.ProfileSetting">
 
     <ImageView
@@ -16,16 +16,15 @@
         android:src="@drawable/boy" />
 
     <TextView
+        android:id="@+id/change_profile_pic_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Change Profile Pic"
         android:gravity="center_horizontal"
+        android:text="Change Profile Pic"
         android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/comment_card_image_size"
-        android:id="@+id/change_profile_pic_text"
-        />
+        android:textSize="@dimen/comment_card_image_size" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -37,15 +36,30 @@
             android:hint="@string/updateName"
             android:inputType="textWebEmailAddress" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:layout_marginTop="@dimen/comment_card_image_size"
         android:id="@+id/update_user_setting"
-        style="@style/secondaryButton"
+        style="@style/primaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/comment_card_image_size"
         android:text="Update Profile" />
 
+    <TextView
+        android:layout_marginTop="36dp"
+        android:textColor="@color/red_400"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Or take a break. We will miss you!"
+        />
 
+    <Button
+        style="@style/secondaryButton"
+        android:onClick="goToSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/comment_card_image_size"
+        android:text="Sign Out" />
 </LinearLayout>

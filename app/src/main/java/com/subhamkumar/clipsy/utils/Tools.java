@@ -3,30 +3,29 @@ package com.subhamkumar.clipsy.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.text.Layout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+
 import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.models.Profile;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Tools {
+
+    public static void _log(String message) {
+        int i = 1;
+        if (i == 1) Log.e("clipsy", message);
+    }
 
     public static String text(View V) {
         return ((EditText) V.findViewById(V.getId())).getText().toString().trim();
@@ -54,7 +53,7 @@ public class Tools {
     }
 
     public static String getToken(Context context) {
-        return new LoginDb(context).getLoginDetails().TOKEN;
+        return LoginPersistance.GetToken(context);
     }
 
     private void makeLinkClickable(SpannableStringBuilder strBuilder, final URLSpan span, Context context) {
@@ -83,8 +82,7 @@ public class Tools {
 
     public static String getTimeStamp() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String millisInString = dateFormat.format(new Date());
-        return millisInString;
+        return dateFormat.format(new Date());
     }
 
 

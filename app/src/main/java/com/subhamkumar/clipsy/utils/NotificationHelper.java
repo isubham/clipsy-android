@@ -7,10 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Notification;
@@ -18,19 +18,21 @@ import com.subhamkumar.clipsy.panel.panel;
 import com.subhamkumar.clipsy.panel.profile_result;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Random;
 
+import static com.subhamkumar.clipsy.models.Constants.fromActivity_Notification;
 import static com.subhamkumar.clipsy.models.Constants.notificationTypeFollowing;
 import static com.subhamkumar.clipsy.models.Constants.notificationTypeNewClip;
 import static com.subhamkumar.clipsy.models.Constants.notificationTypeNewComment;
 import static com.subhamkumar.clipsy.utils.Message.fragmentSearchToProfileResult;
 
-public class NotificationHelper {
+class NotificationHelper {
 
-    public static String channelId = "ChannelId", _description = "Description", _name = "ChannelName", title = "Clipsy";
+    private static final String channelId = "ChannelId";
+    private static final String _description = "Description";
+    private static final String _name = "ChannelName";
+    private static final String title = "Clipsy";
     public static int relationShipNotificationId = 1;
     public static void createNotification(Context context, String contentText) {
 
@@ -49,7 +51,7 @@ public class NotificationHelper {
         String dateString = dateTimeString.split(" ")[0];
         dateString = TrimZeroInData(dateString);
         String timeString = dateTimeString.split(" ")[1];
-        return new Random().nextInt()*Integer.parseInt(getIntegerString(dateString, "/").concat(getIntegerString(timeString, ":")));
+        return new Random().nextInt()*Integer.parseInt((getIntegerString(dateString.substring(2), "/")).concat(getIntegerString(timeString, ":")));
     }
 
     @NonNull
@@ -71,7 +73,7 @@ public class NotificationHelper {
     }
 
 
-    public static void createNotificationChannel(Context context) {
+    private static void createNotificationChannel(Context context) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -95,19 +97,21 @@ public class NotificationHelper {
 
         Intent intent = new Intent(); // = new Intent(context, panel.class);
 
-        if (notification.NotificationType.equals(notificationTypeFollowing)) {
-            // TODO open that person profile
-            intent = new Intent(context, profile_result.class);
-            Bundle toProfileResult = fragmentSearchToProfileResult(getToken(context), notification.UserId, notification.ActionId);
-            intent.putExtras(toProfileResult);
-        }
-        else if (notification.NotificationType.equals(notificationTypeNewClip)) {
-            // TODO open clip
-            intent = new Intent(context, panel.class);
-        }
-        else if (notification.NotificationType.equals(notificationTypeNewComment)) {
-            // TODO open clip later on open the clip and scroll to that comment
-            intent = new Intent(context, panel.class);
+        switch (notification.NotificationType) {
+            case notificationTypeFollowing:
+                // TODO open that person profile
+                intent = new Intent(context, profile_result.class);
+                Bundle toProfileResult = fragmentSearchToProfileResult(getToken(context), notification.UserId, notification.ActionId, fromActivity_Notification);
+                intent.putExtras(toProfileResult);
+                break;
+            case notificationTypeNewClip:
+                // TODO open clip
+                intent = new Intent(context, panel.class);
+                break;
+            case notificationTypeNewComment:
+                // TODO open clip later on open the clip and scroll to that comment
+                intent = new Intent(context, panel.class);
+                break;
         }
 
 
@@ -131,6 +135,6 @@ public class NotificationHelper {
 
 
     private static String getToken(Context context) {
-        return new LoginDb(context).getLoginDetails().TOKEN;
+        return LoginPersistance.GetToken(context);
     }
 }

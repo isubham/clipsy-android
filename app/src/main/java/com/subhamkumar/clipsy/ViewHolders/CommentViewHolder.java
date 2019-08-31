@@ -1,8 +1,8 @@
 package com.subhamkumar.clipsy.ViewHolders;
 
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
@@ -11,19 +11,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.adapter.comment_adapter;
 import com.subhamkumar.clipsy.models.Comment;
 import com.subhamkumar.clipsy.models.Constants;
 
 public class CommentViewHolder  extends RecyclerView.ViewHolder {
-    TextView id;
-    TextView author_id;
-    TextView viewer_id;
-    TextView comment_time;
-    ImageView profile_pic;
-    TextView comment;
-    TextView editComment;
-    TextView deleteComment;
+    private TextView id;
+    private TextView author_id;
+    private TextView viewer_id;
+    private TextView comment_time;
+    private ImageView profile_pic;
+    private TextView comment;
+    private TextView editComment;
+    private TextView deleteComment;
 
     public TextView getId() {
         return id;

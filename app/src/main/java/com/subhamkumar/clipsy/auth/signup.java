@@ -3,7 +3,9 @@ package com.subhamkumar.clipsy.auth;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -28,7 +30,7 @@ import java.util.Objects;
 
 public class signup extends AppCompatActivity {
 
-    private void signupRequest(String email, String password, String name, String type) {
+    private void signupRequest(String email, String password, String name) {
 
         wrapper signUpRequest = new wrapper() {
 
@@ -54,7 +56,7 @@ public class signup extends AppCompatActivity {
                 param.put(Constants.param_email, email);
                 param.put(Constants.param_password, password);
                 param.put(Constants.param_name, name);
-                param.put(Constants.param_type, type);
+                param.put(Constants.param_type, Constants.param_value_public);
                 return param;
             }
 
@@ -95,9 +97,7 @@ public class signup extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             dialog.dismiss();
@@ -123,8 +123,7 @@ public class signup extends AppCompatActivity {
             signupRequest(
                     Tools.text(findViewById(R.id.signup_email)),
                     Tools.text(findViewById(R.id.signup_password)),
-                    Tools.text(findViewById(R.id.signup_name)),
-                    Constants.param_value_public
+                    Tools.text(findViewById(R.id.signup_name))
             );
         }
     }
@@ -182,11 +181,25 @@ public class signup extends AppCompatActivity {
         setContentView(R.layout.signup);
 
         networkLoadingDialog = new Dialog(signup.this, R.style.TranslucentDialogTheme);
-        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
-
+        setActionBar();
         findViewByIds();
     }
 
+    private void setActionBar() {
+        ActionBar bar= getSupportActionBar();
+        Objects.requireNonNull(bar).setDisplayHomeAsUpEnabled(true);
+        bar.setTitle(R.string.create_account);
+        Objects.requireNonNull(bar).setElevation(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return true;
+    }
 
     public void toLogin(View V) {
         startActivity(new Intent(signup.this, signin.class));
@@ -198,6 +211,6 @@ public class signup extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(signup.this, home.class));
+        finish();
     }
 }

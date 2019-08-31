@@ -1,15 +1,11 @@
 package com.subhamkumar.clipsy.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.SpannableStringBuilder;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.URLSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +22,6 @@ import java.util.List;
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.Markwon;
 import ru.noties.markwon.MarkwonConfiguration;
-import ru.noties.markwon.core.spans.LinkSpan;
 import ru.noties.markwon.html.HtmlPlugin;
 
 abstract public class clip_adapter extends RecyclerView.Adapter<clip_adapter.Clip_viewholder> {

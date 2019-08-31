@@ -1,11 +1,10 @@
 package com.subhamkumar.clipsy.panel.fragments;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -46,7 +45,7 @@ public abstract class fragment_wrapper extends Fragment {
 
                 },
 
-                error -> handle_error_response(error)
+                this::handle_error_response
         ) {
 
             @Override

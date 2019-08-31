@@ -2,16 +2,16 @@ package com.subhamkumar.clipsy.panel;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import androidx.appcompat.app.ActionBar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -20,6 +20,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.auth.home;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.ProfileApiResponse;
 import com.subhamkumar.clipsy.utils.wrapper;
@@ -33,8 +34,6 @@ import static com.subhamkumar.clipsy.models.Constants.profilePicChangeRequest;
 import static com.subhamkumar.clipsy.models.Constants.request_user_update_avatar;
 
 public class ProfileSetting extends wrapper {
-
-    int isDirty = 0;
 
     @Override
     public Map<String, String> _getHeaders() {
@@ -78,24 +77,41 @@ public class ProfileSetting extends wrapper {
         return new HashMap<String, String>();
     }
 
-    private Dialog networkLoadingDialog;
+    String initialName, initialProfilePic;
+
+    public String getInitialName() {
+        return uiName.getText().toString().trim();
+    }
+
+    public void setInitialName(String initialName) {
+        this.initialName = initialName;
+    }
+
+    public String getInitialProfilePic() {
+        return initialProfilePic;
+    }
+
+    public void setInitialProfilePic(String initialProfilePic) {
+        this.initialProfilePic = initialProfilePic;
+    }
 
     @Override
     public void handleResponse(String response) {
         Log.i("setting", response);
         Gson gson = new Gson();
         ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
+
         String profilePic = profileApiResponse.data.get(0).profile_pic;
         String parsedProficPic = profilePic.equals("") ? "0" : profilePic;
-        setProfilePic(parsedProficPic);
+
+        inflatProfilePic(parsedProficPic);
         uiName.setText(profileApiResponse.data.get(0).name);
-        initialName = profileApiResponse.data.get(0).name;
-        intialProficPic = parsedProficPic;
+
+        setInitialName(profileApiResponse.data.get(0).name);
+        setInitialProfilePic(parsedProficPic);
     }
 
-    private String intialProficPic; private String initialName;
-
-    private void setProfilePic(String parsedProficPic) {
+    private void inflatProfilePic(String parsedProficPic) {
         int _profile_pic = Integer.parseInt(parsedProficPic);
         int imageResource = Constants.mThumbIds[_profile_pic];
         uiProfilePic.setImageResource(imageResource);
@@ -106,10 +122,6 @@ public class ProfileSetting extends wrapper {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    private boolean changed() {
-        return true;
-    }
-
     private void updateUser() {
 
 
@@ -118,8 +130,8 @@ public class ProfileSetting extends wrapper {
             protected Map makeParams() {
 
                 Map updateUserParams = new HashMap<String, String>();
-                updateUserParams.put("profile_pic", profile_pic);
-                updateUserParams.put("name", getName());
+                updateUserParams.put("profile_pic", getInitialProfilePic());
+                updateUserParams.put("name", getInitialName());
                 return updateUserParams;
 
             }
@@ -130,7 +142,7 @@ public class ProfileSetting extends wrapper {
                 Gson gson = new Gson();
                 ProfileApiResponse profileApiResponse = gson.fromJson(response, ProfileApiResponse.class);
                 uiName.setText(profileApiResponse.data.get(0).name);
-                setProfilePic(profileApiResponse.data.get(0).profile_pic);
+                inflatProfilePic(profileApiResponse.data.get(0).profile_pic);
 
                 Toast.makeText(ProfileSetting.this, "Profile Updated.", Toast.LENGTH_SHORT).show();
                 ProfileSetting.this.finish();
@@ -167,9 +179,6 @@ public class ProfileSetting extends wrapper {
     }
 
 
-
-
-
     private String id;
     private String searcheUserId;
     private String token;
@@ -190,12 +199,10 @@ public class ProfileSetting extends wrapper {
 
         profileSettingLayout = findViewById(R.id.profileSettingLayout);
 
-        networkLoadingDialog = new Dialog(ProfileSetting.this, R.style.TranslucentDialogTheme);
-        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+        Dialog networkLoadingDialog = new Dialog(ProfileSetting.this, R.style.TranslucentDialogTheme);
+        setActionBar();
 
         geIdTokenSearchedIdFromBundle();
-
-        isDirty = 0;
 
         setUiVariables();
         setClickListener();
@@ -221,12 +228,11 @@ public class ProfileSetting extends wrapper {
     }
 
     private void setClickListener() {
-        update_user_setting.setOnClickListener(v -> {
-                updateUser();
-        });
+        update_user_setting.setOnClickListener(v -> updateUser());
     }
 
-    LinearLayout profileSettingLayout;
+    private LinearLayout profileSettingLayout;
+
     private void showUiElementsForSameUser(boolean areSameUser) {
         if (areSameUser) {
             // TODO update profile pic and name
@@ -237,17 +243,13 @@ public class ProfileSetting extends wrapper {
     }
 
     private void addChangeProfilePicTextListener() {
-        (findViewById(R.id.change_profile_pic_text)).setOnClickListener(v -> {
-
-            startActivityForResult(new Intent(ProfileSetting.this,
-                            choose_avatar.class)
-                    , profilePicChangeRequest);
-
-        });
+        (findViewById(R.id.change_profile_pic_text)).setOnClickListener(v -> startActivityForResult(new Intent(ProfileSetting.this,
+                        choose_avatar.class)
+                , profilePicChangeRequest));
     }
 
 
-    String profile_pic;
+    private String profile_pic;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -255,18 +257,43 @@ public class ProfileSetting extends wrapper {
 
         if (requestCode == profilePicChangeRequest) {
             profile_pic = data.getStringExtra("profile_pic");
-            setProfilePic(profile_pic);
-            enableEditButton();
+            setInitialProfilePic(profile_pic);
+            inflatProfilePic(profile_pic);
         }
-    }
-
-    private void enableEditButton() {
-
     }
 
     @Override
     protected void onRestart() {
         // makeRequest();
         super.onRestart();
+    }
+
+    private void setActionBar() {
+        ActionBar bar = getSupportActionBar();
+        Objects.requireNonNull(bar).setDisplayHomeAsUpEnabled(true);
+        bar.setTitle(R.string.edit_profile);
+        Objects.requireNonNull(bar).setElevation(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return true;
+    }
+
+
+    public void goToSignUp(View V) {
+        Intent toSignUp = new Intent(ProfileSetting.this, home.class).putExtra(Constants.SIGNOUT, "1");
+        toSignUp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(toSignUp);
+        this.finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

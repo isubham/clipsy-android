@@ -27,7 +27,7 @@ public class NotificationBroadcast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Intent daemonIntent = new Intent(context, Daemon.class);
-        Log.i(NotificationBroadcast.class.getSimpleName(), "Service Stops! Oooooooooooooppppssssss!!!!");
+        Tools._log("restart_service");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(daemonIntent);

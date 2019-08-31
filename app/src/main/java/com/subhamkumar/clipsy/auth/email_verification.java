@@ -3,8 +3,8 @@ package com.subhamkumar.clipsy.auth;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import androidx.appcompat.app.ActionBar;
+import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,6 +79,7 @@ public class email_verification extends wrapper {
         ApiResponse apiResponse = gson.fromJson(response, ApiResponse.class);
 
         if (apiResponse.success.equals(Constants.status_success)) {
+            // TODO goto panel after saving login details
             startActivity(new Intent(email_verification.this, signin.class));
         }
         else if(apiResponse.success.equals(Constants.status_failed)){
@@ -104,23 +105,21 @@ public class email_verification extends wrapper {
 
     }
 
-    private String callback;
-    private Bundle bundle;
     private Dialog networkLoadingDialog;
 
 
     private void setCallbackFromBundle() {
-        bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         email = "";
         if (bundle != null) {
             email = Objects.requireNonNull(getIntent().getExtras()).getString("email");
-            callback = getIntent().getExtras().getString(Constants.bundle_param_caller_activity_to_email_verification);
+            String callback = getIntent().getExtras().getString(Constants.bundle_param_caller_activity_to_email_verification);
         }
     }
 
-    private boolean showLabelIfEmptyField(String message, TextView label, EditText editText) {
+    private boolean showLabelIfEmptyField(TextView label, EditText editText) {
         if(editText.getText().toString().trim().equals("")) {
-            label.setText(message);
+            label.setText("Token cannot be empty");
             return true;
         }
 
@@ -133,7 +132,7 @@ public class email_verification extends wrapper {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.email_verification);
 
-        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+        setActionBar();
 
         setCallbackFromBundle();
         init();
@@ -141,10 +140,25 @@ public class email_verification extends wrapper {
 
     }
 
+    private void setActionBar() {
+        ActionBar bar= getSupportActionBar();
+        Objects.requireNonNull(bar).setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(bar).setElevation(0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return true;
+    }
+
     private void sendEmailVerification() {
         Tools.showNetworkLoadingDialog(networkLoadingDialog, "email verification show");
         TextView statusTextView = findViewById(R.id.verify_token_status);
-        if (!showLabelIfEmptyField("Token cannot be empty", statusTextView, verify_token) ) {
+        if (!showLabelIfEmptyField(statusTextView, verify_token) ) {
             makeRequest();
         }
     }

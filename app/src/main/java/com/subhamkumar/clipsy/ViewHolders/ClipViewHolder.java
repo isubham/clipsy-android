@@ -2,8 +2,8 @@ package com.subhamkumar.clipsy.ViewHolders;
 
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -20,20 +20,18 @@ import ru.noties.markwon.Markwon;
 import ru.noties.markwon.MarkwonConfiguration;
 import ru.noties.markwon.html.HtmlPlugin;
 
-import static java.security.AccessController.getContext;
-
 public class ClipViewHolder extends RecyclerView.ViewHolder {
-    public TextView id;
-    public TextView author_id;
-    public TextView viewer_id;
-    public TextView clip_time;
-    public ImageView profile_pic;
-    public TextView clip_content;
-    public TextView clip_title;
-    public TextView clip_comment;
-    public TextView author_name;
-    public TextView clip_visibility_text;
-    public ImageView clip_visibility_image;
+    private final TextView id;
+    private final TextView author_id;
+    private final TextView viewer_id;
+    private final TextView clip_time;
+    private final ImageView profile_pic;
+    private final TextView clip_content;
+    private final TextView clip_title;
+    private final TextView clip_comment;
+    private final TextView author_name;
+    private final TextView clip_visibility_text;
+    private final ImageView clip_visibility_image;
 
 
     public ClipViewHolder(View V) {
@@ -60,7 +58,13 @@ public class ClipViewHolder extends RecyclerView.ViewHolder {
         this.author_id.setText(clip.profile.id);
         this.viewer_id.setText(clip.viewer_id);
         this.clip_time.setText(clip.clip_time.concat(" · "));
-        this.clip_title.setText(clip.clip_title);
+        if (clip.clip_time.isEmpty()) {
+            this.clip_title.setVisibility(View.GONE);
+        }
+        else{
+            this.clip_title.setVisibility(View.VISIBLE);
+            this.clip_title.setText(clip.clip_title);
+        }
 
         // Comment
         int commentCount = Integer.parseInt(clip.comment);
@@ -104,9 +108,7 @@ public class ClipViewHolder extends RecyclerView.ViewHolder {
         builder.usePlugin(new AbstractMarkwonPlugin() {
             @Override
             public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                builder.linkResolver((view, link) -> {
-                    CustomTabs.openTab(context, link);
-                });
+                builder.linkResolver((view, link) -> CustomTabs.openTab(context, link));
             }
         });
 

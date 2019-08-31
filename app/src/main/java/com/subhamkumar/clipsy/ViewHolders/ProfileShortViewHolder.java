@@ -1,7 +1,7 @@
 package com.subhamkumar.clipsy.ViewHolders;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,11 +12,11 @@ import com.subhamkumar.clipsy.models.Profile;
 
 public class ProfileShortViewHolder extends RecyclerView.ViewHolder {
 
-    TextView id;
-    TextView name;
-    TextView email;
-    ImageView profile_pic;
-    ImageView crossIcon;
+    private final TextView id;
+    private final TextView name;
+    private final TextView email;
+    private final ImageView profile_pic;
+    private final ImageView crossIcon;
 
     public ProfileShortViewHolder(View V) {
         super(V);

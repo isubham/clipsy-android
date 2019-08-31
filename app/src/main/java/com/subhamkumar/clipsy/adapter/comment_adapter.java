@@ -2,15 +2,14 @@ package com.subhamkumar.clipsy.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +18,6 @@ import com.subhamkumar.clipsy.models.Comment;
 import com.subhamkumar.clipsy.models.Constants;
 
 import java.util.List;
-import java.util.Objects;
 
 abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapter.commentViewholder> {
 
@@ -55,7 +53,6 @@ abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapt
     }
 
     private final List<Comment> comments;
-    private Context context;
 
     public comment_adapter(List<Comment> comments) {
         this.comments = comments;
@@ -67,7 +64,7 @@ abstract public class comment_adapter extends RecyclerView.Adapter<comment_adapt
         View V = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.rl_comment, viewGroup, false);
         commentViewholder clip_viewholder = new commentViewholder(V);
-        context = viewGroup.getContext();
+        Context context = viewGroup.getContext();
 
         addViewClickListeners(V);
 

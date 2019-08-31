@@ -1,28 +1,24 @@
 package com.subhamkumar.clipsy.auth;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.panel;
 import com.subhamkumar.clipsy.utils.Daemon;
-import com.subhamkumar.clipsy.utils.LoginDb;
-import com.subhamkumar.clipsy.utils.LoginDetails;
+import com.subhamkumar.clipsy.utils.LoginPersistance;
 
 import java.util.Objects;
 
 public class home extends AppCompatActivity {
 
-    private SharedPreferences localStore;
-    Bundle bundle;
+    private Bundle bundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +27,7 @@ public class home extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setElevation(0);
 
         bundle = getIntent().getExtras();
-        localStore = getApplicationContext().getSharedPreferences(Constants.myFile , Context.MODE_PRIVATE);
+        SharedPreferences localStore = getApplicationContext().getSharedPreferences(Constants.myFile, Context.MODE_PRIVATE);
 
         handleState(bundle, localStore);
 
@@ -81,30 +77,25 @@ public class home extends AppCompatActivity {
 
 
     private void saveLoginDetails(SharedPreferences localStore, String token, String id) {
-        LoginDb loginDb = new LoginDb(getApplicationContext());
-        loginDb.saveLoginDetails(id, token);
+        LoginPersistance.Save(id, token, getApplicationContext());
     }
 
     private boolean checkLoginDetails() {
-        LoginDb loginDb = new LoginDb(getApplicationContext());
-        return loginDb.getLoginDetails() !=  null;
+        return LoginPersistance.GetToken(getApplicationContext()) !=  null;
     }
 
     private void gotoPanelIFLoginDetailsExist(SharedPreferences localStore) {
 
-        LoginDb loginDb = new LoginDb(getApplicationContext());
-        LoginDetails details = loginDb.getLoginDetails();
         startActivity(new Intent(home.this, panel.class)
-                .putExtra("token", details.getTOKEN())
-                .putExtra("id", details.getID()));
+                .putExtra("token", LoginPersistance.GetToken(getApplicationContext()))
+                .putExtra("id", LoginPersistance.GetId(getApplicationContext())));
 
         this.finish();
     }
 
 
     private void deleteLoginDetails(SharedPreferences localStore) {
-        LoginDb loginDb = new LoginDb(getApplicationContext());
-        loginDb.deleteLoginDetails();
+        LoginPersistance.Delete(getApplicationContext());
     }
 
 
@@ -132,5 +123,9 @@ public class home extends AppCompatActivity {
         stopService(new Intent(this, Daemon.class));
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

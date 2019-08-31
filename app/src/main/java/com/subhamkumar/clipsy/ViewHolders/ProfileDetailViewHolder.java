@@ -1,7 +1,7 @@
 package com.subhamkumar.clipsy.ViewHolders;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,26 +10,24 @@ import android.widget.TextView;
 
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
-import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.models.ProfileDetail;
-import com.subhamkumar.clipsy.models.ProfileMatrixApiResponse;
 
 public class ProfileDetailViewHolder extends RecyclerView.ViewHolder {
-    protected ImageView _choose_avatar_icon;
-    protected TextView _name;
-    protected TextView _email;
-    protected Button relationshipButton;
-    protected TextView fragment_profile_followers;
-    protected TextView fragment_profile_following;
-    protected TextView clip_count;
-    protected TextView followers_count;
-    protected TextView following_count;
-    protected TextView viewer_id;
-    protected TextView id;
-    protected Button profile_edit;
-    protected LinearLayout clipCounterContainer;
-    protected LinearLayout followersCounterContainer;
-    protected LinearLayout followingCounterContainer;
+    private final ImageView _choose_avatar_icon;
+    private final TextView _name;
+    private final TextView _email;
+    private final Button relationshipButton;
+    private final TextView fragment_profile_followers;
+    private final TextView fragment_profile_following;
+    private final TextView clip_count;
+    private final TextView followers_count;
+    private final TextView following_count;
+    private final TextView viewer_id;
+    private final TextView id;
+    private final Button profile_edit;
+    private final LinearLayout clipCounterContainer;
+    private final LinearLayout followersCounterContainer;
+    private final LinearLayout followingCounterContainer;
 
     public ProfileDetailViewHolder(@NonNull View V) {
         super(V);
@@ -84,7 +82,7 @@ public class ProfileDetailViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    protected void hideRelationshipButtonIfSameUser(String user_x, String user_y) {
+    private void hideRelationshipButtonIfSameUser(String user_x, String user_y) {
 
         if (user_x.equals(user_y)) {
             relationshipButton.setVisibility(View.GONE);
@@ -92,7 +90,7 @@ public class ProfileDetailViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    protected void showEditButtonIfSameUser(String user_x, String user_y) {
+    private void showEditButtonIfSameUser(String user_x, String user_y) {
 
         if (!user_x.equals(user_y)) {
             profile_edit.setVisibility(View.GONE);

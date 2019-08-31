@@ -1,14 +1,10 @@
 package com.subhamkumar.clipsy.utils;
 
 import android.os.Bundle;
+import androidx.annotation.Nullable;
 
-import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 
-import static com.subhamkumar.clipsy.models.Constants.PROFILE_LIST_TO_PROFILE_RESULT;
-import static com.subhamkumar.clipsy.models.Constants.TO_HOME;
-import static com.subhamkumar.clipsy.models.Constants.fragment_profile;
-import static com.subhamkumar.clipsy.models.Constants.fragment_search;
 import static com.subhamkumar.clipsy.models.Constants.searched_user_id;
 import static com.subhamkumar.clipsy.models.Constants.id;
 import static com.subhamkumar.clipsy.models.Constants.token;
@@ -17,11 +13,12 @@ import static com.subhamkumar.clipsy.models.Constants.token;
 
 public class Message {
 
-    public static Bundle fragmentSearchToProfileResult(String _token, String _id, String _searchedUserId) {
+    public static Bundle fragmentSearchToProfileResult(String _token, String _id, String _searchedUserId, @Nullable String fromActivity) {
         Bundle message = new Bundle();
         message.putString(token, _token);
         message.putString(id, _id);
         message.putString(searched_user_id , _searchedUserId);
+        message.putString(Constants.fromActivity , fromActivity);
         // message.putString(TO_HOME, fragment_search);
         return message;
     }

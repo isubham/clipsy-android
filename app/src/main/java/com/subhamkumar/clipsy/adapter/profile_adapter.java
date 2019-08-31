@@ -1,9 +1,9 @@
 package com.subhamkumar.clipsy.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.Profile;
 
 import java.util.List;
+import java.util.Objects;
 
 abstract public class profile_adapter extends RecyclerView.Adapter<profile_adapter.Profile_viewholder> {
 
@@ -39,7 +40,6 @@ abstract public class profile_adapter extends RecyclerView.Adapter<profile_adapt
     }
 
     private final List<Profile> profiles;
-    private Context context;
 
     public profile_adapter(List<Profile> profiles) {
         this.profiles = profiles;
@@ -50,7 +50,7 @@ abstract public class profile_adapter extends RecyclerView.Adapter<profile_adapt
     public Profile_viewholder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View V = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.rl_profile, viewGroup, false);
         Profile_viewholder clip_viewholder = new Profile_viewholder(V);
-        context = viewGroup.getContext();
+        Context context = viewGroup.getContext();
         addViewClickListeners(V);
         return clip_viewholder;
     }
@@ -69,7 +69,7 @@ abstract public class profile_adapter extends RecyclerView.Adapter<profile_adapt
     }
 
     private void setCrossIcon(@NonNull Profile_viewholder profileViewholder, int i) {
-        if (profiles.get(i).showCloseIcon != "1") {
+        if (!Objects.equals(profiles.get(i).showCloseIcon, "1")) {
             profileViewholder.crossIcon.setVisibility(View.GONE);
         } else {
             profileViewholder.crossIcon.setVisibility(View.VISIBLE);

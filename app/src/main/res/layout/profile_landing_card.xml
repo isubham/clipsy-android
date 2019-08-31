@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="name"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/profile_card_title"
                     android:textStyle="bold" />
 
                 <TextView
@@ -59,15 +59,15 @@
                     android:gravity="center_horizontal"
                     android:text="email"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/profile_card_content" />
 
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="@dimen/profile_card_element_padding"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/profile_card_element_padding"
                 android:orientation="vertical">
 
 
@@ -171,9 +171,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/profile_card_element_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/profile_card_element_padding"
                     android:orientation="vertical">
 
                     <Button
@@ -186,9 +186,12 @@
                         android:text="@string/follow"
                         android:textAllCaps="false" />
 
+
+                    <!--style="@style/noStyleButton"-->
                     <Button
                         android:id="@+id/profile_edit"
-                        style="@style/noStyleButton"
+
+                        style="@style/primaryButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="16dp"

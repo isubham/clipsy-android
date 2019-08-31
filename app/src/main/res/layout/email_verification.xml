@@ -5,14 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="@dimen/activityPadding"
     tools:context=".auth.email_verification">
+
+    <TextView
+        android:id="@+id/verify_token_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="@string/we_have_send_an_email_with_a_token_use_that_to_verify_your_email_it_may_take_2_minutes_to_get_the_email"
+        android:textColor="@color/text_secondary" />
 
     <TextView
         android:id="@+id/email_verification_status_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <!--verify token -->
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -23,20 +32,15 @@
             android:layout_height="wrap_content"
             android:hint="@string/token"
             android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/verify_token_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/we_have_send_an_email_with_a_token_use_that_to_verify_your_email_it_may_take_2_minutes_to_get_the_email"
-        android:textColor="@color/black" />
 
     <Button
         android:id="@+id/send_verify_token"
-        style="@style/primaryBigButton"
+        style="@style/primaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="@string/verify" />
 
 </LinearLayout>

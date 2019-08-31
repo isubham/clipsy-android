@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:myapp="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:myapp="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/write_clip"
+        android:icon="@drawable/round_add_black_48"
         android:title="@string/write"
         android:visible="true"
-        myapp:showAsAction="always"
-        android:icon="@drawable/outline_create_black"
-        />
+        myapp:showAsAction="always" />
     <!--
     <item
         android:id="@+id/notification"
@@ -18,7 +16,6 @@
         myapp:showAsAction="always"
         android:icon="@drawable/globe"
         />
-        -->
      <item
         android:id="@+id/sign_out"
         android:title="@string/sign_out"
@@ -27,4 +24,5 @@
         android:icon="@drawable/logout"
         />
 
+        -->
 </menu>

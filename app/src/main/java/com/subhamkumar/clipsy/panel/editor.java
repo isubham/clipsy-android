@@ -1,21 +1,19 @@
 package com.subhamkumar.clipsy.panel;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -41,7 +39,7 @@ import static com.subhamkumar.clipsy.utils.Tools.getTimeStamp;
 
 public class editor extends AppCompatActivity {
 
-    public static String initialEditorHtml = "Here it goes ...";
+    private static final String initialEditorHtml = "Here it goes ...";
 
 
     private Clip currentclip;
@@ -51,9 +49,7 @@ public class editor extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            dialog.dismiss();
-        });
+        dialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> dialog.dismiss());
 
         dialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             dialog.dismiss();
@@ -104,9 +100,7 @@ public class editor extends AppCompatActivity {
             showSaveVisibility.dismiss();
         });
 
-        showSaveVisibility.findViewById(R.id.dialog_save_clip_cancel).setOnClickListener(v -> {
-            showSaveVisibility.dismiss();
-        });
+        showSaveVisibility.findViewById(R.id.dialog_save_clip_cancel).setOnClickListener(v -> showSaveVisibility.dismiss());
 
         showSaveVisibility.show();
 
@@ -129,7 +123,7 @@ public class editor extends AppCompatActivity {
         }
     }
 
-    RelativeLayout parent;
+    private RelativeLayout parent;
 
     private enum EditorStates {
         TitleEmptyContentUntouched,
@@ -261,9 +255,6 @@ public class editor extends AppCompatActivity {
         }
     }
 
-    private boolean isActivityVisible() {
-        return editor.this.isActivityVisible();
-    }
 
     private static final String TAG = "RTextEditorView";
 
@@ -284,23 +275,22 @@ public class editor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editor);
 
-        Objects.requireNonNull(getSupportActionBar()).setElevation(0);
+        ActionBar actionBar = getSupportActionBar();
+        Objects.requireNonNull(actionBar).setTitle(R.string.editor_title);
+        Objects.requireNonNull(actionBar).setElevation(0);
         networkLoadingDialog = new Dialog(editor.this, R.style.TranslucentDialogTheme);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         init();
 
 
         // Insert Link
         RTextEditorButton insertLinkButton = findViewById(R.id.insert_link);
-        insertLinkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                InsertLinkDialogFragment dialog = InsertLinkDialogFragment.newInstance();
-                dialog.setOnInsertClickListener(onInsertLinkClickListener);
-                dialog.show(getSupportFragmentManager(), "insert-link-dialog");
-            }
+        insertLinkButton.setOnClickListener(view -> {
+            InsertLinkDialogFragment dialog = InsertLinkDialogFragment.newInstance();
+            dialog.setOnInsertClickListener(onInsertLinkClickListener);
+            dialog.show(getSupportFragmentManager(), "insert-link-dialog");
         });
     }
 
@@ -336,7 +326,8 @@ public class editor extends AppCompatActivity {
 
     }
 
-    String fetchedClip, fetchedTitle;
+    private String fetchedClip;
+    private String fetchedTitle;
 
     private void setExistingClipOrDefaultClip() {
         currentclip = new Clip();
@@ -447,8 +438,7 @@ public class editor extends AppCompatActivity {
 
             @Override
             public String setHttpUrl() {
-                String url = String.format(Constants.request_clip_read, getClipId());
-                return url;
+                return String.format(Constants.request_clip_read, getClipId());
             }
 
             @Override
@@ -580,7 +570,6 @@ public class editor extends AppCompatActivity {
                 if (clipApiResonse.success.equals("1")) {
                     currentclip = clipApiResonse.data.get(0);
                     closeEditor();
-                } else {
                 }
 
                 Tools.hideNetworkLoadingDialog(networkLoadingDialog, "editor hide");

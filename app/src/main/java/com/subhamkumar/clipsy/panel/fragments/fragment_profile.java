@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +62,7 @@ import static com.subhamkumar.clipsy.utils.Message.getSearchId_forClips_orSearch
 /**
  * A simple {@link Fragment} subclass.
  */
-public class fragment_profile extends android.support.v4.app.Fragment {
+public class fragment_profile extends androidx.fragment.app.Fragment {
 
 
     private void gotoProfileResult(View V) {
@@ -114,13 +114,13 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         closeAction.setOnClickListener(v -> dialog.dismiss());
 
         editAction.setOnClickListener(v -> {
-            gotoClip(v, "update", authorId, clipId);
+            gotoClip(v, authorId, clipId);
             dialog.dismiss();
         });
 
         deleteAction.setOnClickListener(v -> {
             dialog.dismiss();
-            showConfirmationToDelete(v, "delete", authorId, clipId);
+            showConfirmationToDelete(v, authorId, clipId);
         });
 
         dialog.show();
@@ -128,7 +128,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     }
 
 
-    private void showConfirmationToDelete(View V, String action, String authorId, String clipId) {
+    private void showConfirmationToDelete(View V, String authorId, String clipId) {
 
         final Dialog delete_clip_confirmation = new Dialog(context);
         hidetitleofdialog(delete_clip_confirmation);
@@ -142,9 +142,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
             delete_clip_confirmation.dismiss();
         });
 
-        closeAction.setOnClickListener(v -> {
-            delete_clip_confirmation.dismiss();
-        });
+        closeAction.setOnClickListener(v -> delete_clip_confirmation.dismiss());
 
         delete_clip_confirmation.show();
 
@@ -165,12 +163,12 @@ public class fragment_profile extends android.support.v4.app.Fragment {
                     // setItemsAndNotifyAdapter(clipList);
                 },
 
-                error -> handle_error_response(error)
+                this::handle_error_response
         ) {
 
             @Override
             protected Map<String, String> getParams() {
-                return new HashMap<String, String>();
+                return new HashMap<>();
             }
 
             @Override
@@ -190,18 +188,17 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     }
 
 
-    private int clipUpdateRequestCode = 123;
-
-    private void gotoClip(View V, String action, String authorId, String clipId) {
+    private void gotoClip(View V, String authorId, String clipId) {
 
         Bundle toClip = new Bundle();
         toClip.putString("token", token);
-        toClip.putString("action", action);
+        toClip.putString("action", "update");
         toClip.putString("id", authorId);
         toClip.putString("clip_id", clipId);
         toClip.putString("clip", "clip");
         Intent toClipIntent = new Intent(getActivity(), editor.class);
         toClipIntent.putExtras(toClip);
+        int clipUpdateRequestCode = 123;
         startActivityForResult(toClipIntent, clipUpdateRequestCode);
     }
 
@@ -257,11 +254,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
                 });
 
         reportDialog.findViewById(R.id.dialog_other_user_show_report_close)
-                .setOnClickListener(v -> {
-
-                    reportDialog.dismiss();
-
-                });
+                .setOnClickListener(v -> reportDialog.dismiss());
 
         reportDialog.show();
     }
@@ -278,7 +271,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
                 },
 
-                error -> handle_error_response(error)
+                this::handle_error_response
         ) {
 
             @Override
@@ -327,7 +320,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
         commentsDialog.setContentView(R.layout.dialog_clip_comments);
 
-        showLoadingContainer(((ShimmerFrameLayout) commentsDialog.findViewById(R.id.rl_comment_placeholder)));
+        showLoadingContainer(commentsDialog.findViewById(R.id.rl_comment_placeholder));
         commentsDialog.show();
 
         Objects.requireNonNull(commentsDialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -379,14 +372,13 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     }
 
     private Unidapter unidapter;
-    private LinearLayoutManager commentlinearLayoutManager;
     private ArrayList<Object> comments;
     private RecyclerView commentsRecyclerView;
 
     private void initializeCommentsDialogRecyclerView(Dialog commentDialog, View clipView) {
 
         commentsRecyclerView = commentDialog.findViewById(R.id.clip_comments);
-        commentlinearLayoutManager = new LinearLayoutManager(context);
+        LinearLayoutManager commentlinearLayoutManager = new LinearLayoutManager(context);
         comments = new ArrayList<>();
 
         unidapter = new Unidapter(comments) {
@@ -409,10 +401,9 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         });
 
         commentDialog.findViewById(R.id.commentSubmit).setOnClickListener(v -> {
-            View clip = clipView;
-            String clipId = ((TextView) clip.findViewById(R.id.rl_clip_id)).getText().toString().trim();
+            String clipId = ((TextView) clipView.findViewById(R.id.rl_clip_id)).getText().toString().trim();
 
-            EditText commentEditText = (EditText) commentDialog.findViewById(R.id.commentContent);
+            EditText commentEditText = commentDialog.findViewById(R.id.commentContent);
             String comment = (commentEditText).getText().toString();
 
             if (comment.isEmpty()) {
@@ -593,7 +584,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
         comments.clear();
         Log.e("Comments", response);
-        hideLoadingContainer(((ShimmerFrameLayout) commentDialog.findViewById(R.id.rl_comment_placeholder)));
+        hideLoadingContainer(commentDialog.findViewById(R.id.rl_comment_placeholder));
 
         CommentApiResonse commentApiResonse = new Gson().fromJson(response, CommentApiResonse.class);
 
@@ -608,17 +599,12 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     }
     // end of clips
 
-    public void fetchProfile() {
+    private void fetchProfile() {
         showLoadingContainer(clipAndprofileLoadingContainer);
+        // showProfileAndClipUIAndHideLoading();
         StringRequest fetch = new StringRequest(Request.Method.GET, String.format(getString(R.string.request_user_user_profile_matrix), searched_id),
-                response -> {
-
-                    getProfileAndClips(response);
-                    // showProfileAndClipUIAndHideLoading();
-                },
-                error -> {
-                    showNetworkRetryDialog();
-                }
+                this::getProfileAndClips,
+                error -> showNetworkRetryDialog()
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -630,30 +616,25 @@ public class fragment_profile extends android.support.v4.app.Fragment {
             @Override
             protected Map<String, String> getParams() {
                 networkretry = NETWORKRETRY.PROFILE;
-                HashMap<String, String> stringStringHashMap = new HashMap<>();
-                return stringStringHashMap;
+                return new HashMap<>();
             }
-
-            ;
 
         };
 
-        Volley.newRequestQueue(getActivity()).add(fetch);
+        Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(fetch);
 
     }
 
-    protected void handle_error_response(VolleyError error) {
+    private void handle_error_response(VolleyError error) {
         showNetworkRetryDialog();
     }
 
 
-    protected void showNetworkRetryDialog() {
+    private void showNetworkRetryDialog() {
         final Dialog noNetworkDialog = new Dialog(context);
         noNetworkDialog.setContentView(R.layout.dialog_network_unavailable_confirmation);
 
-        noNetworkDialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> {
-            noNetworkDialog.dismiss();
-        });
+        noNetworkDialog.findViewById(R.id.dialog_nonet_exit).setOnClickListener(v -> noNetworkDialog.dismiss());
 
         noNetworkDialog.findViewById(R.id.dialog_nonet_continue).setOnClickListener(v -> {
             noNetworkDialog.dismiss();
@@ -666,11 +647,11 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     private NETWORKRETRY networkretry;
 
     private enum NETWORKRETRY {
-        FOLLOWERS, FOLLOWING, PROFILE, RELATIONSHIPBUTTON;
+        FOLLOWERS, FOLLOWING, PROFILE, RELATIONSHIPBUTTON
     }
 
     private void networkRetryRequest() {
-        Log.i("n/w retry", networkretry.name().toString());
+        Log.i("n/w retry", networkretry.name());
         switch (networkretry) {
             case PROFILE:
                 fetchProfile();
@@ -697,7 +678,6 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
 
     private RecyclerView rv_profile;
-    private LinearLayoutManager linearLayoutManager;
     private com.subhamkumar.clipsy.adapter.profile_adapter profile_adapter;
     private List<Profile> profileList;
 
@@ -721,7 +701,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
     private void initializeShowPeopleDialogVariables(Dialog dialog) {
         rv_profile = dialog.findViewById(R.id.connected_people);
-        linearLayoutManager = new LinearLayoutManager(context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         profileList = new ArrayList<>();
 
         profile_adapter = new profile_adapter(profileList) {
@@ -734,8 +714,6 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         rv_profile.setLayoutManager(linearLayoutManager);
     }
 
-    private StringRequest getConnectedUsers;
-
     private void hideLoadingContainer(ShimmerFrameLayout shimmerFrameLayout) {
         shimmerFrameLayout.setVisibility(View.GONE);
         shimmerFrameLayout.stopShimmer();
@@ -746,8 +724,8 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         profileLoadingContainer.startShimmer();
     }
 
-    ShimmerFrameLayout clipAndprofileLoadingContainer;
-    ShimmerFrameLayout connectedProfileContainer;
+    private ShimmerFrameLayout clipAndprofileLoadingContainer;
+    private ShimmerFrameLayout connectedProfileContainer;
 
     private void getProfiles(Dialog dialog, String typeOfPeople, String viewerId) {
 
@@ -764,7 +742,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
                 viewerId);
 
 
-        getConnectedUsers = new StringRequest(
+        StringRequest getConnectedUsers = new StringRequest(
                 Request.Method.GET,
                 profileListUrl,
                 response -> {
@@ -788,7 +766,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
 
             @Override
             protected Map<String, String> getParams() {
-                return new HashMap<String, String>();
+                return new HashMap<>();
             }
 
             @Override
@@ -812,14 +790,14 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         );
     }
 
-    protected void gotToProfileResult(View view) {
+    private void gotToProfileResult(View view) {
         Intent to_profile_result = new Intent(context, profile_result.class);
         String searchedUserId = ((TextView) view.findViewById(R.id.rl_profile_id)).getText().toString().trim();
         to_profile_result.putExtras(fragmentProfileToProfileResult(token, id, searchedUserId));
         startActivity(to_profile_result);
     }
 
-    protected Bundle bundle;
+    private Bundle bundle;
 
     protected String getTokenFromBundle() {
         return bundle.getString(getString(R.string.params_token));
@@ -830,23 +808,25 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     }
 
 
-    protected Context context;
+    private Context context;
 
-    String id, token, searched_id;
+    private String id;
+    private String token;
+    private String searched_id;
 
-    protected void setVariablesFromBundle() {
+    private void setVariablesFromBundle() {
         id = Objects.requireNonNull(getArguments()).getString(getString(R.string.params_id));
         token = getArguments().getString(getString(R.string.params_token));
         searched_id = getSearchId_forClips_orSearch_orProfileList(getArguments(), id);
     }
 
-    LinearLayoutManager clipLayoutManager;
-    ViewGroup fragment_profile;
-    Dialog networkRetryDialog;
-    RecyclerView rv_clip;
+    private LinearLayoutManager clipLayoutManager;
+    private ViewGroup fragment_profile;
+    private Dialog networkRetryDialog;
+    private RecyclerView rv_clip;
     private Unidapter uniDapterForClipAndProfile;
 
-    protected void inializeUnidapter(View V) {
+    private void inializeUnidapter(View V) {
         clipLayoutManager = new LinearLayoutManager(getActivity());
         rv_clip = V.findViewById(R.id.fragment_profile_clip_profile);
 
@@ -861,7 +841,7 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         rv_clip.setAdapter(uniDapterForClipAndProfile);
     }
 
-    View V;
+    private View V;
     // start of clips
     private ArrayList<Object> objects;
 
@@ -913,13 +893,13 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         }
     }
 
-    StringRequest relationShipStringRequest;
+    private StringRequest relationShipStringRequest;
 
-    protected String getUrlByResponseMessage(String message, String searched_id) {
+    private String getUrlByResponseMessage(String message, String searched_id) {
         switch (message) {
             case "Follow":
                 return String.format(getString(R.string.request_user_user_follow), searched_id);
-            case "Following":
+            case "Unfollow":
                 return String.format(getString(R.string.request_user_user_unfollow), searched_id);
             default:
                 return String.format(getString(R.string.request_user_user_follow), searched_id);
@@ -951,9 +931,11 @@ public class fragment_profile extends android.support.v4.app.Fragment {
         V.findViewById(R.id.rx).setOnClickListener(v -> {
 
             v.setEnabled(false);
-            ViewCompat.setBackgroundTintList(v, ContextCompat.getColorStateList(getActivity(), R.color.grey_300));
+            ViewCompat.setBackgroundTintList(v, ContextCompat.getColorStateList(Objects.requireNonNull(getActivity()), R.color.grey_300));
 
             String message = ((Button) V.findViewById(R.id.rx)).getText().toString().trim();
+            String searched_id =  ((TextView) V.findViewById(R.id.profile_landing_id)).getText().toString().trim();
+
             relationShipStringRequest = new StringRequest(
                     Request.Method.POST,
                     getUrlByResponseMessage(message, searched_id),
@@ -991,11 +973,11 @@ public class fragment_profile extends android.support.v4.app.Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         bundle = getArguments();
-        networkRetryDialog = new Dialog(context, R.style.CustomDialogTheme);
+        networkRetryDialog = new Dialog(Objects.requireNonNull(context), R.style.CustomDialogTheme);
         objects = new ArrayList<>();
 
         V = inflater.inflate(R.layout.fragment_profile, container, false);
-        clipAndprofileLoadingContainer = (ShimmerFrameLayout)V.findViewById(R.id.shimmer_profile_clips);
+        clipAndprofileLoadingContainer = V.findViewById(R.id.shimmer_profile_clips);
         showLoadingContainer(clipAndprofileLoadingContainer);
         inializeUnidapter(V);
         fragment_profile = (ViewGroup) V;

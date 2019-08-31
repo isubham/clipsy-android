@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editor_title_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -21,7 +21,7 @@
             android:hint="My Title"
             android:inputType="textWebEmailAddress"
             android:textSize="@dimen/comment_card_image_size" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.jkcarino.rtexteditorview.RTextEditorView
         android:id="@+id/editor_view"

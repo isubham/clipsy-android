@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/commentMarginTop"
+    app:cardCornerRadius="0sp"
+    app:cardElevation="0dp">
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activityPadding"
+        android:paddingTop="@dimen/activityPadding"
+        android:paddingRight="@dimen/activityPadding">
+
+        <!-- row 1 => user pic | name | ago-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+            <ImageView
+                android:id="@+id/rl_comment_profile_pic"
+                android:layout_width="@dimen/comment_card_image_size"
+                android:layout_height="@dimen/comment_card_image_size"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/boy" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="4dp"
+                android:orientation="horizontal">
+
+
+
+                <TextView
+                    android:id="@+id/rl_notification_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Name with comment" />
+
+
+            <View
+                android:id="@+id/rl_clip_extra_space"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/rl_comment_cross"
+                    android:layout_width="@dimen/comment_card_image_size"
+                    android:layout_height="@dimen/comment_card_image_size"
+                    android:contentDescription="@string/todo"
+                    android:src="@drawable/outline_close_black" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!--
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/rl_comment_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:text="sample date"
+                android:textColor="#939393"
+                android:textSize="12sp" />
+
+
+        </LinearLayout>
+        -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- ids -->
+            <TextView
+                android:id="@+id/rl_notification_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/rl_notification_author_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/author_id"
+                android:textStyle="bold"
+                android:visibility="gone" />
+            <!-- end of ids -->
+            <TextView
+                android:id="@+id/rl_notification_viewer_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/author_id"
+                android:textStyle="bold"
+                android:visibility="gone" />
+            <!-- end of ids -->
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
