@@ -36,7 +36,6 @@
     <string name="request_user_delete_searched">https://api.pitavya.com/clipsy/deleteSearched/%1$s</string>
 
 
-
     <string name="request_user_forgot_password">https://api.pitavya.com/clipsy/forgot_password</string>
 
     <!--clip-->
@@ -205,7 +204,6 @@
     <string name="trouble_logging_in">Trouble logging in</string>
     <string name="we_have_send_an_email_with_a_token_use_that_to_verify_your_email_it_may_take_2_minutes_to_get_the_email">Paste 6 letter code from the email.</string>
     <string name="email_verification_pre_help">An email with a code will be send to your email account.</string>
-
 
 
 </resources>

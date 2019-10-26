@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/basePadding"
+    android:layout_height="match_parent"
+    tools:context=".panel.follow_people">
+
+    <CheckBox
+        android:text="Dr. Science"
+        android:id="@+id/choose_interest_science"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:text="Dr. Music"
+        android:id="@+id/choose_interest_music"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:text="Dr. Video"
+        android:id="@+id/choose_interest_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:text="Dr. Joker"
+        android:id="@+id/choose_interest_joker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

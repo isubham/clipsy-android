@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.auth.home;
@@ -23,6 +25,7 @@ import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.fragments.fragment_clips;
 import com.subhamkumar.clipsy.panel.fragments.fragment_profile;
 import com.subhamkumar.clipsy.panel.fragments.fragment_search;
+import com.subhamkumar.clipsy.utils.CustomViewPager;
 import com.subhamkumar.clipsy.utils.Daemon;
 import com.subhamkumar.clipsy.utils.LoginPersistance;
 
@@ -35,28 +38,10 @@ import static com.subhamkumar.clipsy.utils.Message.getToken;
 
 public class panel extends AppCompatActivity {
 
-    // Top Right Action Menu
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        createTopRightOptionMenu(menu);
-        return true;
-    }
+    private enum TABS { _CLIPSY, _SEARCH, _PROFILE };
 
-    private void createTopRightOptionMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.write_clip:
-                toCreateClip();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    private TABS initialTab;
 
     // End of Top Right Action Menu
 
@@ -93,7 +78,8 @@ public class panel extends AppCompatActivity {
     private TabLayout tabLayout;
 
     private void initializeVaribles() {
-        ViewPager viewPager = findViewById(R.id.user_panel_viewpager);
+        initialTab =  TABS._CLIPSY;
+        CustomViewPager viewPager = findViewById(R.id.user_panel_viewpager);
         tabLayout = findViewById(R.id.user_panel_tabs);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -124,6 +110,7 @@ public class panel extends AppCompatActivity {
 
     }
 
+
     private void addProfile(ViewPagerAdapter viewPagerAdapter) {
         fragment_profile fragment_profile = new fragment_profile();
         fragment_profile.setArguments(user_details);
@@ -148,15 +135,16 @@ public class panel extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
+                int tabPosition = tab.getPosition();
+                switch (tabPosition) {
                     case 0:
-                        Objects.requireNonNull(getSupportActionBar()).setTitle("Clipsy");
+                        Objects.requireNonNull(getSupportActionBar()).setTitle(Constants.CLIPSY);
                         break;
                     case 1:
-                        Objects.requireNonNull(getSupportActionBar()).setTitle("Search");
+                        Objects.requireNonNull(getSupportActionBar()).setTitle(Constants.SEARCH);
                         break;
                     case 2:
-                        Objects.requireNonNull(getSupportActionBar()).setTitle("Profile");
+                        Objects.requireNonNull(getSupportActionBar()).setTitle(Constants.PROFILE);
                         break;
                 }
             }
@@ -172,6 +160,10 @@ public class panel extends AppCompatActivity {
             }
         });
     }
+
+    Menu menuGlobal;
+
+
 
     private Bundle user_details;
 

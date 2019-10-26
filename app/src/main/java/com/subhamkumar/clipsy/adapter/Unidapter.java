@@ -127,17 +127,17 @@ public abstract class Unidapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private void configureComment(CommentViewHolder commentViewHolder, int position) {
         Comment comment = (Comment) items.get(position);
-        commentViewHolder.BindData(comment);
+        commentViewHolder.BindData(comment, getContext());
     }
 
     private void configureProfileSearch(ProfileShortViewHolder profileShortViewHolder, int position) {
         Profile profile = (Profile) items.get(position);
-        profileShortViewHolder.BindData(profile);
+        profileShortViewHolder.BindData(profile, getContext());
     }
 
     private void configureProfileDetail(ProfileDetailViewHolder profileDetailViewHolder, int position) {
         ProfileDetail profileDetail = (ProfileDetail) items.get(position);
-        profileDetailViewHolder.BindData(profileDetail);
+        profileDetailViewHolder.BindData(profileDetail, getContext());
     }
 
     private void configureClip(ClipViewHolder clipViewHolder, int position) {

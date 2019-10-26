@@ -48,15 +48,11 @@
         android:paddingBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/trouble_logging_in" />
+        android:text="Or" />
 
-    <Button
-        style="@style/secondaryButton"
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_sign_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="gotoForgotPassword"
-        android:text="@string/forgot_password"
-        android:textAllCaps="false" />
-
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

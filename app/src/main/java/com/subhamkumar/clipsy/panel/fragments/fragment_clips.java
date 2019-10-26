@@ -4,13 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -18,6 +16,12 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,15 +34,14 @@ import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.clip_adapter;
 import com.subhamkumar.clipsy.adapter.comment_adapter;
 import com.subhamkumar.clipsy.models.ApiResponse;
-import com.subhamkumar.clipsy.models.ClipApiResonse;
 import com.subhamkumar.clipsy.models.Clip;
+import com.subhamkumar.clipsy.models.ClipApiResonse;
 import com.subhamkumar.clipsy.models.Comment;
 import com.subhamkumar.clipsy.models.CommentApiResonse;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.panel.editor;
 import com.subhamkumar.clipsy.panel.profile_result;
 import com.subhamkumar.clipsy.utils.Tools;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,8 +162,7 @@ public class fragment_clips extends Fragment {
         setSelectedClipId(clip_id);
         if (author_id.equals(viewer_id)) {
             showSameUserDialog(author_id, clip_id);
-        }
-        else {
+        } else {
             showDifferentUserDialog(author_id);
             setSelectedUserId(author_id);
         }
@@ -776,6 +778,7 @@ public class fragment_clips extends Fragment {
             Log.e("null on", e.getMessage());
         }
 
+        setHasOptionsMenu(true);
 
         View v = inflater.inflate(R.layout.fragment_clips, container, false);
         context = Objects.requireNonNull(container).getContext();
@@ -783,6 +786,21 @@ public class fragment_clips extends Fragment {
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.feed_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        startActivity(new Intent(getActivity(), editor.class)
+                .putExtra("token", token)
+                .putExtra("action", "save")
+
+        );
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onResume() {

@@ -1,7 +1,8 @@
 package com.subhamkumar.clipsy.models;
 
 public class Profile {
-    public String id, email, name, profile_pic, type, token, clips, followers, following, showCloseIcon;
+    public String id, email, name, password, profile_pic, type, token, clips, followers, following, showCloseIcon, status;
+    public String emailStatus, passwordStatus;
 
 
     public Profile() {
@@ -15,6 +16,13 @@ public class Profile {
         this.profile_pic = profile_pic;
     }
 
+    public Profile(String email, String password, String status, String emailStatus, String passwordStatus) {
+        this.email = email;
+        this.password = password;
+        this.status = status;
+        this.emailStatus = emailStatus;
+        this.passwordStatus = passwordStatus;
+    }
 
     public String getProfile_pic() {
         return profile_pic;

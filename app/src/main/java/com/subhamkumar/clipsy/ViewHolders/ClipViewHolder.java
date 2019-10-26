@@ -14,6 +14,7 @@ import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.utils.CustomTabs;
+import com.subhamkumar.clipsy.utils.Tools;
 
 import ru.noties.markwon.AbstractMarkwonPlugin;
 import ru.noties.markwon.Markwon;
@@ -84,18 +85,7 @@ public class ClipViewHolder extends RecyclerView.ViewHolder {
         int visibility_img = clip.visibility.equals(Constants.visibility_private) ? R.drawable.user : R.drawable.globe;
         this.clip_visibility_image.setImageResource(visibility_img);
 
-        // profile pic
-        int imageResource, _profile_pic = 0;
-
-        try {
-            _profile_pic = Integer.parseInt(clip.profile.profile_pic);
-        } catch (NumberFormatException e) {
-            _profile_pic = 0;
-        } finally {
-            imageResource = Constants.mThumbIds[_profile_pic];
-            this.profile_pic.setImageResource(imageResource);
-        }
-
+        Tools.setProfilePic(clip.profile.profile_pic, this.profile_pic, context);
         // Render HTML
         renderHtmlInClipContent(this, clip.clip_content, context);
 

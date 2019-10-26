@@ -99,12 +99,12 @@ public class CustomTabs {
     }
     */
 
-    /* Adds a default share item to the menu */
+    /* Adds a default share item to the feed_menu */
     private static void addShareMenuItem(CustomTabsIntent.Builder builder) {
         builder.addDefaultShareMenuItem();
     }
 
-    /* Adds a copy item to the menu */
+    /* Adds a copy item to the feed_menu */
     private static void addCopyMenuItem(Context context, CustomTabsIntent.Builder builder) {
         String label = "Copy";
         Intent intent = new Intent(context, CopyBroadcastReceiver.class);

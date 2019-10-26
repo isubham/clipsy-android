@@ -1,5 +1,6 @@
 package com.subhamkumar.clipsy.ViewHolders;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Comment;
 import com.subhamkumar.clipsy.models.Constants;
+import com.subhamkumar.clipsy.utils.Tools;
 
 public class CommentViewHolder  extends RecyclerView.ViewHolder {
     private TextView id;
@@ -101,7 +103,7 @@ public class CommentViewHolder  extends RecyclerView.ViewHolder {
         deleteComment = V.findViewById(R.id.rl_comment_delete);
     }
 
-    public void BindData(Comment comment) {
+    public void BindData(Comment comment, Context context) {
 
         this.id.setText(comment.comment_id);
 
@@ -120,21 +122,9 @@ public class CommentViewHolder  extends RecyclerView.ViewHolder {
         this.comment_time.setText(comment.comment_time);
 
         setCommentProfileNameAndComment(this, comment);
-        setProfilePic(this, comment);
+        Tools.setProfilePic(comment.profile.profile_pic, this.profile_pic, context);
     }
 
-    private void setProfilePic(@NonNull CommentViewHolder commentViewholder, Comment comment) {
-        int imageResource, _profile_pic = 0;
-        try {
-            _profile_pic = Integer.parseInt(comment.profile.profile_pic);
-        } catch (NumberFormatException e) {
-            _profile_pic = 0;
-        }
-        finally {
-            imageResource = Constants.mThumbIds[_profile_pic];
-            commentViewholder.profile_pic.setImageResource(imageResource);
-        }
-    }
 
     private void setCommentProfileNameAndComment(@NonNull CommentViewHolder commentViewholder, Comment comment) {
         String profileName = comment.profile.name;

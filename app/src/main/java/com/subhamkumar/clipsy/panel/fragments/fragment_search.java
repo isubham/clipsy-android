@@ -6,18 +6,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -43,7 +48,9 @@ import java.util.Objects;
 import static com.subhamkumar.clipsy.utils.Message.fragmentSearchToProfileResult;
 
 
-public class fragment_search extends fragment_wrapper {
+public class fragment_search extends fragment_wrapper implements SearchView.OnQueryTextListener {
+
+
     @Override
     public int setHttpMethod() {
         return Request.Method.GET;
@@ -124,23 +131,9 @@ public class fragment_search extends fragment_wrapper {
         };
         rv_profile.setLayoutManager(linearLayoutManager);
         rv_profile.setAdapter(profile_adapter);
-        live_search = V.findViewById(R.id.live_search);
-        live_search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                fillSearchResult(live_search.getText().toString().trim());
-            }
-        });
 
     }
+
 
     private void setClickListenerOnProfileCard(View V) {
 
@@ -384,18 +377,40 @@ public class fragment_search extends fragment_wrapper {
         View fragment_search = inflater.inflate(R.layout.fragment_search, container, false);
         init(fragment_search);
         showLoadingAndHideCntent(loadingContainer, content);
-        showKeyboarWhenSearchFragmentLoads();
 
         GetTop10Search();
+
+        setHasOptionsMenu(true);
+
+        if (searchView!=null) {
+        }
         return fragment_search;
     }
 
-    private void showKeyboarWhenSearchFragmentLoads() {
-        // to show keyboard
-        live_search.requestFocus();
-        InputMethodManager mgr = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.showSoftInput(live_search, InputMethodManager.SHOW_IMPLICIT);
+    SearchView searchView;
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.search_icon);
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(Constants.EMAIL_OR_NAME);
+        searchView.setOnQueryTextListener(this);
+        super.onCreateOptionsMenu(menu, inflater);
     }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        fillSearchResult(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        fillSearchResult(newText);
+        return false;
+    }
+
 
 
     @Override

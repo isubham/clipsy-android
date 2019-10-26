@@ -2,15 +2,20 @@ package com.subhamkumar.clipsy.ViewHolders;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.models.Constants;
 import com.subhamkumar.clipsy.models.ProfileDetail;
+import com.subhamkumar.clipsy.utils.Tools;
 
 public class ProfileDetailViewHolder extends RecyclerView.ViewHolder {
     private final ImageView _choose_avatar_icon;
@@ -55,22 +60,21 @@ public class ProfileDetailViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void BindData(ProfileDetail profileDetail) {
+    public void BindData(ProfileDetail profileDetail, Context context) {
+        Log.e("profileDetail", profileDetail.toString());
         this._email.setText(profileDetail.email);
         this._name.setText(profileDetail.name);
-        int _profile_pic;
-        try {
-            _profile_pic = Integer.parseInt(profileDetail.profile_pic);
-        } catch (NumberFormatException e) {
-            _profile_pic = 0;
-        }
-        int imageResource = Constants.mThumbIds[_profile_pic];
-        this._choose_avatar_icon.setImageResource(imageResource);
+
+        Tools.setProfilePic(profileDetail.profile_pic, this._choose_avatar_icon, context);
 
         this.clip_count.setText(profileDetail.clips);
         this.following_count.setText(profileDetail.following);
         this.followers_count.setText(profileDetail.followers);
 
+        // TODO hotfix message is coming null
+        if (profileDetail.message == null) {
+            profileDetail.message = "Follow";
+        }
         this.relationshipButton.setText(profileDetail.message.equals("Following") ? "Unfollow" : profileDetail.message);
 
         this.viewer_id.setText(profileDetail.viewer_id);

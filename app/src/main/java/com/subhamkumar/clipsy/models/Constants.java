@@ -87,6 +87,8 @@ public class Constants {
     public static final String request_user_user_following = "https://api.pitavya.com/clipsy/following/%1$s";
     public static final String request_user_user_follower = "https://api.pitavya.com/clipsy/follower/%1$s";
 
+    public static final String request_google_signin = "https://api.pitavya.com/clipsy/createAccountOrSignInWithGoogle";
+
     public static final String request_clip_get_comment = "https://api.pitavya.com/clipsy/comment/%1$s";
     public static final String newNotificationRequest = "https://api.pitavya.com/clipsy/newNotification";
 
@@ -117,6 +119,9 @@ public class Constants {
     public static final String param_password = "password";
     public static final String param_type = "type";
     public static final String param_name = "name";
+    public static final String param_profile_pic = "profile_pic";
+
+
     public static final String param_value_public = "2";
     public static final String param_token = "token";
     public static final String param_search_id = "search_id";
@@ -131,6 +136,10 @@ public class Constants {
     public static final String PROFILE_LIST_TO_PROFILE_RESULT = "PROFILE_LIST_TO_PROFILE_RESULT";
 
     public static final String myFile = "theAwesomeDataInMain";
+    public static final String CLIPSY = "Clipsy";
+    public static final String SEARCH = "Search";
+    public static final String PROFILE = "Profile";
+    public static final String EMAIL_OR_NAME = "Email or Name";
     public static String myKey = "52521";
 
     public static final String param_visibility = "visibility";
@@ -148,8 +157,6 @@ public class Constants {
     public static final int profilePicChangeRequest = 23323;
     public static final String token = "token";
     public static final String id = "id";
-    public static String fragment_search = "fragment_search";
-    public static String fragment_profile = "fragment_profile";
 
 
     public static final String searched_user_id = "searched_id";
@@ -160,6 +167,6 @@ public class Constants {
     public static final String fromActivity_Activity = "ac";
     public static final String fromActivity_Notification = "no";
 
-
+    public static final int RC_SIGN_IN = 341;
 
 }

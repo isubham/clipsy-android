@@ -13,6 +13,8 @@
     <dimen name="commentMarginTop">4dp</dimen>
 
 
+    <dimen name="basePadding">16dp</dimen>
+    <dimen name="baseMargin">2sp</dimen>
 
 
     <dimen name="placeholderImage">60dp</dimen>
@@ -47,6 +49,11 @@
     <dimen name="clip_margin">10sp</dimen>
     <dimen name="clip_padding">4dp</dimen>
 
+
+
+    <!-- landing card styles -->
+    <dimen name="landing_card_padding">4dp</dimen>
+    <dimen name="landing_card_margin">4dp</dimen>
 
 
     <dimen name="clip_image">36dp</dimen>

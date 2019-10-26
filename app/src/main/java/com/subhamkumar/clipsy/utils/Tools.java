@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.text.SpannableStringBuilder;
@@ -13,9 +15,11 @@ import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.subhamkumar.clipsy.R;
+import com.subhamkumar.clipsy.models.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -76,7 +80,7 @@ public class Tools {
     }
 
     public static void hideNetworkLoadingDialog(Dialog networkLoadingDialog, String... activity) {
-       //  Log.e("tools n/w ", activity[0]);
+        //  Log.e("tools n/w ", activity[0]);
         networkLoadingDialog.dismiss();
     }
 
@@ -86,8 +90,19 @@ public class Tools {
     }
 
 
-
     public static void setNoHistory(Intent to_profile_result) {
         to_profile_result.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    }}
+    }
 
+    public static void setProfilePic(String imageUrl, ImageView imageView, Context context) {
+        int _profile_pic, imageResource;
+        try {
+            _profile_pic = Integer.parseInt(imageUrl);
+            imageResource = Constants.mThumbIds[_profile_pic];
+            imageView.setImageResource(imageResource);
+        } catch (NumberFormatException e) {
+            Glide.with(context).load(imageUrl).into(imageView);
+        }
+    }
+
+}

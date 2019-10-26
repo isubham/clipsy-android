@@ -3,24 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/baseMargin"
     app:cardCornerRadius="0sp"
+    android:background="@color/grey_300"
     app:cardElevation="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:padding="@dimen/clip_padding"
+        android:paddingLeft="@dimen/basePadding"
+        android:paddingRight="@dimen/basePadding"
+        android:paddingTop="@dimen/clip_padding"
+        android:paddingBottom="@dimen/clip_padding"
         >
 
         <!-- row 1 => user pic | name | ago-->
 
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/rl_profile_profile_pic"
             android:layout_width="@dimen/search_image"
             android:layout_height="@dimen/search_image"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/grey_500"
             android:contentDescription="@string/todo"
             android:src="@drawable/boy" />
 
@@ -55,8 +63,9 @@
 
         <ImageView
             android:id="@+id/rl_profile_close"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:contentDescription="@string/todo"
             android:src="@drawable/outline_close_black" />
         <!-- ids -->

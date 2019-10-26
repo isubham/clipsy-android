@@ -1,17 +1,15 @@
 package com.subhamkumar.clipsy.panel.fragments;
 
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -21,6 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,6 +37,7 @@ import com.google.gson.reflect.TypeToken;
 import com.subhamkumar.clipsy.R;
 import com.subhamkumar.clipsy.adapter.Unidapter;
 import com.subhamkumar.clipsy.adapter.profile_adapter;
+import com.subhamkumar.clipsy.auth.home;
 import com.subhamkumar.clipsy.models.ApiResponse;
 import com.subhamkumar.clipsy.models.Clip;
 import com.subhamkumar.clipsy.models.ClipApiResonse;
@@ -934,7 +939,7 @@ public class fragment_profile extends androidx.fragment.app.Fragment {
             ViewCompat.setBackgroundTintList(v, ContextCompat.getColorStateList(Objects.requireNonNull(getActivity()), R.color.grey_300));
 
             String message = ((Button) V.findViewById(R.id.rx)).getText().toString().trim();
-            String searched_id =  ((TextView) V.findViewById(R.id.profile_landing_id)).getText().toString().trim();
+            String searched_id = ((TextView) V.findViewById(R.id.profile_landing_id)).getText().toString().trim();
 
             relationShipStringRequest = new StringRequest(
                     Request.Method.POST,
@@ -982,6 +987,7 @@ public class fragment_profile extends androidx.fragment.app.Fragment {
         inializeUnidapter(V);
         fragment_profile = (ViewGroup) V;
 
+        setHasOptionsMenu(true);
         try {
             setVariablesFromBundle();
         } catch (NumberFormatException e) {
@@ -992,6 +998,26 @@ public class fragment_profile extends androidx.fragment.app.Fragment {
         return V;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (!getActivity().getClass().getSimpleName().equals("profile_result")) {
+            inflater.inflate(R.menu.profile_menu, menu);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        goToSignUp();
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void goToSignUp() {
+        Intent toSignUp = new Intent(getActivity(), home.class).putExtra(Constants.SIGNOUT, "1");
+        toSignUp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(toSignUp);
+        this.getActivity().finish();
+    }
     @Override
     public void onResume() {
         super.onResume();
