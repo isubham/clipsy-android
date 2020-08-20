@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
-import androidx.databinding.DataBindingUtil;
 
 import android.view.MenuItem;
 import android.view.View;
@@ -22,9 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.subhamkumar.clipsy.R;
-import com.subhamkumar.clipsy.databinding.SigninBinding;
 import com.subhamkumar.clipsy.models.Constants;
-import com.subhamkumar.clipsy.models.Profile;
 import com.subhamkumar.clipsy.models.SignInApiResponse;
 import com.subhamkumar.clipsy.panel.panel;
 import com.subhamkumar.clipsy.utils.LoginPersistance;
@@ -214,10 +211,9 @@ public class signin extends wrapper {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.signin);
+
         screenshotOff();
-        SigninBinding binding = DataBindingUtil.setContentView(this, R.layout.signin);
-        Profile profile = new Profile("Your Email", "password", "", "", "");
-        binding.setUser(profile);
         setActionBar();
         initializeViews();
     }

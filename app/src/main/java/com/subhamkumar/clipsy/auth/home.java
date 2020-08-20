@@ -49,29 +49,40 @@ public class home extends AppCompatActivity {
 
         handleState(bundle, localStore);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         SignInButton signInButton = findViewById(R.id.google_sign_button);
         signInButton.setOnClickListener(v -> {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+
+            startGoogleLogin();
         });
 
 
+    }
+
+    private void startGoogleLogin() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient.signOut();
+
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
             handleSignInResult(task);
         }
     }
@@ -135,10 +146,15 @@ public class home extends AppCompatActivity {
 
     }
 
+
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            createAccountOrSignInWithGoogle(account.getEmail(), account.getDisplayName(), account.getPhotoUrl().toString());
+            String email = account.getEmail();
+            String displayName = account.getDisplayName();
+            String photoUrl = account.getPhotoUrl() == null ? "0" : account.getPhotoUrl().toString();
+            createAccountOrSignInWithGoogle(email, displayName, photoUrl);
 
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
